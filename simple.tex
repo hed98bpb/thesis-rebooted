@@ -1,0 +1,525 @@
+\chapter{Simple $O(n^3 +k n^2)$ implementation}
+In this section we describe an $O(n^3+k n^2)$ implementation which solves the
+"Shortest Paths in Plane with Obstacles Violations"-problem. $n$ is the number
+of vertices and $k$ is the number of polygon violations allowed. In the first
+section we describe how we construct the visibility graph. Imagine a plane with
+a starting point $s$, an end point $t$, and $h$ polygon obstacles. A visibility
+graph is a graph where for each set of points  $p,q\in P \cup \{s,t\}$ (recall
+$P$ is the set of all points of the polygons) there is an edge if the two points
+can see each other without going (or looking) through any interior of an
+obstacle (see figure \ref{visibilitygraph}). In the second section we find the
+shortest path from $s$ to $t$ in the visibility graph using shortest path
+algorithm Dijkstra's algorithm and finally in the third section we test our
+code to see if the actual running time is the same as the theoretical.
+
+\begin{figure}[H]
+	\caption{Example of visibility graph}
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=6cm]{figures/visibilitygraph1.pdf}
+		\caption{}
+	\label{fig:visibilitygraph1}
+	\end{subfigure}
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=6cm]{figures/visibilitygraph.pdf}
+		\caption{}
+		\label{fig:visibilitygraph1}
+	\end{subfigure}
+	\label{visibilitygraph}
+\end{figure}
+\section{Constructing the visibility graph}
+The normal naive way of constructing a visibility graph is to make a graph
+where every set of points $p,q \in P\cup \{s,t\}$ is connected to each other,
+then removing all edges that crosses the interior of a polygon. But in this
+setting we are allowed to cross $k$ polygons, so we construct the graph a bit
+different. Given a set $P$ consisting of all the polygons, where each polygon
+is a list of the points in the polygon we use the following algorithm.  Create
+a graph $G_0=(V,E)$, where $V$ contains all the vertices in $P\cup \{s,t\}$,
+and let $E$ contain all possible connections between the vertices. Make $k$
+copies of the graph and name them $G_1,\dots,G_{k}$.  The algorithm goes as
+follows. For each graph $G_i$, take for each edge $e_j\in G_i$ and call
+NumberOfCrosses$(e_j)$, which returns the number of polygons from $P$ that the
+line segment crosses, and connect the endpoint to the corresponding point in
+$G_{i+n}$, i.e.\ if you take an edge in the graph, that goes through $n$
+polygons, you travel $n$ graphs up. If $i+n>k$ then delete the edge. We now
+have a graph that has $k$ levels where every time you go through $k$ polygons
+you go $k$ levels up.
+
+\begin{algorithm} 
+	\caption{MakeVisibilityGraph($P,s,t$)}
+	\begin{algorithmic}[1]
+		\ForAll{$G_i=(V_i,E_i) \in G$}
+		\ForAll{$e \in E_i$}
+			\State $count = numberOfCrossings(e)$
+			\If{$count+i<=k$}
+				\State make $e$ go from $G_i$ to $G_{i+count}$
+			\Else
+				\State delete edge $e$
+			\EndIf
+		\EndFor
+		\EndFor
+	\end{algorithmic}
+\end{algorithm}
+
+The only missing part is the numberOfCrosses function, which we will define
+below.
+
+\subsection{Number of crossings}
+Calculating the number of polygons a line segment crosses is no trivial task,
+since there is a bunch of edge cases. We try to give a brief intuition of the
+edge cases, and then present our algorithm.
+The first five cases (a-e) \ref{fig:crossings} are allowed intersections since
+the only the interior of a polygon we can not travel, the
+next five cases (f-j) are not allowed since they travel through the interior
+of the polygon.
+
+\begin{figure}
+\caption{}
+\begin{tabular}{|c|c|c|c|c|}
+      \hline
+		\multicolumn{5}{|c|}{No intersection} \\
+		\hline
+      \addheight{\includegraphics[width=20mm]{figures/crossFig1.pdf}} &
+      \addheight{\includegraphics[width=20mm]{figures/crossFig2.pdf}} &
+      \addheight{\includegraphics[width=20mm]{figures/crossFig3.pdf}} &
+      \addheight{\includegraphics[width=20mm]{figures/crossFig4.pdf}} &
+      \addheight{\includegraphics[width=20mm]{figures/crossFig5.pdf}} \\
+      \small (a) &  (b) & (c) & (d) & (e) \\
+      \hline
+		\multicolumn{5}{|c|}{Intersection} \\
+		\hline
+      \addheight{\includegraphics[width=20mm]{figures/crossFig6.pdf}} &
+      \addheight{\includegraphics[width=20mm]{figures/crossFig7.pdf}} &
+      \addheight{\includegraphics[width=20mm]{figures/crossFig8.pdf}} &
+      \addheight{\includegraphics[width=20mm]{figures/crossFig9.pdf}} &
+      \addheight{\includegraphics[width=20mm]{figures/crossFig10.pdf}} \\
+      \small (f) &  (g) & (h) & (i) & (j) \\
+      \hline
+\end{tabular}
+	\label{fig:crossings}
+\end{figure}
+So given a polygon $p\in P$, and a line segment $l$ we want to
+determine weather $l$ crosses the polygon $p$. First we make  We start by
+making the list of points into a list of line segment
+$p'=(p_1,p_2),(p_2,p_3),\dots,(p_{i-1},p_i)$.  If a line segment crosses a line
+segment of a polygon, it counts as a crossing (cases f and g). The other three cases of
+crossing (cases h, i and j) all have that in common that they have four end points in
+common with line segments from the polygon. So we say it is not allowed to have
+four points in common with a polygons line segment. Problem is that it makes
+(cases c, d and e) not allowed which they should be. But fortunately they all have that in
+common that they are colinear with a line segment of the polygon, so the
+algorithm becomes 
+\begin{enumerate}
+	\item if line segment crosses a line segment of a polygon it crosses the
+		polygon
+	\item if a line has four points  in common with the polygon it crosses the
+		polygon, unless the line segment is collinear with a line segment of the
+		polygon 
+\end{enumerate}
+
+This lead us to the following algorithm
+\begin{algorithm} 
+	\caption{NumberOfCrossings($l,P$)}
+	\begin{algorithmic}[1] 
+		\State \text{TODO}
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection{Crosses}
+To make a crosses function, we need a right turn function. Consider three
+points $p_1,p_2,p_3$, we make a line going through $p_1$ and $p_2$, now if
+stand at point $p_1$ and look in the direction of $p_2$ will $p_3$, if $p_3$
+doesn't lie on the same line as $p_1$ and $p_2$ will it be on the
+right or the left of the line. 
+Let $p_i.x$ and $p_i.y$ denote the x-coordinates
+and y-coordinates respectively.
+To find out weather the three points are a right turn, left turn or colinear we
+make the following two vectors.
+
+\begin{align*}
+	v_1 &=p_2-p_1 = \langle p_2.x-p_1.x,p_2.y-p_1.y\rangle\\
+	v_2 &=p_3-p_1 = \langle p_3.x-p_1.x,p_3.y-p_1.y\rangle
+\end{align*}
+Lets denote $v_1 = <a,b>$ and $v_2 = <c,d>$
+(see Figure \ref{fig:rightturn_a})
+\subsubsection{Right turn}
+\begin{figure}[H]
+	\caption{Right turn}
+    \centering
+	\begin{subfigure}{.7\textwidth}
+		\includegraphics[width=8cm]{figures/rightturn1.pdf}
+		\caption{}
+		\label{fig:rightturn_a}
+	\end{subfigure}
+    %
+	\begin{subfigure}{.7\textwidth}
+		\includegraphics[width=8cm]{figures/rightturn2.pdf}
+		\caption{}
+		\label{fig:rightturn_b}
+	\end{subfigure}
+\end{figure}
+\nick{Find book ref to right turn}
+We claim that we can calculate the turn by calculating the signed area of the
+parallelogram spanned by the two vectors. The area of their parallelogram can
+be calculated as follows calculate the area of the big rectangle, and take the
+two small triangles and the little square and subtract that area.
+\begin{align}
+	\text{area} &= (a+c)(d+b)-2A-2B-2C\nonumber\\
+							&=ad+ab+cd+bc-cd-2ad-ab\nonumber\\
+							&=bc-ad \nonumber\\
+							&=(p_2.y-p_1.y)(p_3.x-p_1.x)-(p_2.x-p_1.x)(p_3.y-p_1.y)\label{form:rightturn}
+\end{align}
+Now we claim that the area between these two vectors is positive if the
+three points make a right turn, and negative if they make a left turn. We show
+that by an example (see figure \ref{rightturn3})
+
+Given our formula \ref{form:rightturn} we get that the $q_1,q_3,q_2$ area is
+\begin{align*}
+	&(q_3.y-q_1.y)(q_2.x-q_1.x)-(q_3.x-q_1.x)(q_2.y-q_1.y)\\ 
+	= &(2-0)(-1-0)-(0-0)(1-0)\\
+	= & 2\cdot (-1)-0\cdot1\\
+	= & -2-0\\
+	= & -2
+\end{align*}
+$2\cdot1-0\cdot1=2$ where $q_1,q_3,q_4$ gives us $2\cdot(-1)-0\cdot(-1)=-2$.
+The area is the same but if the three point do a left turn, the area will
+become negative. If the three lines are collinear, the two vectors are on top
+of each other and the area is zero.
+\begin{align*}
+	&(q_3.y-q_1.y)(q_4.x-q_1.x)-(q_3.x-q_1.x)(q_4.y-q_1.y)\\ 
+	= &(2-0)(1-0)-(0-0)(1-0)\\
+	= &(2\cdot 1 - 0\cdot 1\\
+	= &2-0\\
+	= &2
+\end{align*}
+\begin{figure}[H]
+    \centering
+	\includegraphics{figures/rightturn3.pdf}
+	\caption{Right turn example}
+    \label{rightturn3}
+\end{figure}
+So the function for calculating the right turn is
+\begin{algorithm} 
+	\caption{rightTurn($p_1,p_2,p_3$)}
+	\begin{algorithmic}[1] 
+		\State \Return $(p_2.x-p_1.x)(p_3.y-p_1.y)-(p_2.y-p_1.y)(p_3.x-p_1.x)$
+	\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Crossing of two line segments}
+\begin{figure}[H]
+	\caption{Crossing of two line segments}
+	\minipage{0.32\textwidth}
+		\includegraphics[width=2cm]{figures/crosses.pdf}
+		\caption{}
+		\label{fig:crosses_a}
+	\endminipage\hfill
+	\minipage{0.32\textwidth}
+		\includegraphics[width=3cm]{figures/crosses1.pdf}
+		\caption{}
+		\label{fig:crosses_b}
+	\endminipage\hfill
+	\minipage{0.32\textwidth}
+		\includegraphics[width=3cm]{figures/crosses2.pdf}
+		\caption{}
+		\label{fig:crosses_c}
+		\endminipage\hfill
+\end{figure}
+
+\begin{Lemma}
+Given two line segments, $l_1$ and $l_2$, we want to know if they cross. We start by taking the
+first line segment  $l_1$ and check if the two points of $l_2$, $l_2.p$ and
+$l_2.q$ lie on separate sides of the line that is collinear to $l_1$, if this is
+the case we do a similar check the other way around, and if that is true the
+two line segment cross.
+\end{Lemma}
+\begin{proof}
+Let $L_1$ and $L_2$ denote the lines collinear to $l_1$ and $l_2$ respectively.
+If both the end points of $l_2$ is on the same side of $L_1$, then the
+line segments can't cross $L_1$, and therefore $l_1$ obviously. If they lie on
+opposite sites, $l_2$ crosses $L_1$ and we have to determine if $l_2$ crosses
+$L_1$ between $l_1.p$ and $l_1.q$. 
+
+We know the line $l_2$ crosses $L_1$, the question is, is it between the two
+end points, we can quit easily determine this by looking at if the endpoints
+lie on opposite sites of $l_2$, like before. If they do it must be the case
+that $l_1$ and $l_2$ crosses, if not it crosses $L_1$ another place.
+\end{proof}
+
+\subsubsection{Algorithm}
+We can check weather the points lie on opposite sites
+by multiplying the right turn results, since, if they lie on opposite sites,
+they will have different sign, if the lie on the same site they have the same
+sign so the result will be negative if they are on opposite sites and positive
+if they are on the same side.
+\nick{If its zero the hits an endpoint, write about that}
+\begin{algorithm}[H]
+	\caption{Crosses($l_1,l_2$)}
+	\begin{algorithmic}[1] 
+		\State foo = $rightTurn(l_1.p,l_1.q,l_2.p)\cdot
+		rightTurn(l_1.p,l_1.q,l_2.q)$
+		\State bar = $rightTurn(l_2.p,l_2.q,l_1.p)\cdot
+		rightTurn(l_2.p,l_2.q,l_1.q)$
+		\If{foo$<0$ and bar$<0$}
+		\State \Return True
+		\Else
+		\State \Return False
+		\EndIf
+	\end{algorithmic}
+\end{algorithm}
+
+\section{Dijkstra}
+
+Dijkstra's algorithm solves the single-source shortest path problem for a
+weighted directed graph $G$. i.e. Given a graph $G=(V,E)$, where $V$ is the
+vertices and $E$ is the directed weighted edges and a start vertex $s\in V$,
+find the path where the sum of of the weights it the smallest possible.
+Dijkstra original conceived the algorithm in his 1959 paper "A note on two
+problems in connexion with graphs"\cite{dijkstra59}, the following description
+is based on an "Introduction to Algorithms"\cite{IntroToAlg}, 24.3.
+
+$v_\pi$ being either the predecessor or nill\nick{null nil???}. $v_d$ being the upper bound on
+the weight of a shortest path from source $s$ to $v$. Running time $\Theta (V)$
+
+\begin{algorithm} 
+	\caption{Initialize-Single-Source(G,s)}
+	\begin{algorithmic}[1] 
+		\ForEach {vertex $v \in G.V$} 
+			\State $v.d = \infty$
+			\State $v.\pi =$ NIL 
+		\EndFor 
+		\State $s.d = 0$ 
+	\end{algorithmic}
+\end{algorithm}
+
+Relaxing an edge $(u,v)$ consist of testing whether we can improve the shortest
+path to $v$ found so far by going through $u$ and, if so, update $v.d$ and
+$v.\pi$. We define $w$ as following for a path $p=\langle v_0,v_1,...,v_k
+\rangle$
+
+$$ w(p) = \sum_{i=1}^k w(v_{i-1},v_i) $$
+
+\begin{algorithm} 
+	\caption{Relax(u,v,w)} 
+	\begin{algorithmic}[1] 
+		\If {$v.d > u.d + w(u,v)$} 
+			\State $v.d=u.d+w(u,v)$ 
+			\State $v.\pi = u$ 
+		\EndIf 
+		\State $s.d = 0$
+	\end{algorithmic} 
+\end{algorithm}
+
+$Q$ acts as a min-priority queue to contain all the vertices in $V$. Naive
+implementation of Dijkstra yields $O((V+E)lgV)$ which is $O(E \cdot lgV)$ if
+all vertices are reachable from the source. And can be $O(V^2)$ if
+$E=o(V^2/lgV)$. Extract min runs in $O(lgV)$ 
+
+\begin{algorithm}[H]
+	\caption{Dijkstra(G,w,s)} 
+	\begin{algorithmic}[1] 
+		\State Initialize-Single-Source(G,s) 
+		\State $S = \emptyset$ 
+		\State $Q = G.V$ 
+		\While {$Q \not= \emptyset$} 
+			\State $u = $Extract-Min(Q) 
+			\State $S = S \cup \{u\}$
+			\ForEach {vertex $v \in G.Adj[u]$} 
+				\State Relax(u,v,w) 
+			\EndFor 
+		\EndWhile
+	\end{algorithmic} 
+\end{algorithm}
+
+\section{Experiment}
+In this section we will go through the experiments we did with the algorithm,
+both for running time and test of correctness.
+\subsection{Computer specification}
+The test were run on a computer with the following specification
+\begin{figure}[H]
+\begin{tabular}{| c | l |}
+	\hline
+	Model & Lenovo ThinkPad, x230 \\
+	\hline
+	Operating system & Arch Linux \\
+	\hline
+	CPU & Intel(R) Core(TM) i7-3520M CPU @ 2.90GHz\\
+	\hline
+	Memory & 8 GB \\
+	\hline
+\end{tabular}
+\end{figure}
+\subsection{Correctness of algorithm}
+We tested the correctness of our algorithm by creating a lot of examples and
+made our program able to output a svg image of the polygons and route so we
+were able to confirm the algorithm made the correct visibility graph.
+\begin{figure}[H]
+	\caption{Examples of figures for correctness}
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=6cm]{figures/correctness1.pdf}
+		\caption{}
+		\label{fig:correctness_1}
+	\end{subfigure}
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=6cm]{figures/correctness2.pdf}
+		\caption{}
+		\label{fig:correctness_2}
+	\end{subfigure}
+\end{figure}
+
+\subsection{Running time of algorithm}
+\begin{figure}[H]
+	\caption{Examples of figures for correctness}
+		\includegraphics[width=6cm]{figures/testexample.pdf}
+		\label{fig:correctness_2}
+\end{figure}
+\begin{tikzpicture}
+\begin{axis}[
+height=9cm,
+width=9cm,
+grid=major,
+xlabel = $n$,
+ylabel = time (microseconds),
+]
+\addplot coordinates {
+	(2,0)
+	(6,0)
+	(18,0)
+	(38,1)
+	(66,7)
+	(102,19)
+	(146,48)
+	(198,106)
+	(258,230)
+	(326,443)
+	(402,817)
+	(486,1431)
+	(578,2380)
+	(678,3816)
+	(786,5914)
+	(902,8928)
+	(1026,13042)
+	(1158,18820)
+	(1298,26353)
+	(1446,36337)
+	(1602,49176)
+	(1766,65528)
+	(1938,86477)
+	(2118,112619)
+	(2306,144957)
+	(2502,185109)
+	(2706,233848)
+	(2918,292542)
+	(3138,363661)
+	(3366,449106)
+	(3602,548799)
+	(3846,667232)
+	(4098,805750)
+	(4358,970500)
+	(4626,1158224)
+	(4902,1376560)
+	(5186,1628900)
+	(5478,1918616)
+	(5778,2251452)
+	(6086,2630222)
+	(6402,3058033)
+	(6726,3546503)
+	(7058,4094086)
+};
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+height=9cm,
+width=9cm,
+grid=major,
+xlabel = $n$,
+ylabel = time (microseconds),
+]
+\addplot coordinates {
+	(2,0)
+	(6,0)
+	(18,0)
+	(38,1.82242309374544E-05)
+	(66,2.43481648440326E-05)
+	(102,1.79041243563938E-05)
+	(146,1.54234904901328E-05)
+	(198,1.36555845157008E-05)
+	(258,1.33927178086812E-05)
+	(326,1.27864777138909E-05)
+	(402,1.25760396305643E-05)
+	(486,1.24661063034278E-05)
+	(578,1.23251848601655E-05)
+	(678,1.22438862002393E-05)
+	(786,1.21790575335383E-05)
+	(902,1.21656290217229E-05)
+	(1026,1.20754163433562E-05)
+	(1158,1.21197577971116E-05)
+	(1298,1.20505254603436E-05)
+	(1446,1.20183318068858E-05)
+	(1602,1.19609497232248E-05)
+	(1766,1.18974753918892E-05)
+	(1938,1.18806252405051E-05)
+	(2118,1.18531505190561E-05)
+	(2306,1.1821192334051E-05)
+	(2502,1.1818588689404E-05)
+	(2706,1.18018552347664E-05)
+	(2918,1.17742258887073E-05)
+	(3138,1.17689552329356E-05)
+	(3366,1.17762365912315E-05)
+	(3602,1.17430844983328E-05)
+	(3846,1.17286770169451E-05)
+	(4098,1.17080468603778E-05)
+	(4358,1.17255672540896E-05)
+	(4626,1.16997255581352E-05)
+	(4902,1.16862514035625E-05)
+	(5186,1.16787640949647E-05)
+	(5478,1.16713737908893E-05)
+	(5778,1.16715915226443E-05)
+	(6086,1.16680038017385E-05)
+	(6402,1.16545405767285E-05)
+	(6726,1.16554687048092E-05)
+	(7058,1.16442628162986E-05)
+};
+\end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\begin{axis}[
+height=9cm,
+width=9cm,
+grid=major,
+xlabel = $k$,
+ylabel = time (microseconds),
+]
+
+\addplot coordinates {
+	(0,184927)
+	(1,185173)
+	(2,185082)
+	(3,185218)
+	(4,184888)
+	(5,184901)
+	(6,185203)
+	(7,184971)
+	(8,185074)
+	(9,185320)
+	(10,185211)
+	(11,185254)
+	(12,185479)
+	(13,185317)
+	(14,185491)
+	(15,185355)
+	(16,185504)
+	(17,185928)
+	(18,185985)
+	(19,185669)
+	(20,185842)
+	(21,185879)
+	(22,185980)
+	(23,186128)
+	(24,186250)
+	(25,186189)
+};
+\end{axis}
+\end{tikzpicture}

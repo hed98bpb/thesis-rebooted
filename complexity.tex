@@ -1,0 +1,74 @@
+\section{Complexity of SPM map}
+
+\begin{mydef}[Star-shaped polygon]\cite{PreparataS85}
+	\label{star-shaped}
+	A simple polygon $P$ is star-shaped if there exists a point $z$ not external
+	to $P$ such that for all points $p$ of $P$ the line segment $\overline{zp}$
+	lies entirely within $P$. The locus of the points $z$ having the above
+	property is the \emph{kernel} of $P$.
+\end{mydef}
+
+\begin{Lemma}[Lemma 3.2]
+	\label{lemma:3.2}
+	The shortest path map $SPM(s)$ has $O(n)$ vertices, edges and faces. Each
+	edge is a segment of a line or a hyperbola
+\end{Lemma}
+\begin{proof}
+	Note that each face $SPM(s)$ is star-shaped (see definition
+	\ref{star-shaped})
+	with the unique predecessor vertex for the face, and the predecessor is in
+	the kernel of the face.
+	The idea behind this proof is to show that each obstacle vertex is a
+	predecessor vertex for at most one face in $SPM(s)$.
+	Consider a vertex $u$ that is the predecessor of a face $F$ and let
+	$pred(u)$ be the set of predecessors of $u$, this is a set because there can
+	be multiple predecessors. Observe that $d(s,u)=d(s,v)+|\overline{uv}|$ for
+	any $v\in pred(u)$, since the distance $d(s,u)$ can always be rewritten as
+	the distance to from $s$ to $u$'s predecessor, and a straight line from the
+	predecessor to $u$ since your predecessor is always visible from a point.
+
+	If a point $p$ is visible from a vertex $v \in pred(u)$ with $v$, $u$, $p$ 
+    not being collinear, then $p$ cannot have $u$ as its predecessor. This is 
+    due to the triangle inequality, where it is always shorter to take the direct 
+    line instead going by another point.
+
+	\nick{figure}
+
+	Consider the subset of the free space that is visible from $u$
+	but not visible from $v\in pred(u)$. Let $R(u,v)$ denote the component of
+	this subset that is incident to $u$. Then $R(u,v)$ lies in an
+	\nick{figure}
+	angular angle around $u$ of less than 180$^\circ$. Define
+	\begin{align}
+		R(u) =  \bigcap_{v\in pred(u)} R(u,v)
+	\end{align}
+
+	Clearly $F \subseteq R(u)$, since the area $R(u)$ is the area that is
+	incident to $u$, and not visible from any predecessor $v\in pred(u)$ 
+	
+	Then the claim is that there is at most one face of
+	$SPM(s)$ in $R(u)$ with $u$ as its predecessor. 
+	
+	We do this by contradiction: 
+	Suppose there were two faces
+	$F_1$ and $F_2$ both having $u$ as their unique predecessor. The faces $F_1$
+	and $F_2$ must have exactly one point in common, the vertex $u$. In the space
+	between $F_1$ and $F_2$ there is a point $p$, there have to be a point here,
+	otherwise they would be the same face. The point $p$ is arbitrarily close to $u$ with
+	predecessor $z$ such that $z$ is distinct from both $u$ and $pred(u)$. In
+	other words $d(s,u)+|\overline{up}|>d(s,z)+|\overline{zp}|$. However as $p$
+	moves towards $u$ the difference in the distance shrinks and finally
+	$d(s,u) = d(s,z)+|\overline{zu}|$. But then $z$ must be a predecessor of
+	$u$. This means that $F_1$ and $F_2$ is part of the same face, contradicting
+	the hypothesis. Thus a vertex $u$ is a predecessor of at most one face in
+	the shortest path map.
+
+	\nick{do the end from here to proof end}
+	Finally to prove the linear upper bound on the size of the shortest path
+	map, recall that the number of obstacle vertices is $n$ the remaining
+	vertices border at least three faces of $SPM(s)$ (for this argument we count
+	the obstacle polygons as faces of the shortest path map). Since the number
+	of faces is $O(n)$, Eulers formula for planar graphs implies that the total
+	number of vertices is also $O(n)$. This completes the proof
+\end{proof}
+

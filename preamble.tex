@@ -1,0 +1,88 @@
+% Allways use memoir class, 
+\documentclass[a4paper,
+%final,
+book,english]{memoir}
+
+% inputenc tells latex that the encoding is utf8
+\usepackage[utf8]{inputenc}
+
+% babel knows how the language works, word division, and so on. (the language is set in the \documentclass option)
+\usepackage{babel}
+
+% Helps with the fonts
+\usepackage[T1]{fontenc}
+
+% for making better word division, and think it should only be used in danish. uncomment if you use danish.
+%\renewcommand{\danishhyphenmins}{22}
+
+%if you  \emph{} something that is already in italy it becomed bold and italy
+\usepackage{fixltx2e}
+\renewcommand*\eminnershape{\bfseries \itshape}
+
+%For using math in latex
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+%For link in document hidelinks removes the ugly red color
+\usepackage[hidelinks]{hyperref}
+%Make the read around the url go away
+
+\usepackage{alltt}
+
+\usepackage[colorinlistoftodos,obeyFinal]{todonotes}
+
+\newtheorem{mydef}{Definition}
+\newtheorem{theorem}[mydef]{Theorem}
+\newtheorem{Lemma}[mydef]{Lemma}
+\newtheorem{Corollary}[mydef]{Corollary}
+
+%\numberwithin{mydef}{chapter}
+%\numberwithin{theorem}{chapter}
+%\numberwithin{Lemma}{chapter}
+
+\usepackage{graphicx,wrapfig,lipsum}
+
+\usepackage{algorithm}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage[noend]{algpseudocode}
+\algnewcommand\algorithmicforeach{\textbf{for each}}
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+
+
+\settocdepth{subsection}
+\setsecnumdepth{subsection}
+\usepackage{alltt}
+\usepackage{makeidx}
+\makeindex
+
+%  \newlength\myindent
+%  \setlength\myindent{2em}
+%  \newcommand\bindent{
+%    \begingroup
+%    \setlength{\itemindent}{\myindent}
+%    \addtolength{\algorithmicindent}{\myindent}
+%  }
+%  \newcommand\eindent{\endgroup}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{pgf}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+\newcommand*{\addheight}[2][.5ex]{%
+  \raisebox{0pt}[\dimexpr\height+(#1)\relax]{#2}%
+}
+\usepackage{pgfplots} 
+
+\makeatletter
+\newcommand{\multiline}[1]{%
+  \begin{tabularx}{\dimexpr\linewidth-\ALG@thistlm}[t]{@{}X@{}}
+    #1
+  \end{tabularx}
+}
+\makeatother
+
+\algnewcommand{\LeftComment}[1]{\Statex \(\triangleright\) #1}

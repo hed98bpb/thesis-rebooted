@@ -1,0 +1,140 @@
+\input{preamble.tex}
+
+\newcommand{\gerth}[1]{\todo[color=black!40]{#1}}
+\newcommand{\nick}[1]{\todo[color=green!40]{#1}}
+\newcommand{\peter}[1]{\todo[color=blue!40]{#1}}
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\pretitle{%
+  \begin{center}
+  \includegraphics[width=6cm]{figures/frontpage.pdf}
+}
+
+\posttitle{
+	\end{center}
+}
+\title{
+	\\
+	\normalfont \normalsize 
+    \vspace{2cm}
+	\textsc{Aarhus University, Department of Computer Science} \\ [25pt] % Your university, school and/or department name(s)
+	\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+    \huge Master Thesis \\
+    \huge Shortest Paths in the Plane with Polygon Violations 
+	\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule 
+}
+
+\author{
+	Nick Bakkegaard - 20114270\\
+	Peter Burgaard - 201209175 
+} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+
+\frontmatter
+
+\maketitle % Print the title
+
+\thispagestyle{empty}
+
+\newpage
+
+\chapter*{Abstract}
+
+Wow such a great thesis
+
+\newpage
+
+\tableofcontents
+\listoftodos
+\listoffigures
+\listoftables
+\listofalgorithms
+\mainmatter
+
+\input{introduction.tex}
+
+\input{simple.tex}
+
+\chapter{Continuous Dijkstra - overview of $O(k^2 n \log n)$ algorithm}
+
+\input{overview.tex}
+
+\chapter{Shortest path maps and their geometric properties}
+
+\input{shortestpathmap.tex}
+
+\chapter{Conforming subdivision}
+
+\input{conformingsubdivision.tex}
+
+\chapter{Wavefront propagation}
+
+\input{wavefront.tex}
+
+\chapter{Algorithm for shortest path with obstacle violations}
+
+\input{shortestpath.tex}
+
+\input{lowerbound.tex}
+
+\chapter{Conclusion}
+
+\newpage
+
+\appendix
+
+\input{complexity.tex}
+
+\chapter{Definition for a Hyperbola and Bisection}
+
+\section{Hyperbola definition}
+
+\begin{mydef}
+	\textbf{Hyperbola:} \\ 
+	A hyperbola\cite{Hyperbola} is a set of
+	points, such that for any point $P$ of the set, the absolute difference of
+	the distance $|PF_1|$, $|PF_2|$ to two fixed points $F_1$, $F_2$, also known
+	as the \textit{foci}, is constant, usually denoted by $2a, a>0$:
+	$$H=\{P|||PF_1|-|PF_2||=2a\}$$ 
+\end{mydef}
+
+\begin{figure}[H] 
+	\centering
+	\includegraphics[width=0.4\textwidth]{figures/hyperbel-def-e.png} 
+	\caption{Example of a hyperbola} 
+	\label{fig:hyperbola} 
+\end{figure}
+
+\section{Bisection}
+
+\begin{mydef}
+	\textbf{Bisection:} \\ 
+	Bisection is the division of something into
+	two equal or congruent parts, usually by a line, which is then called a
+	bisector. The most often considered types of bisectors are the segment
+	bisector (a line that passes through the midpoint of a given segment) and
+	the angle bisector (a line that passes through the apex of an angle, that
+	divides it into two equal angles).\cite{Bisector-collinearity-convexPoly}
+\end{mydef}
+
+\begin{figure}[H] 
+	\centering
+	\includegraphics[width=0.5\textwidth]{figures/bisector.pdf} 
+	\caption{Example of Segment Bisection} 
+	\label{fig:SegmentBisection} 
+\end{figure}
+\input{appendix.tex}
+\newpage
+\bibliography{papers}{}
+\bibliographystyle{plain}
+\newpage
+\printindex
+\end{document}

@@ -1,0 +1,108 @@
+\chapter{Lower bound of}
+In this chapter we will show the shortest path without violation has a
+$\Omega{(n\log n)}$ lower bound in the algebraic computation tree model.
+First we will introduce the element distinction problem, then we present a
+lower bound for that problem. Afterwards we present the sorting problem, and
+making a reduction to the element distinction problem and thereby showing that
+sorting must have at least the same lower bound as element distinction and
+lastly showing that the shortest path in the plane without violations can be
+used to sort number and thereby showing that the shortest path problem has
+lower bound at least the same.
+\section{The Algebraic Computation Tree Model}
+The idea of the The Algebraic Computation Tree Model is to construct a rooted
+tree where each path from the root to a leaf is a membership test.
+Let $W \subseteq \mathbb{R}^n$ be any set. The membership problem for $W$ is
+the following:
+\begin{align}
+	\text{Given } x = (x_1,\dots,x_n) \in \mathbb{R}^n \text{ determine if } x\in W
+\end{align}
+Formally a computation tree $T$ for each vertex $v$ it holds that
+\begin{itemize}
+  \item If $v$ has one son it computes one of the following computations
+			\begin{align}
+				f_v:=f_{v_1} \circ f_{v_2}\quad \text{ or }\quad
+				f_v:=c \circ f_{v_1}\quad \text{ or }\quad
+				f_v:=\sqrt{f_{v_1}}
+				\label{form:computation}
+			\end{align}
+  	 where $v_i$ is an ancestor of $v$ in the tree $T$ or $f_{v_i}\in
+  	 \{x_1,\dots,x_n\}$, $\circ \in \{+,-,\cdot,/\}$
+   \item If $v$ has two children it is a test instruction on the form
+		\begin{align}
+			 f_{v_1}>0\quad \text{ or }\quad
+			 f_{v_1}\geq 0\quad \text{ or }\quad
+			 f_{v_1}= 0
+			 \label{form:comparison}
+		\end{align}
+   \item If $v$ is a leaf it is either labeled YES or NO, depending on
+  	 weather the path down the tree $T$ makes $(x_1,\dots,x_n)\in W$
+\end{itemize}
+So given and input $x\in \mathbb{R}^n$ we can build a tree $T$ and find the
+depth of the tree to see what the lower bound of the computation is.
+The impotent thing to note is that we are allowed to make comparison (formula
+\ref{form:comparison}) and computation (formula \ref{form:comparison}).
+
+\section{Element distinction problem}
+
+The element distinctness problem is the following
+\begin{mydef}
+	\label{def:distinction}
+	Given $n$ elements $x_1,\dots,x_n\in \mathbb{R}$ is there a pair $x_i=x_j$
+	where $i\neq j$?
+\end{mydef}
+
+The following theorem is due to Michael Ben-Or 83\cite{DBLP:conf/stoc/Ben-Or83}
+
+\begin{theorem}
+	\label{thm:distinction_lower}
+Any algebraic computation tree that solves the n-element distinctness problem
+must have complexity of at least $\Omega{(n \log n)}$
+\end{theorem}
+
+With that settled, we will move on to sorting
+
+\subsection{Sorting of numbers}
+
+\begin{mydef}{Sorting}\nick{cite cormen}
+	\label{def:sorting}
+Given a sequence of $n$ numbers $x_1,\dots,x_n$ find er permutation
+	$x'_1,\dots,x'_n$ such that  $x'_1\leq x'_2 \leq\dots\leq x'_n$
+\end{mydef}
+
+Now we make a reduction from distinction Def. (\ref{def:distinction}) to
+sorting Def. (\ref{def:sorting}).  We are given $x_1,\dots, x_n$, and wants to
+see if there exists a pair $x_i=x_j$ where $i\neq j$. We do this by sorting the
+values and afterwards make a linear scan to see if $x'_i=x'_{i+1}$ since the
+elements is in sorted order, two element that are the same will appear next to
+each other in the sorted sequence, so we will find it using this approach.
+Since the reduction takes $O(n)$ and the element distinction can be solved
+using sorting that means that sorting must have at least the same lower bound,
+$\Omega(n\log n)$, as element distinction. 
+
+\subsection{Shortest path in the plane}
+Now we make a reduction from sorting numbers to calculating the shortest path
+in the plane with obstacles (\todo{Insert ref to problem definition}).
+Given numbers $x_1,\dots,x_n\in \mathbb{N}$, and lets for simplicity say they are all positive
+(i.e.\ $x_i>0$ for $i=1,\dots,n$) we construct the obstacle as follows: Take each
+point $x_i$ and construct the rectangle with the following points
+$(x_i,x_i^2),(x_i-1,x_i^2),(x_i-1,w), (x_i,w)$, where $w=max$ (see figure
+\ref{fig:reduction})
+
+\begin{figure}[H]
+	\caption{Reduction}
+	\includegraphics{figures/reduction.pdf}
+	\label{fig:reduction}
+\end{figure}
+
+Set $s=(0,0)$ and let
+$i_{max}=\underset{i}{\arg\max}(x_i)$ and set $t=(x_{i_{max}},x_{i_{max}}^2)$.
+This gives us a an instance of shortest path in the plane with obstacles where
+each rectangle which lower right corner lies on the
+function $f(x)=x^2$, this function is convex which results in every rectangles
+lower right corner being visited on the way from $s$ to $t$. Now we can run our
+SPM algorithm, get out a path which will be the sorted range of the numbers.
+
+Given that the reduction (constructing the rectangles and finding $t$) takes
+$O(n)$ we can conclude that we can make a reduction from number sorting to
+finding the shortest path in the plane with obstacles. This mean that we have
+shown a $\Omega{(n\log n)}$ lower bound on shortest path in the plane with obstacles.
