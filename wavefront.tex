@@ -988,7 +988,7 @@ sub edge $f \cap H$ into pieces of length equal to the inner square of the annul
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\textwidth]{figures/subdividedconvexhull.pdf}
+	\includegraphics[width=0.6\textwidth]{figures/subdividedconvexhull.pdf}
 	\caption{A subdivision of of a cell, with a convex hull around a boundary edge $e$ and the inner square of 
     		 the annulus.}
 	\label{fig:subdividedconvexhull}
@@ -997,9 +997,15 @@ sub edge $f \cap H$ into pieces of length equal to the inner square of the annul
 Due to $f$ being parallel with edge $e$ and the inner boundary of the annulus being well separated from the '
 outer boundary, see again the minimum clearance property, the total length of $f$'s sub edge inside $H$ is 
 proportional to the side length of the inner square. By this it follows that the partition of $f$ only creates 
-$O(1)$ edges. 
+$O(1)$ edges. We can see that these subdivided edges satisfy the propagation invariant, by the following example. 
+Given any such $f$, let $g'$ be an edge of $c$ such $W(e,f)$ leaves $c$ by passing through $g'$. Since $g'$ is an 
+edge from the conforming subdivision of the free space, $\mathcal{S}'$, we know it is a fragment of an edge $g$ in 
+the conforming subdivision of the obstacles vertices and $s$, $\mathcal{S}$. We know we from lemma 
+\ref{lemma:admitsa2conformingsubdivision} that there are $O(1)$ cells of $S'$ within shortest path distance $2|g|$ 
+of $g'$ by construction. Since the new transparent edge which makes the cell $c$ convex are subdivided into piece 
+such that $|f| \leq |g|$, then this implies that the propagation invariant holds for the edge $f$.
+
+\section{Simulation of the wavefront propagation}
 
 
-
-\section{Correctness of wavefront propagation}
 
