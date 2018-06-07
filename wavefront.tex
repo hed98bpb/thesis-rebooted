@@ -1005,6 +1005,25 @@ the conforming subdivision of the obstacles vertices and $s$, $\mathcal{S}$. We 
 of $g'$ by construction. Since the new transparent edge which makes the cell $c$ convex are subdivided into piece 
 such that $|f| \leq |g|$, then this implies that the propagation invariant holds for the edge $f$.
 
+\subsection{Dynamic wavefront propagation}
+
+Up until now we have, in this chapter, kept the simulation of wavefront propagation rather static, in the sense that
+we have look at the atomic examples of how to handle different cases at different time in the propagation process.
+Now we take these ideas and see what happens when we let them operate in a dynamic setting. This means means e.g. 
+since a wavefront is a collection of generators, which one of the generators waves do we calculate first, and how do
+we drop a generator when it has served its purpose, and so on. So we see what happens to the wavefront propagation 
+when we add the element of time to the process.
+
+So what happens to the combinatorical structure of the wavefront as it sweeps across the (convex) cells, and how 
+does the wavefront $W(e)$ behave as it sweeps across a cell $c$ after entering it through the edge $e$? The 
+simulation should detect and process each bisector event involving the the generators from each wavefront, e.g. 
+$W(e)$ that may occur inside $c$. The events are processed in an order of increasing distance to $s$. This is to 
+simulate the element of time since the weight and therefore the distance to each generator is assigned by the 
+arrival of the wavefront in unit speed, so distance and time are equivalent in this sense. So generator marked as 
+event are process.
+
+Let $W$ denote the current wavefront we currently are simulating, at any time in its simulation process. In the beginning of the simulation we have $W = W(e)$ as the approximate wavefront which passes through $e$ to compute cell $c$. It might be the case that the edge $e$ is claimed by multiple waves, and therefore $W$ is a list of generators, each claiming a portion of $e$. Every generator $v \in W$ defines a pair of bisectors with its neighbors in the list. If we let $v$ be the first generator in the list, then $v$ claims one of the endpoints of $e$, and its first bisector represented as the ray from $v$ through the end point of $e$. Similarly we define the last generator $v'$ of the generators. Should $v = v'$ and claim the whole edge $e$, then there are no bisectors in the list, and the wave is the ray propagated from the generator through $e$. 
+
 \section{Simulation of the wavefront propagation}
 
 
