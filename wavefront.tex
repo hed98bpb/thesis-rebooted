@@ -1022,7 +1022,34 @@ simulate the element of time since the weight and therefore the distance to each
 arrival of the wavefront in unit speed, so distance and time are equivalent in this sense. So generator marked as 
 event are process.
 
-Let $W$ denote the current wavefront we currently are simulating, at any time in its simulation process. In the beginning of the simulation we have $W = W(e)$ as the approximate wavefront which passes through $e$ to compute cell $c$. It might be the case that the edge $e$ is claimed by multiple waves, and therefore $W$ is a list of generators, each claiming a portion of $e$. Every generator $v \in W$ defines a pair of bisectors with its neighbors in the list. If we let $v$ be the first generator in the list, then $v$ claims one of the endpoints of $e$, and its first bisector represented as the ray from $v$ through the end point of $e$. Similarly we define the last generator $v'$ of the generators. Should $v = v'$ and claim the whole edge $e$, then there are no bisectors in the list, and the wave is the ray propagated from the generator through $e$. 
+Let $W$ denote the current wavefront we currently are simulating, at any time in its simulation process. In the 
+beginning of the simulation we have $W = W(e)$ as the approximate wavefront which passes through $e$ to compute cell
+$c$. It might be the case that the edge $e$ is claimed by multiple waves, and therefore $W$ is a list of generators,
+each claiming a portion of $e$. Every generator $v \in W$ defines a pair of bisectors with its neighbors in the 
+list. If we let $v$ be the first generator in the list, then $v$ claims one of the endpoints of $e$, and its first 
+bisector represented as the ray from $v$ through the end point of $e$. Similarly we define the last generator $v'$ 
+of the generators. Should $v = v'$ and claim the whole edge $e$, then there are no bisectors in the list, and the 
+wave is the ray propagated from the generator through $e$. 
+
+\subsubsection{Crossing of two line segments}
+\begin{figure}[H]
+	\caption{Crossing of two line segments}
+	\minipage{0.48\textwidth}
+		\includegraphics[height=3cm]{figures/vandvprimesharingedge.pdf}
+		\caption{}
+		\label{fig:crosses_a}
+	\endminipage\hfill
+	\minipage{0.48\textwidth}
+		\includegraphics[height=3cm]{figures/vandvprimeallofe.pdf}
+		\caption{}
+		\label{fig:crosses_b}
+	\endminipage\hfill
+	\minipage{0.5\textwidth}
+		\includegraphics[height=3cm]{figures/visallofe.pdf}
+		\caption{}
+		\label{fig:crosses_c}
+		\endminipage\hfill
+\end{figure}
 
 \section{Simulation of the wavefront propagation}
 
