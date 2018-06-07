@@ -1,16 +1,17 @@
 \chapter{Simple $O(n^3 +k n^2)$ implementation}
 In this section we describe an $O(n^3+k n^2)$ implementation which solves the
-"Shortest Paths in Plane with Obstacles Violations"-problem. $n$ is the number
-of vertices and $k$ is the number of polygon violations allowed. In the first
-section we describe how we construct the visibility graph. Imagine a plane with
-a starting point $s$, an end point $t$, and $h$ polygon obstacles. A visibility
-graph is a graph where for each set of points  $p,q\in P \cup \{s,t\}$ (recall
-$P$ is the set of all points of the polygons) there is an edge if the two points
-can see each other without going (or looking) through any interior of an
-obstacle (see figure \ref{visibilitygraph}). In the second section we find the
-shortest path from $s$ to $t$ in the visibility graph using shortest path
-algorithm Dijkstra's algorithm and finally in the third section we test our
-code to see if the actual running time is the same as the theoretical.
+"Shortest Paths in Plane with Obstacles Violations"-problem. Recall that $n$ is
+the number of vertices in the polygons and $k$ is the number of polygon
+violations allowed. In the first section we describe how we construct the
+visibility graph. Imagine a plane with a starting point $s$, an end point $t$,
+and $h$ polygon obstacles. A visibility graph is a graph where for each set of
+points  $p,q\in P \cup \{s,t\}$ (recall $P$ is the set of all points of the
+polygons) there is an edge between them if the two points can see each other
+without going (or looking) through any interior of an obstacle (see figure
+\ref{visibilitygraph}). In the second section we explain Dijkstra's algorithm
+for finding the shortest path from $s$ to $t$ in the visibility graph and
+finally in the third section we test our code to see if the actual running time
+is the same as the theoretical.
 
 \begin{figure}[H]
 	\caption{Example of visibility graph}
@@ -36,7 +37,7 @@ is a list of the points in the polygon we use the following algorithm.  Create
 a graph $G_0=(V,E)$, where $V$ contains all the vertices in $P\cup \{s,t\}$,
 and let $E$ contain all possible connections between the vertices. Make $k$
 copies of the graph and name them $G_1,\dots,G_{k}$.  The algorithm goes as
-follows. For each graph $G_i$, take for each edge $e_j\in G_i$ and call
+follows: for each graph $G_i$, take for each edge $e_j\in G_i$ and call
 NumberOfCrosses$(e_j)$, which returns the number of polygons from $P$ that the
 line segment crosses, and connect the endpoint to the corresponding point in
 $G_{i+n}$, i.e.\ if you take an edge in the graph, that goes through $n$
@@ -60,7 +61,7 @@ you go $k$ levels up.
 	\end{algorithmic}
 \end{algorithm}
 
-The only missing part is the numberOfCrosses function, which we will define
+The only missing part is the numberOfCrossings function, which we will define
 below.
 
 \subsection{Number of crossings}
@@ -97,15 +98,15 @@ of the polygon.
 \end{tabular}
 	\label{fig:crossings}
 \end{figure}
-So given a polygon $p\in P$, and a line segment $l$ we want to
-determine weather $l$ crosses the polygon $p$. First we make  We start by
-making the list of points into a list of line segment
-$p'=(p_1,p_2),(p_2,p_3),\dots,(p_{i-1},p_i)$.  If a line segment crosses a line
-segment of a polygon, it counts as a crossing (cases f and g). The other three cases of
-crossing (cases h, i and j) all have that in common that they have four end points in
-common with line segments from the polygon. So we say it is not allowed to have
-four points in common with a polygons line segment. Problem is that it makes
-(cases c, d and e) not allowed which they should be. But fortunately they all have that in
+So given a polygon $p\in P$, and a line segment $l$ we want to determine
+weather $l$ crosses the polygon $p$. We start by making the list of points into
+a list of line segment $p'=(p_1,p_2),(p_2,p_3),\dots,(p_{i-1},p_i)$.  Then we
+observe that if a line segment crosses a line segment of a polygon, it counts
+as a crossing (cases f and g). The other three cases of crossing (cases h, i
+and j) all have that in common that the line segment crosses four end points
+from the polygon. So we say it is not allowed to cross four points in of
+a polygons line segments. The problem is that it makes (cases a, c
+and d) not allowed which they should be. But fortunately they all have that in
 common that they are colinear with a line segment of the polygon, so the
 algorithm becomes 
 \begin{enumerate}
@@ -117,6 +118,7 @@ algorithm becomes
 \end{enumerate}
 
 This lead us to the following algorithm
+\nick{Write this algorithm}
 \begin{algorithm} 
 	\caption{NumberOfCrossings($l,P$)}
 	\begin{algorithmic}[1] 
@@ -139,7 +141,7 @@ make the following two vectors.
 	v_1 &=p_2-p_1 = \langle p_2.x-p_1.x,p_2.y-p_1.y\rangle\\
 	v_2 &=p_3-p_1 = \langle p_3.x-p_1.x,p_3.y-p_1.y\rangle
 \end{align*}
-Lets denote $v_1 = <a,b>$ and $v_2 = <c,d>$
+Lets denote $v_1 = \langle a,b\rangle$ and $v_2 = \langle c,d\rangle$
 (see Figure \ref{fig:rightturn_a})
 \subsubsection{Right turn}
 \begin{figure}[H]
@@ -160,7 +162,7 @@ Lets denote $v_1 = <a,b>$ and $v_2 = <c,d>$
 \nick{Find book ref to right turn}
 We claim that we can calculate the turn by calculating the signed area of the
 parallelogram spanned by the two vectors. The area of their parallelogram can
-be calculated as follows calculate the area of the big rectangle, and take the
+be calculated as follows: calculate the area of the big rectangle, and take the
 two small triangles and the little square and subtract that area.
 \begin{align}
 	\text{area} &= (a+c)(d+b)-2A-2B-2C\nonumber\\
@@ -172,7 +174,7 @@ Now we claim that the area between these two vectors is positive if the
 three points make a right turn, and negative if they make a left turn. We show
 that by an example (see figure \ref{rightturn3})
 
-Given our formula \ref{form:rightturn} we get that the $q_1,q_3,q_2$ area is
+Given our formula (formula \ref{form:rightturn}) we get that the $q_1,q_3,q_2$ area is
 \begin{align*}
 	&(q_3.y-q_1.y)(q_2.x-q_1.x)-(q_3.x-q_1.x)(q_2.y-q_1.y)\\ 
 	= &(2-0)(-1-0)-(0-0)(1-0)\\
@@ -180,10 +182,7 @@ Given our formula \ref{form:rightturn} we get that the $q_1,q_3,q_2$ area is
 	= & -2-0\\
 	= & -2
 \end{align*}
-$2\cdot1-0\cdot1=2$ where $q_1,q_3,q_4$ gives us $2\cdot(-1)-0\cdot(-1)=-2$.
-The area is the same but if the three point do a left turn, the area will
-become negative. If the three lines are collinear, the two vectors are on top
-of each other and the area is zero.
+And the area of $q_1,q_3,q_4$ is
 \begin{align*}
 	&(q_3.y-q_1.y)(q_4.x-q_1.x)-(q_3.x-q_1.x)(q_4.y-q_1.y)\\ 
 	= &(2-0)(1-0)-(0-0)(1-0)\\
@@ -191,6 +190,7 @@ of each other and the area is zero.
 	= &2-0\\
 	= &2
 \end{align*}
+
 \begin{figure}[H]
     \centering
 	\includegraphics{figures/rightturn3.pdf}
@@ -204,6 +204,10 @@ So the function for calculating the right turn is
 		\State \Return $(p_2.x-p_1.x)(p_3.y-p_1.y)-(p_2.y-p_1.y)(p_3.x-p_1.x)$
 	\end{algorithmic}
 \end{algorithm}
+
+This function will return a negative number if the three points make a left
+turn, a positive number if it is a right turn and 0 if the three points are on
+a line.
 
 \subsubsection{Crossing of two line segments}
 \begin{figure}[H]
@@ -226,23 +230,25 @@ So the function for calculating the right turn is
 \end{figure}
 
 \begin{Lemma}
-Given two line segments, $l_1$ and $l_2$, we want to know if they cross. We start by taking the
-first line segment  $l_1$ and check if the two points of $l_2$, $l_2.p$ and
-$l_2.q$ lie on separate sides of the line that is collinear to $l_1$, if this is
-the case we do a similar check the other way around, and if that is true the
-two line segment cross.
+	Given two line segments, $l_1$ and $l_2$, we want to know if they cross (see
+	figure \ref{fig:crosses_a}). We start by taking the first line segment
+	$l_1$ and check if the two points of $l_2$, $l_2.p$ and $l_2.q$ lie on
+	separate sides of the line that is collinear to $l_1$, if this is the case
+	we do a similar check the other way around, and if that is true the two line
+	segment cross.
 \end{Lemma}
 \begin{proof}
 Let $L_1$ and $L_2$ denote the lines collinear to $l_1$ and $l_2$ respectively.
-If both the end points of $l_2$ is on the same side of $L_1$, then the
-line segments can't cross $L_1$, and therefore $l_1$ obviously. If they lie on
-opposite sites, $l_2$ crosses $L_1$ and we have to determine if $l_2$ crosses
-$L_1$ between $l_1.p$ and $l_1.q$. 
+	If both the end points of $l_2$ is on the same side of $L_1$, then the line
+	segments can't cross $L_1$, and therefore $l_1$ obviously(see figure
+	\ref{fig:crosses_b}). If they lie on opposite sites, $l_2$ crosses $L_1$ and
+	we have to determine if $l_2$ crosses $L_1$ between $l_1.p$ and $l_1.q$. 
 
 We know the line $l_2$ crosses $L_1$, the question is, is it between the two
-end points, we can quit easily determine this by looking at if the endpoints
-lie on opposite sites of $l_2$, like before. If they do it must be the case
-that $l_1$ and $l_2$ crosses, if not it crosses $L_1$ another place.
+	end points, we can quit easily determine this by looking at if the endpoints
+	lie on opposite sites of $l_2$, like before(see figure \ref{fig:crosses_b}.
+	If they do it must be the case that $l_1$ and $l_2$ crosses, if not it
+	crosses $L_1$ another place.
 \end{proof}
 
 \subsubsection{Algorithm}
