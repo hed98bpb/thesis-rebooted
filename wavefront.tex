@@ -882,7 +882,7 @@ boundary edges of an active region.
 	with the edges of $\mathcal{O}$ to build the subdivision $SPM(s)$.
 \end{proof}
 
-\section{The list based data structure for wavefront propagation}
+\section{The list based data structure for wavefront propagation} \label{section:datastructurewavefront}
 
 To keep track of our approximate wavefront, we use a list to keep track of the generators coming from 
 obstacle vertices. For this list we need a data structure which we can use two types of operations on:
@@ -1029,27 +1029,43 @@ each claiming a portion of $e$. Every generator $v \in W$ defines a pair of bise
 list. If we let $v$ be the first generator in the list, then $v$ claims one of the endpoints of $e$, and its first 
 bisector represented as the ray from $v$ through the end point of $e$. Similarly we define the last generator $v'$ 
 of the generators. Should $v = v'$ and claim the whole edge $e$, then there are no bisectors in the list, and the 
-wave is the ray propagated from the generator through $e$. 
+wave is the ray propagated from the generator through $e$. See figure \ref{fig:vandvprimesharingedge}, \ref{fig:vandvprimeallofe} and \ref{fig:visallofe}.
 
-\subsubsection{Crossing of two line segments}
 \begin{figure}[H]
 	\caption{Crossing of two line segments}
 	\minipage{0.48\textwidth}
 		\includegraphics[height=3cm]{figures/vandvprimesharingedge.pdf}
-		\caption{}
-		\label{fig:crosses_a}
+		\caption{$v$ and $v'$ each claim the end points of $e$, with their bisectors being shared with other generators claiming the middle part of $e$.}
+		\label{fig:vandvprimesharingedge}
 	\endminipage\hfill
 	\minipage{0.48\textwidth}
 		\includegraphics[height=3cm]{figures/vandvprimeallofe.pdf}
-		\caption{}
-		\label{fig:crosses_b}
+		\caption{$v$ and $v'$ claim all of $e$ and only have one bisector between them}
+		\label{fig:vandvprimeallofe}
 	\endminipage\hfill
+	\centering
 	\minipage{0.5\textwidth}
 		\includegraphics[height=3cm]{figures/visallofe.pdf}
-		\caption{}
-		\label{fig:crosses_c}
+		\caption{$v$ claims all of $e$ and there are therefore no bisectors other than the ray projected from $v$ through $e$.}
+		\label{fig:visallofe}
 		\endminipage\hfill
 \end{figure}
+
+In order to process the bisectors event in the correct order, we will maintain the generators of $W$ in the priority queue which was 
+describe in section \ref{section:datastructurewavefront}. The priority field which each node of the priority queue tree has, is 
+assigned with its weighted distance to the point at which the two bisectors that defines $v$ and its neighbors intersect, beyond $e$. 
+An example of this is given in figure \ref{fig:priorityvalue}. Here thee bisectors defining $v$ and its neighbours intersects after 
+passing through $e$, and meeting at the point $p$. This means that $v$ priority value $priority(v) = d(s,v) + |\overline{vp}|$.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/priorityvalue.pdf}
+	\caption{A visualization of what a generator $v$'s priority value, $|\overline{vp}| + d(s,v)$, could be with the
+	         dashed lines being bisectors of the generators claiming $e$.}
+	\label{fig:priorityvalue}
+\end{figure}
+
+The processing of the approximate wavefront propagation will be done in event of increasing priority up to some maximum priority $t_{stop}$. The $t_{stop}$ is calculated from the shape of the cell $c$, which we will show how to later in this section. The limit of $t_{stop}$ is calculated from the individual values of $t_{stop}(f)$ for each transparent edge $f$ of $c$. Initially the values for all f is $t_{stop}(f) = \infty$ and therefore $t_{stop} = \infty$. 
 
 \section{Simulation of the wavefront propagation}
 
