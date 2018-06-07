@@ -1065,7 +1065,47 @@ passing through $e$, and meeting at the point $p$. This means that $v$ priority 
 	\label{fig:priorityvalue}
 \end{figure}
 
-The processing of the approximate wavefront propagation will be done in event of increasing priority up to some maximum priority $t_{stop}$. The $t_{stop}$ is calculated from the shape of the cell $c$, which we will show how to later in this section. The limit of $t_{stop}$ is calculated from the individual values of $t_{stop}(f)$ for each transparent edge $f$ of $c$. Initially the values for all f is $t_{stop}(f) = \infty$ and therefore $t_{stop} = \infty$. 
+The processing of the approximate wavefront propagation will be done in event of increasing priority up to some maximum priority 
+$t_{stop}$. The $t_{stop}$ is calculated from the shape of the cell $c$, which we will show how to later in this section. The limit of 
+$t_{stop}$ is calculated from the individual values of $t_{stop}(f)$ for each transparent edge $f$ of $c$. Initially the values for all
+f is $t_{stop}(f) = \infty$ and therefore $t_{stop} = \infty$. Also to keep track of the priorities through out the simulation, by 
+initializing an empty set $T$ which will be cleared after each simulation.
+
+At each step of the simulation, the generator $v$ with the lowest priority from the queue is processed, where one of following 
+scenarios can happen.
+
+\begin{enumerate}
+    \item  If the event (the intersection of the $v$'s bisectors) happens inside the cell $c$, then $v$ is deleted, since it no longer 
+           propagates the free space, and we recompute the priorities for $v$'s neighbours. We mark $v$ in $W(e)$ for the cell $c$ by 
+           the marking rules explained in section \ref{section:bisectorevents}, which also implies marking it in $O(1)$ number of 
+           neighbouring cells to $c$ accord to the marking rules.
+    \item If $v$'s event happens outside, then we set $priority(v) = \infty$ and add $v$ to the set $T$. In this case the generator 
+          list is not changed since $v$ still has more free space outside of $c$ to propagate.
+\end{enumerate}
+
+If we where to process each bisector event of $W$ in their initialize time order, and not update them in the first of the above cases, 
+then the neighboring generators of $v$ could participate in bisector event outside of cell $c$ before, all bisector events inside $c$ 
+were fully processed. 
+
+So far we have seen the intersection of $v$'s bisectors if its neighbours engulfs $v$, as seen in figure \ref{fig:priorityvalue}, in 
+which case we would mark $v$ by rule 3 of the generator marking rules. But it's also important to be aware that the bisector event of 
+$v$ could also happen if either the intersection lies on a opaque edge of if they lie on different transparent edges with an opaque 
+edge between them. In that case rule 1 above, should still do as stated, but would use rule 4 to mark $v$ for cell $c$ and its 
+neighbours. Should the intersection point $p$ lie on a transparent edge, e.g. $f$, then we update our $t_stop$'s as follows:
+
+\begin{align*}
+    t_{stop}(f) &= \min(t_{stop}(f), d(s,v) + |\overline{vx}| + |f|) \\
+    t_{stop}    &= \min(t_{stop}, t_{stop}(f))
+\end{align*}
+
+The update of $t_{stop}(f)$ is either the current $t_{stop}(f)$ or the weight as calculated the same way as in figure 
+\ref{fig:priorityvalue} plus the length of the transparent edge $f$. This way we assure, that overestimate the priority since we would 
+have swept all of $f$. By doing it this way, we also don't overshoot the estimate since it still not $2\cdot|f|$ times greater than the
+time at which $W$ first comes to contact with $f$.
+
+The $t_{stop}$ priority, which is in the priority queue, is either $t_{stop} = \infty$ in which case all events inside $c$ have been 
+processed, or $t_{stop} < \infty$, which happens in the above update if there is a transparent edge $f$ on the boundary of $c$ with 
+$t_{stop} = t_{stop}(f)$. We see that this definition of 
 
 \section{Simulation of the wavefront propagation}
 
