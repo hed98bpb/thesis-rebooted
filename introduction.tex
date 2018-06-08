@@ -32,9 +32,15 @@ single source shortest path algorithm. Afterwards we are going to explain the
 implementation details and lastly we describe the algorithm from 2017 and
 implement that.
 \nick{Find ud af hvorfor visibility graphen er at gå fra vertex til
-vertex,(trekants uligheden), og skriv det et sted her}
-\section{Problem description}
-Formal definition of problem
+vertex,(trekants uligheden), og skriv det et sted her} \section{Problem
+description} We a given two points in the plane $s,t\in\mathbb{R}^2$ and a list
+of polygons $P=p_1,\dots,p_h$ where $p_i$ is a list of points in polygon $p_i$
+starting an abitrary place and in clockwise order(note that sometimes we use
+$P$ as a set f. ex. polygon $p_i\in P$). We say a legal path is a list of
+points where two adjecent points are mutually visibible, i.e. you are able to
+draw a line from one to the other without crossing the interioer of any polygon
+in $P$.
+We want to find a shortest legal path from $s$ to $t$.
 
 \section{Naive algorithm}
 Overview of naive
