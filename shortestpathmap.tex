@@ -36,8 +36,8 @@ further define what space we can create our path in, and which we cannot.
 	encapsulating polygon minus the interiors of all obstacle polygons.
 \end{mydef}
 
-The algorithms that we will be examining will mostly need the obstacles to be 
-convex, which are defined as follows: 
+The final $O(k^2 \cdot n \log n)$ algorithm that we will be examining will  
+need the obstacles to be convex, which are defined as follows: 
 
 \begin{mydef}
 	\textbf{Convex Polygons:} \\ 
@@ -105,8 +105,7 @@ equally we use $d_k(p)$ to denote the length of the shortest path from the fixed
 source $s$ in the case of up to $k$ obstacle violations. The reason we use a 
 separate notation in the case of obstacle violation is that shortest 0-path 
 problem with origination at a common source point $s$ cannot intersect, by the 
-triangle inequality\cite{HershbergerKS17}\footnote{this will be proven later in 
-the thesis}.
+triangle inequality\cite{HershbergerKS17}
 
 \begin{mydef}
 	\textbf{Triangle Inequality:} \\ 
@@ -123,12 +122,156 @@ the thesis}.
 \end{figure}
 
 
-\section{Shortest path map}
+\section{Shortest path map and shortest $k$-path map}
+
+This section will briefly introduce the reader to the concept of shortest path map
+and shortest $k$-path map and som basic properties of these.
+
+We begin this section with a definition of a predecessor which is essential to understand
+what a shortest path map is
+
+\begin{mydef}
+	\textbf{Predecessor:} \\ 
+	The predecessor of an arbitrary point $p$ is defined as a vertex in the plane which is 
+	adjacent to $p$ in $\pi(p,s)$. These vertices also include the source $s$. A predecessor of
+	$p$ is necessarily visible from $p$. If $p$ and $s$ are mutually visible,
+	then $s$ is a predecessor of $p$. \cite{HershbergerS99} 
+\end{mydef}
+
+next we give the definition of a shortest path map
+
+\begin{mydef}
+	\textbf{Shortest Path Map:} \\ 
+	The shortest path map  of a
+	particular source point s, denoted $SPM(s)$, is a subdivision of the plane
+	into two-dimensional regions such that all the points in one region have the
+	same, unique predecessor\cite{HershbergerS99}. 
+\end{mydef}
+
+An example of an $SPM$ can be seen in figure \ref{fig:exampleofspms} blow
+
+\begin{figure}[H] 
+	\centering
+	\includegraphics[width=0.65\textwidth]{figures/exampleofspms.pdf}
+	\caption{An example of an $SPM$ build around $s$ with where the area between
+	         the arrows and fully drawn lines shows the regions in the plane with
+	         the same predecessors.}
+	\label{fig:exampleofspms} 
+\end{figure}
+
+The figures shows the $SPM$ build around $s$ as the source, and the different obstacles in the plane. 
+Since a shortest path only needs to turn at the vertices of the obstacles, by triangular inequality, 
+the vertices of obstacles naturally constitute the unique predecessors of the points within the different 
+regions marked by the fully drawn lines. Here the lines will extend until the meet the encapsulating 
+polygon $\mathcal{P}$ an then be fully enclosed. The dashed lines show the shortest path from a region 
+$s$ or to the preceding region. It should be noted that these fully drawn line constitutes bisectors 
+(which will explained in later chapter) and there point on the line have a equal distance to $s$ through 
+either of the regions which the bisector acts a border between. It should therefore be noted that in the 
+case of the $SPM$ there may multiple shortest paths to points in the plane, in which case one just chooses 
+one of them.
+
+The distance to a point $p$ in the $SPM$ is calculated by finding the weight from $s$ to $p$
+
+\begin{mydef}
+	\textbf{Weight:} \\ 
+	We define weight of an vertex (including obstacle vertices) to be
+	its shortest path distance to the source $s$. Given an arbitrary point $p$
+	in free space, its weighted distance to a visible vertex $v$ is defined as
+	$$d(s,v) + \left| \overline{vp} \right|$$
+	that is the straight-line distance from $v$ to $p$ plus the shortest path 
+	distance from $s$ to $v$.
+	\cite{HershbergerS99} 
+\end{mydef}
+
+Next we move on to the definition of $k$-predecessors and the shortest $k$-path map
+
+\begin{mydef}
+	\textbf{$k$-predecessor}\\ 
+	Given a shortest $k$-path $\pi_k(p)$, we define the \textit{predecessor of
+	p} to be the vertex (including $s$) that is adjacent to $p$ in
+	$\pi_k(p)$\cite{HershbergerKS17}. 
+\end{mydef}
+
+\begin{mydef}
+	\textbf{Shortest k-path map}(Definition 9 in \cite{HershbergerKS17})\\
+	The partition of free space into connected regions with the same
+	$k$-predecessor is called the \textit{shortest k-path map}, and is denoted
+	by $SPM_k$. The subset of $SPM_k$ for which the shortest path $\pi_k(p)$ to
+	every point $p$ has exactly $k$ crossings is called the shortest $(=k)$-path
+	map and denoted by $SPM_{=k}$. 
+\end{mydef}
 
 
+\section{Complexity of SPM map}
 
-\section{Shortest k path map}
+\begin{mydef}[Star-shaped polygon]\cite{PreparataS85}
+	\label{star-shaped}
+	A simple polygon $P$ is star-shaped if there exists a point $z$ not external
+	to $P$ such that for all points $p$ of $P$ the line segment $\overline{zp}$
+	lies entirely within $P$. The locus of the points $z$ having the above
+	property is the \emph{kernel} of $P$.
+\end{mydef}
 
-\section{Differences between $SPM$ and $SPM_k$}
+\begin{Lemma}[Lemma 3.2]
+	\label{lemma:3.2}
+	The shortest path map $SPM(s)$ has $O(n)$ vertices, edges and faces. Each
+	edge is a segment of a line or a hyperbola
+\end{Lemma}
+\begin{proof}
+	Note that each face $SPM(s)$ is star-shaped (see definition
+	\ref{star-shaped})
+	with the unique predecessor vertex for the face, and the predecessor is in
+	the kernel of the face.
+	The idea behind this proof is to show that each obstacle vertex is a
+	predecessor vertex for at most one face in $SPM(s)$.
+	Consider a vertex $u$ that is the predecessor of a face $F$ and let
+	$pred(u)$ be the set of predecessors of $u$, this is a set because there can
+	be multiple predecessors. Observe that $d(s,u)=d(s,v)+|\overline{uv}|$ for
+	any $v\in pred(u)$, since the distance $d(s,u)$ can always be rewritten as
+	the distance to from $s$ to $u$'s predecessor, and a straight line from the
+	predecessor to $u$ since your predecessor is always visible from a point.
 
-\subsection{Given slack when going to k violations}
+	If a point $p$ is visible from a vertex $v \in pred(u)$ with $v$, $u$, $p$ 
+    not being collinear, then $p$ cannot have $u$ as its predecessor. This is 
+    due to the triangle inequality, where it is always shorter to take the direct 
+    line instead going by another point.
+
+	\nick{figure}
+
+	Consider the subset of the free space that is visible from $u$
+	but not visible from $v\in pred(u)$. Let $R(u,v)$ denote the component of
+	this subset that is incident to $u$. Then $R(u,v)$ lies in an
+	\nick{figure}
+	angular angle around $u$ of less than 180$^\circ$. Define
+	\begin{align}
+		R(u) =  \bigcap_{v\in pred(u)} R(u,v)
+	\end{align}
+
+	Clearly $F \subseteq R(u)$, since the area $R(u)$ is the area that is
+	incident to $u$, and not visible from any predecessor $v\in pred(u)$ 
+	
+	Then the claim is that there is at most one face of
+	$SPM(s)$ in $R(u)$ with $u$ as its predecessor. 
+	
+	We do this by contradiction: 
+	Suppose there were two faces
+	$F_1$ and $F_2$ both having $u$ as their unique predecessor. The faces $F_1$
+	and $F_2$ must have exactly one point in common, the vertex $u$. In the space
+	between $F_1$ and $F_2$ there is a point $p$, there have to be a point here,
+	otherwise they would be the same face. The point $p$ is arbitrarily close to $u$ with
+	predecessor $z$ such that $z$ is distinct from both $u$ and $pred(u)$. In
+	other words $d(s,u)+|\overline{up}|>d(s,z)+|\overline{zp}|$. However as $p$
+	moves towards $u$ the difference in the distance shrinks and finally
+	$d(s,u) = d(s,z)+|\overline{zu}|$. But then $z$ must be a predecessor of
+	$u$. This means that $F_1$ and $F_2$ is part of the same face, contradicting
+	the hypothesis. Thus a vertex $u$ is a predecessor of at most one face in
+	the shortest path map.
+
+	\nick{do the end from here to proof end}
+	Finally to prove the linear upper bound on the size of the shortest path
+	map, recall that the number of obstacle vertices is $n$ the remaining
+	vertices border at least three faces of $SPM(s)$ (for this argument we count
+	the obstacle polygons as faces of the shortest path map). Since the number
+	of faces is $O(n)$, Eulers formula for planar graphs implies that the total
+	number of vertices is also $O(n)$. This completes the proof
+\end{proof}
