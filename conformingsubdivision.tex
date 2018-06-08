@@ -1,3 +1,5 @@
+\label{chapter:conformingsubdivision}
+
 The following chapter presents the main theory behind the conforming subdivision, and an 
 algorithm for computing it, and a $O(n \log n)$ implementation of the algorithm. 
 
@@ -766,10 +768,8 @@ To give a better overview, we include step 10 through 20 from algorithm
 \ref{algorithm:build-subdivision} below.
 
 \begin{algorithm}[H]
-	\setcounter{algorithm}{7}
-	\caption{step 10 to 20}  
+	\caption{step 10 to 20 from Algorithm \ref{algorithm:build-subdivision}}  
 	\begin{algorithmic}[1]
-    	\setcounter{ALG@line}{9}
         \ForEach {$q\in \mathcal{Q}(i-2)$}
             \State Let $\bar{q} = \mathbf{growth}(q)$
             \If {$q$ is a simple component of $\mathcal{Q}(i-2)$ 

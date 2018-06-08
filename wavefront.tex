@@ -159,7 +159,6 @@ order of its covertime. The main loop of the simulation is as follows:
 
 \begin{algorithm}[H]
 	\caption{Propagation Algorithm} \label{algorithm:propagationalgorithm}
-    \setcounter{algorithm}{10}
 	\begin{algorithmic}[1]
 		\While {there is an unprocessed transparent edge}
         	\State Select edge $e$ with minimum $covertime(e)$
@@ -1005,11 +1004,11 @@ the conforming subdivision of the obstacles vertices and $s$, $\mathcal{S}$. We 
 of $g'$ by construction. Since the new transparent edge which makes the cell $c$ convex are subdivided into piece 
 such that $|f| \leq |g|$, then this implies that the propagation invariant holds for the edge $f$.
 
-\subsection{Dynamic wavefront propagation}
+\subsection{Dynamic wavefront propagation} \label{section:dynamicwavefront}
 
 Up until now we have, in this chapter, kept the simulation of wavefront propagation rather static, in the sense that
 we have look at the atomic examples of how to handle different cases at different time in the propagation process.
-Now we take these ideas and see what happens when we let them operate in a dynamic setting. This means means e.g. 
+Now we take these ideas and see what happens when we let them operate in a dynamic setting. This means e.g. 
 since a wavefront is a collection of generators, which one of the generators waves do we calculate first, and how do
 we drop a generator when it has served its purpose, and so on. So we see what happens to the wavefront propagation 
 when we add the element of time to the process.
@@ -1105,9 +1104,57 @@ time at which $W$ first comes to contact with $f$.
 
 The $t_{stop}$ priority, which is in the priority queue, is either $t_{stop} = \infty$ in which case all events inside $c$ have been 
 processed, or $t_{stop} < \infty$, which happens in the above update if there is a transparent edge $f$ on the boundary of $c$ with 
-$t_{stop} = t_{stop}(f)$. We see that this definition of 
+$t_{stop} = t_{stop}(f)$. We see that by updating $t_{stop}(f)$ this way, we ensure that all bisector events needed to produce $W(e,f)$
+have indeed been processed. So now we move one to explain how to process $W(e,f)$. The wavefront $W(e,f)$ is calculated from $W$ in the
+following way. First we locate the endpoints of $f$ in $W$, which can be done by can picking a bisector in $W$, and following its 
+neighbors outwards, there is at least on such bisector (in the case of one, this bisector claims all of f). Mark the endpoint claiming 
+generator by rule 2. From here we split the generator list into 3 parts. Those generators whose bisectors are between the two endpoint 
+claiming generators. Those are the one who will go through $f$, which after the reset of priorities will be the $W(e,f)$ wavefront, and
+the other two sets are those who pass left and those who pass right of $f$. The simulation process continues with the left and right 
+passing sets independently after the $t_{stop}$ has been reset in each set to be the minim of $t_{stop}(g)$ over the transparent edges 
+$g$ for that group. 
 
-\section{Simulation of the wavefront propagation}
+\missingfigure[]{}
 
+So the above is the case of $t_{stop} < \infty$. Should we stop because we reach $t_{stop}$ and $t_{stop} = \infty$ then we split the 
+current generator list at all the transparent edge endpoints, which will produce $W(e,f)$ for each transparent edge $f$, and some 
+wavefront pieces that hit only opaque edges.
+
+Should no transparent edges remain in some piece, then all bisectors in the piece hits an opaque edge, in which case we mark all the 
+generators in that piece for cell $c$ and a $O(1)$ of neighboring cell by marking rule 4. We also make the necessary marking of rule 2 
+and rule 3.
+
+When finished the priority of each vertex in $T$ is reset, based on the bisectors it defines with its neighbours in the new list. This 
+is done to ensure each wavefront fragment $W(e,f)$ has proper priorities. Now we have computer $W(e,f)$ and we can determine the time 
+the wavefront first makes contact, which is $d(s,v)+|\overline{vp}$.
+
+\subsection{Analysis of the wavefront propagation}
+
+The propagation algorithm calls the self balancing binary priority queue $O(1)$ times with priority and list operations per bisector event processed and $O(1)$ for each edge in the conforming subdivision (transparent edge). Each operation takes by construction of data structure $O(\log n)$ time and space. Since the data structure by construction is fully persistent, the all the modifications we do when computing a single wavefront list $W(e)$ are independent.
+
+The main result for section \ref{section:dynamicwavefront} can be summarized in the following lemma:
+
+\begin{Lemma} [Lemma 5.2 in \cite{HershbergerS99}]
+Every bisector event processed in the procedure in section \ref{section:dynamicwavefront} either:
+\begin{enumerate}
+    \item Lies inside cell $c$.
+    \item Involves a generator whose region is truncated by an opaque edge of $c$.
+    \item Is associated with $t_{stop}(f)$ being set to a finite values for the first time for some transparent edge $f$ of $c$, or
+    \item Lies within shortest path distance $2\cdot|f|$ of a transparent edge $f$ of $c$. 
+\end{enumerate}
+If the number of event is $m$, then the procedure takes $O(m \log n)$ time.
+\end{Lemma}
+
+This Lemma, together with the results of chapter \ref{chapter:shortestpathmap} and \ref{chapter:conformingsubdivision} gives us the following theorem due to Hershberger and Suri \cite{HershbergerS99}.
+
+\begin{theorem}[Theorem 5.3 in \cite{HershbergerS99}]
+Let $\mathcal{O}$ be a family of polygonal obstacles in the plane with pairwise disjoint interiors and a total of $n$ vertices. Given a
+point $s$, we can construct the shortest path map from $s$ with respect to $\mathcal{O}$ in time $O(n \log n)$ and space $O(n \log n)$.
+\end{theorem}
+
+By this theorem we see that, one can compute the $SPM(s)$ by processing the point locations in the plane, where after one can make a 
+shortest path query from $s$ to any point $t$ in the plane, which can be answered in time $O(\log n)$ due to \peter{inset artikle 16 
+from hershberger99}. A shortest path $\pi(s,t)$ can be computed in additional $O(k)$ time, where $k$ is the number of edges in 
+$\pi(s,t)$.
 
 
