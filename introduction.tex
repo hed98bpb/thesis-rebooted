@@ -4,12 +4,14 @@ traveling in the interior of any polygon in $P$. It is an old and well studied
 problem, and historically there have been two approaches to the problem,
 visibility graph and continuous Dijkstra. 
 
-The visibility graph approach is to construct a graph of all legal paths and
+The visibility graph approach is to construct a graph of all legal paths
+\nick{What is a legal path} and
 then running a single source shortest path algorithm on that graph. The problem
 with this approach is that the complexity of the graph can be $\Omega(n^2)$,
 where $n$ is the number of vertices of the polygons. \nick{Sounds weird}
 
-The continuous Dijkstra works by simulating a wave front propagation from the
+The continuous Dijkstra works by simulating a wave front
+propagation\nick{define wavefront propagation} from the
 start point $s$, where at simulation time $t$ the wavefront contains all the
 points that is reached within distance $t$.  Every time a vertex edge is
 reached a new wavefront starts emitting from there. In 1999 Hersberger and Suri
@@ -20,7 +22,8 @@ In 2017 they, together with Neeraj, looked at a generalization of that problem.
 Given the same setting as before, you are now allowed to remove $k$ polygons.
 Which polygons should you remove to minimize the distance from $s$ to $t$. They
 presented an $O(k^2 n\log n)$ algorithm for this problem, which used a modified
-version of the 1999 algorithm.
+version of the 1999 algorithm. Notice that if $k=0$ its the same problem as the
+1999 one.
 
 In this thesis we are going to look into implementations of the generalist
 problem. We start by describing and implementing a naive algorithm for solving
@@ -31,8 +34,12 @@ implement that.
 \nick{Find ud af hvorfor visibility graphen er at gå fra vertex til
 vertex,(trekants uligheden), og skriv det et sted her}
 \section{Problem description}
+Formal definition of problem
 
 \section{Naive algorithm}
+Overview of naive
 \section{Hersberger suri}
+overview of hersberger suri
 \section{Previous Work}
+\section{Overview of thesis}
 \section{Preliminaries}
