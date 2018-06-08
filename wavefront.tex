@@ -1110,11 +1110,16 @@ following way. First we locate the endpoints of $f$ in $W$, which can be done by
 neighbors outwards, there is at least on such bisector (in the case of one, this bisector claims all of f). Mark the endpoint claiming 
 generator by rule 2. From here we split the generator list into 3 parts. Those generators whose bisectors are between the two endpoint 
 claiming generators. Those are the one who will go through $f$, which after the reset of priorities will be the $W(e,f)$ wavefront, and
-the other two sets are those who pass left and those who pass right of $f$. The simulation process continues with the left and right 
+the other two sets are those who pass left and those who pass right of $f$, see figurue \ref{fig:wef}. The simulation process continues with the left and right 
 passing sets independently after the $t_{stop}$ has been reset in each set to be the minim of $t_{stop}(g)$ over the transparent edges 
 $g$ for that group. 
 
-\missingfigure[]{}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/wef.pdf}
+	\caption{A visualisation of the three groups of bisectors that can occur in the calculation of $W(e,f)$. One going left of $f$, one going right of $f$, these two groups are marked with gray, and the middle group which is the group $W(e,f)$ consists of.}
+	\label{fig:wef}
+\end{figure}
 
 So the above is the case of $t_{stop} < \infty$. Should we stop because we reach $t_{stop}$ and $t_{stop} = \infty$ then we split the 
 current generator list at all the transparent edge endpoints, which will produce $W(e,f)$ for each transparent edge $f$, and some 
