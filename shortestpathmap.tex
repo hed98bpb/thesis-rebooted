@@ -236,6 +236,18 @@ So for a point $p$ in $SPM_{=k}$, we identify the $k$-predecessor of $p$ by the 
 is a vertex of $\mathcal{P}$ and $i \in \{0,1,..,k\}$ such that $d_k(o) = d_i(v) + |\overline{vp}|$ and the
 segment $\overline{vp}$ crosses $(k-i)$ obstacles \cite{HershbergerKS17}.
 
+Neat property of the $SPM_k$ is we devide it into two parts, a $V_{k-1}$ path which is the region consisting of
+$k-1$-visible points, which is starshaped, and the $SPM_{=k}$ part. The concept of $V$ areas can be seen in
+figure \ref{fig:regions}.
+
+\begin{figure}[H] 
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/regions.pdf}
+	\caption{Here the boundary of $V_1$ is marked with dashed lines, while the region of $V_0$ is shown with 
+	         dotted lines. $V_1$ is further shown with blue and the $V_1 \setminus V_0$ is shown with green.}
+	\label{fig:regions} 
+\end{figure}
+
 \section{Complexity of SPM map}
 
 Here follows a Lemma which will be usefull for bounding the number of hyperbolic arcs in the proof 
