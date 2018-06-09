@@ -1,5 +1,11 @@
 \label{chapter:shortestpathmap}
 
+This chapter is dedicated to presenting some formal definition that will help us
+precisely discuss the theory in the rest of the thesis. We will also define the
+shortest path map and its near relatives the shortest $k$-path map, and some properties
+their properties. Finally we will present a Lemma which bounds some complexity of 
+the shortest path map which will be usefull later in \ref{chapter:wavefrontpropagation}.
+
 \section{Definitions for shortest paths and shortest k-paths}
 
 We start with a trivial definition which we will expand upon.
@@ -201,15 +207,26 @@ Next we move on to the definition of $k$-predecessors and the shortest $k$-path 
 	map and denoted by $SPM_{=k}$. 
 \end{mydef}
 
+It is quite easy to see that a $SPM$ is the same as an $SPM_{=0}$, we will therefore use $SPM$ when 
+dealing with the Hershberger-Suri algorithm in chapters \ref{chapter:conformingsubdivision} and 
+\ref{chapter:wavefrontpropagation}, and $SPM_{=0}$ when dealing with the computing of $SPM_k$ in
+chapter \ref{chapter:shortestpathobstaclesviolation}.
+
+\peter{skriv sidste 1/2 side færdig}
+
 
 \section{Complexity of SPM map}
+
+Here follows a Lemma which will be usefull for bounding the number of hyperbolic arcs in the proof 
+of Lemma \ref{lemma:4.12} in chapter \ref{chapter:wavefrontpropagation} but first we define what
+a star-shaped polygon is.
 
 \begin{mydef}[Star-shaped polygon]\cite{PreparataS85}
 	\label{star-shaped}
 	A simple polygon $P$ is star-shaped if there exists a point $z$ not external
-	to $P$ such that for all points $p$ of $P$ the line segment $\overline{zp}$
-	lies entirely within $P$. The locus of the points $z$ having the above
-	property is the \emph{kernel} of $P$.
+	to $\mathcal{P}$ such that for all points $p$ of $\mathcal{P}$ the line segment 
+	$\overline{zp}$ lies entirely within $P$. The locus of the points $z$ having the 
+	above property is the \emph{kernel} of $\mathcal{P}$.
 \end{mydef}
 
 \begin{Lemma}[Lemma 3.2]

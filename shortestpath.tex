@@ -1,24 +1,6 @@
-\section{Overview of $SPM_k$}
+\label{chapter:shortestpathobstaclesviolation}
 
-We begin this chapter by given a formal definition of $SPM$ and $SPM_k$.
-
-\begin{mydef}
-	\textbf{Shortest Path Map:} \\ 
-	The shortest path map  of a
-	particular source point s, denoted $SPM(s)$, is a subdivision of the plane
-	into two-dimensional regions such that all the points in one region have the
-	same, unique predecessor\cite{HershbergerS99}. In the case legal obstacle
-	violations we use a shortest path map with k violations denoted by
-	$SPM_k(p)$. This map has a fixed source and contains the set of unique
-	shortest paths from $s$ to $p$, one for each number of violation we allow
-	from $0,1,...,k$. 
-\end{mydef}
-
-
-
-\section{Algorithm for constructing $SPM_k$}
-
-This section is dedicated to showing the extension of the Hershberger Suri algorithm which was presented in chapter 
+This chapter is dedicated to showing the extension of the Hershberger Suri algorithm which was presented in chapter 
 \ref{chapter:conformingsubdivision} and \ref{chapter:shortestpathmap} for calculating a shortest $k$-path map, $SPM_k$ in time $O(k^2 \cdot 
 n \log n)$. This is done by extending this continuous Dijkstra method into a $k$-garage structure. This way we can enter each level $i$ by 
 going through an obstacle polygon in level $i-1$, and leave it into the next layer $i$. This can then be done up to $k$ times, which is 
