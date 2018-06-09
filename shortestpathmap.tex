@@ -212,8 +212,29 @@ dealing with the Hershberger-Suri algorithm in chapters \ref{chapter:conformings
 \ref{chapter:wavefrontpropagation}, and $SPM_{=0}$ when dealing with the computing of $SPM_k$ in
 chapter \ref{chapter:shortestpathobstaclesviolation}.
 
-\peter{skriv sidste 1/2 side færdig}
+We saw with the $SPM_0$ map that each predecessor to an region always where on the boundary on said
+region, this isn't necessarily the case for a $SPM_k$. Further more multiple regions in $SPM_k$ may 
+have the same predecessor see figure \ref{fig:1predecessor}.
 
+\begin{figure}[H] 
+	\centering
+	\includegraphics[width=0.4\textwidth]{figures/1predecessor.pdf}
+	\caption{Here we present a $SPM_1$ map, where we the fat lines are obstacles.}
+	\label{fig:1predecessor} 
+\end{figure}
+
+Here we see that the shortest path from $s$ to $p$ goes through point $q$ which lies outside the region
+in which $p$ is. So we need to maintain additional information with polygon vertices to disambiguate the 
+predecessor relation. So suppose we have a live segment $\overline{vp}$ between to vertices which crosses
+$(k-1)$ obstacles for some $0 \leq i \leq k$, then the length $d_k(p)$ of $\pi_k(p)$, is defined as
+the sum of the length of the $i$-path to $v$ and the length of segment $\overline{vp}$. So in the context
+of figure \ref{fig:1predecessor}  we have $\overline{qp}$ crosses $(k-1)$ obstacle in the relation of $0 \leq
+1 \leq k = 1$, which leaves the $k - 1 = 0$ obstacles left which we can cross. The $0$-path to $q$ is the
+direct path $\overline{sq}$, where we have the total shortest path.
+
+So for a point $p$ in $SPM_{=k}$, we identify the $k$-predecessor of $p$ by the pair $(v,i)$, where $v$
+is a vertex of $\mathcal{P}$ and $i \in \{0,1,..,k\}$ such that $d_k(o) = d_i(v) + |\overline{vp}|$ and the
+segment $\overline{vp}$ crosses $(k-i)$ obstacles \cite{HershbergerKS17}.
 
 \section{Complexity of SPM map}
 
