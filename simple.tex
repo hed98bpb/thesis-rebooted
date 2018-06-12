@@ -148,8 +148,9 @@ a left turn or are collinear we make the following two vectors.
 Lets denote $v_1 = \langle a,b\rangle$ and $v_2 = \langle c,d\rangle$
 (see Figure \ref{fig:rightturn_a})
 
+\subsection{Right turn}
+
 \begin{figure}[H]
-	
     \centering
 	\begin{subfigure}{.7\textwidth}
 		\includegraphics[width=8cm]{figures/rightturn1.pdf}
@@ -220,34 +221,34 @@ This function will return a negative number if the three points make a left
 turn, a positive number if it is a right turn and 0 if the three points are on
 a line.
 
-\subsubsection{Crossing of two line segments}
+\subsection{Crossing of two line segments}
+
 \begin{figure}[H]
 	\minipage{0.32\textwidth}
 		\includegraphics[width=2cm]{figures/crosses.pdf}
-		\caption{}
+		\caption{Two lines crossing}
 		\label{fig:crosses_a}
 	\endminipage\hfill
 	\minipage{0.32\textwidth}
 		\includegraphics[width=3cm]{figures/crosses1.pdf}
-		\caption{}
+		\caption{Two line which does not cross}
 		\label{fig:crosses_b}
 	\endminipage\hfill
 	\minipage{0.32\textwidth}
 		\includegraphics[width=3cm]{figures/crosses2.pdf}
-		\caption{}
+		\caption{$\overline{p_1p_2}$ passes both tests of \ref{lemma:crosses}, while $\overline{p_2p_3}$ only passes one}
 		\label{fig:crosses_c}
 		\endminipage\hfill
-	\caption{Crossing of two line segments}
 \end{figure}
 
-\begin{Lemma}
-	Given two line segments, $l_1$ and $l_2$, we want to know if they cross (see
-	figure \ref{fig:crosses_a}). We start by taking the first line segment
-	$l_1$ and check if the two points of $l_2$, $l_2.p$ and $l_2.q$ lie on
-	separate sides of the line that is collinear to $l_1$, if this is the case
-	we do a similar check the other way around, and if that is true the two line
-	segment cross.
+\begin{Lemma} \label{lemma:crosses}
+    Given two line segments, $l_1$ and $l_2$ we can decide whether they cross
+    by first checking if the two end points of $l_2$, namely $l_2.p$ and $l_2.q$, 
+    lie on separate sides of the line which is collinear to $l_1$. Should this be
+    the case, we do a similar check for $l_2$ on $l_1$. Should both cases be true
+    we know $l_1$ crosses $l_2$, see figure \ref{fig:crosses_a}.
 \end{Lemma}
+
 \begin{proof}
 Let $L_1$ and $L_2$ denote the lines collinear to $l_1$ and $l_2$ respectively.
 	If both the end points of $l_2$ is on the same side of $L_1$, then the line
@@ -262,10 +263,10 @@ We know the line $l_2$ crosses $L_1$, the question is, is it between the two
 	crosses $L_1$ another place.
 \end{proof}
 
-\subsubsection{Algorithm}
-We can check weather the points lie on opposite sites
-by multiplying the right turn results, since, if they lie on opposite sites,
-they will have different sign, if the lie on the same site they have the same
+\subsection{Crosses algorithm}
+We can check whether the endpoints of a line segment lie on opposite sites of another
+line segment by multiplying the right turn results, since, if they lie on opposite sites,
+they will have different sign, if they lie on the same side they have the same
 sign so the result will be negative if they are on opposite sites and positive
 if they are on the same side.
 \nick{If its zero the hits an endpoint, write about that}
@@ -286,15 +287,17 @@ if they are on the same side.
 
 \section{Dijkstra}
 
+the following description
+is based on an "Introduction to Algorithms"\cite{IntroToAlg}, 24.3.
+
 Dijkstra's algorithm solves the single-source shortest path problem for a
 weighted directed graph $G$. i.e. Given a graph $G=(V,E)$, where $V$ is the
 vertices and $E$ is the directed weighted edges and a start vertex $s\in V$,
-find the path where the sum of of the weights it the smallest possible.
+find the path where the sum of the weights is the smallest possible.
 Dijkstra original conceived the algorithm in his 1959 paper "A note on two
-problems in connexion with graphs"\cite{dijkstra59}, the following description
-is based on an "Introduction to Algorithms"\cite{IntroToAlg}, 24.3.
+problems in connexion with graphs" \cite{dijkstra59}.
 
-$v_\pi$ being either the predecessor or nill\nick{null nil???}. $v_d$ being the upper bound on
+Let $v_\pi$ either be a predecessor of null. $v_d$ being the upper bound of
 the weight of a shortest path from source $s$ to $v$. Running time $\Theta (V)$
 
 \begin{algorithm} 
@@ -302,14 +305,14 @@ the weight of a shortest path from source $s$ to $v$. Running time $\Theta (V)$
 	\begin{algorithmic}[1] 
 		\ForEach {vertex $v \in G.V$} 
 			\State $v.d = \infty$
-			\State $v.\pi =$ NIL 
+			\State $v.\pi =$ Null
 		\EndFor 
 		\State $s.d = 0$ 
 	\end{algorithmic}
 \end{algorithm}
 
 Relaxing an edge $(u,v)$ consist of testing whether we can improve the shortest
-path to $v$ found so far by going through $u$ and, if so, update $v.d$ and
+path to $v$ found so far, by going through $u$ and, if so, update $v.d$ and
 $v.\pi$. We define $w$ as following for a path $p=\langle v_0,v_1,...,v_k
 \rangle$
 
@@ -348,8 +351,9 @@ $E=o(V^2/lgV)$. Extract min runs in $O(lgV)$
 \end{algorithm}
 
 \section{Experiment}
-In this section we will go through the experiments we did with the algorithm,
+In this section we present the experiments we did on our $O(n^3+kn^2)$ implementation,
 both for running time and test of correctness.
+
 \subsection{Computer specification}
 The test were run on a computer with the following specification
 \begin{figure}[H]
@@ -365,13 +369,13 @@ The test were run on a computer with the following specification
 	\hline
 \end{tabular}
 \end{figure}
+
 \subsection{Correctness of algorithm}
-We tested the correctness of our algorithm by creating a lots of examples and
-made our program able to output a svg image of the polygons and route so we
+To verify the correctness of our implementation we run the code against a list of tests.
+We implemented the function to output a svg image of the polygons and route so we
 were able to confirm the algorithm made the correct visibility graph. (See
 figure \ref{fig:correctness_1} and \ref{fig:correctness_2}
 \begin{figure}[H]
-	\caption{Examples of figures for correctness}
 	\begin{subfigure}{.5\textwidth}
 		\includegraphics[width=6cm]{figures/correctness1.pdf}
 		\caption{}
@@ -382,35 +386,50 @@ figure \ref{fig:correctness_1} and \ref{fig:correctness_2}
 		\caption{}
 		\label{fig:correctness_2}
 	\end{subfigure}
+	\caption{Examples of figures for correctness}
 \end{figure}
 
 \subsection{Running time of algorithm}
-To test the running time of our algorithm we autogenerated a map consisting of
-x times x squares and put $s$ and $t$ in oppersite conners (see figure
+To test the running time of our implementation we auto generated a map consisting of
+x times x squares and put $s$ and $t$ in opposite corners of the map (see figure
 \ref{fig:test})
+
 \begin{figure}[H]
+    \centering
+	\includegraphics[width=6cm]{figures/testexample.pdf}
+	\label{fig:test}
 	\caption{Examples of figures for correctness}
-		\includegraphics[width=6cm]{figures/testexample.pdf}
-		\label{fig:test}
 \end{figure}
 
-We ran the algorithm where the number of violations was a constant $5$ and the
-number of squares was $n=t^2$ for $t=1,\dots,41$ and got the following graph
+We ran the implementation with the number of violations being constant at $5$ and the
+number of vertices was $n= 4 \cdot t^2$ for $t=1,\dots,41$ and got the following graph
+
+\begin{center}
 \input{graph/graph1.tex}
+\end{center}
 
 Then we tried figuring out where the time was spent so we tried measuring the
-crossing function, the construction of visibility graph and the dijkstra
-seperately and got the following
-\input{graph/graph2.tex}
+crossing function, the construction of visibility graph and the Dijkstra
+separately and got the following
 
-The algorithm is totally dominatet by the crossing calculating which makes
-sense as the $O(n^3)$ is the most dominint, we tried dividing the first graph
+\begin{center}
+\input{graph/graph2.tex}
+\end{center}
+
+The implementation is totally dominated by the crossing calculating which makes
+sense since the $O(n^3)$ is the most dominant sub time, we tried dividing the first graph
 with $O(n^3)$ and got the following
+
+\begin{center}
 \input{graph/graph3.tex}
+\end{center}
 
 Lastly we tried to make a test where $n=25^2$ and $k=1,\dots,25$ and getting
 the almost linear graph
-\input{graph/graph4.tex}
 
-In conclussion we have implemented a naive $O()$ algorithm and made tests both
-confirming the correctness and the running time of the algorithm.
+\begin{center}
+\input{graph/graph4.tex}
+\end{center}
+
+In conclusion we have implemented a naive $O(n^3 + kn^2)$ algorithm and made tests both
+for confirming its correctness and its running time of the algorithm.
