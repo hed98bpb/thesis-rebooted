@@ -113,14 +113,14 @@ from the polygon. So we say it is not allowed to cross four points in of
 a polygons line segments. The problem is that it makes (cases a, c
 and d) illegal. But fortunately they all have that in common that they are collinear 
 (they lie on a common line) with a line segment of the polygon, so the
-algorithm becomes 
+algorithm is as follows:
 
 \begin{enumerate}
-	\item if line segment crosses a line segment of a polygon it crosses the
-		polygon
-	\item if a line has four points  in common with the polygon it crosses the
-		polygon, unless the line segment is collinear with a line segment of the
-		polygon 
+	\item if a line segment $l_1$ crosses another line segment $l_2$ of a polygon it 
+	      crosses the polygon
+	\item if a line segment has four points in common with the polygon it crosses the
+		  polygon, unless the line segment is collinear with a line segment of the
+		  polygon 
 \end{enumerate}
 
 This lead us to the following algorithm
@@ -134,14 +134,12 @@ This lead us to the following algorithm
 
 \subsection{Crosses}
 To make a crosses function, we need a right turn function. Consider three
-points $p_1,p_2,p_3$, we make a line going through $p_1$ and $p_2$, now if
-stand at point $p_1$ and look in the direction of $p_2$ will $p_3$, if $p_3$
+points $p_1,p_2,p_3$ in the plane, make a line that goes through $p_1$ and $p_2$. 
+Now if we stand at point $p_1$ and look in the direction of $p_2$ will $p_3$, if $p_3$
 doesn't lie on the same line as $p_1$ and $p_2$ will it be on the
-right or the left of the line. 
-Let $p_i.x$ and $p_i.y$ denote the x-coordinates
-and y-coordinates respectively.
-To find out weather the three points are a right turn, left turn or colinear we
-make the following two vectors.
+right or the left of the line. Let $p_i.x$ and $p_i.y$ denote the x-coordinates
+and y-coordinates respectively. To find out whether the three points form a right turn, 
+a left turn or are collinear we make the following two vectors.
 
 \begin{align*}
 	v_1 &=p_2-p_1 = \langle p_2.x-p_1.x,p_2.y-p_1.y\rangle\\
@@ -149,38 +147,43 @@ make the following two vectors.
 \end{align*}
 Lets denote $v_1 = \langle a,b\rangle$ and $v_2 = \langle c,d\rangle$
 (see Figure \ref{fig:rightturn_a})
-\subsubsection{Right turn}
+
 \begin{figure}[H]
-	\caption{Right turn}
+	
     \centering
 	\begin{subfigure}{.7\textwidth}
 		\includegraphics[width=8cm]{figures/rightturn1.pdf}
 		\caption{}
 		\label{fig:rightturn_a}
 	\end{subfigure}
+	\caption{A right turn formed by three points}
     %
 	\begin{subfigure}{.7\textwidth}
 		\includegraphics[width=8cm]{figures/rightturn2.pdf}
 		\caption{}
 		\label{fig:rightturn_b}
 	\end{subfigure}
+	\caption{Area are of a parallelogram given by two vectors}
 \end{figure}
-\nick{Find book ref to right turn}
+
 We claim that we can calculate the turn by calculating the signed area of the
 parallelogram spanned by the two vectors. The area of their parallelogram can
 be calculated as follows: calculate the area of the big rectangle, and take the
 two small triangles and the little square and subtract that area.
+
 \begin{align}
 	\text{area} &= (a+c)(d+b)-2A-2B-2C\nonumber\\
 							&=ad+ab+cd+bc-cd-2ad-ab\nonumber\\
 							&=bc-ad \nonumber\\
 							&=(p_2.y-p_1.y)(p_3.x-p_1.x)-(p_2.x-p_1.x)(p_3.y-p_1.y)\label{form:rightturn}
 \end{align}
+
 Now we claim that the area between these two vectors is positive if the
-three points make a right turn, and negative if they make a left turn. We show
+three points form a right turn, and negative if they form a left turn. We show
 that by an example (see figure \ref{rightturn3})
 
 Given our formula (formula \ref{form:rightturn}) we get that the $q_1,q_3,q_2$ area is
+
 \begin{align*}
 	&(q_3.y-q_1.y)(q_2.x-q_1.x)-(q_3.x-q_1.x)(q_2.y-q_1.y)\\ 
 	= &(2-0)(-1-0)-(0-0)(1-0)\\
@@ -203,12 +206,14 @@ And the area of $q_1,q_3,q_4$ is
 	\caption{Right turn example}
     \label{rightturn3}
 \end{figure}
-So the function for calculating the right turn is
+
+So the function for calculating a right turn is
+
 \begin{algorithm} 
-	\caption{rightTurn($p_1,p_2,p_3$)}
 	\begin{algorithmic}[1] 
 		\State \Return $(p_2.x-p_1.x)(p_3.y-p_1.y)-(p_2.y-p_1.y)(p_3.x-p_1.x)$
 	\end{algorithmic}
+	\caption{rightTurn($p_1,p_2,p_3$)}
 \end{algorithm}
 
 This function will return a negative number if the three points make a left
@@ -217,7 +222,6 @@ a line.
 
 \subsubsection{Crossing of two line segments}
 \begin{figure}[H]
-	\caption{Crossing of two line segments}
 	\minipage{0.32\textwidth}
 		\includegraphics[width=2cm]{figures/crosses.pdf}
 		\caption{}
@@ -233,6 +237,7 @@ a line.
 		\caption{}
 		\label{fig:crosses_c}
 		\endminipage\hfill
+	\caption{Crossing of two line segments}
 \end{figure}
 
 \begin{Lemma}
