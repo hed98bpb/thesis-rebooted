@@ -12,10 +12,10 @@ unmodified Hershberger-Suri would find a shortest path, that is a shortest path 
 violations. One of the key ideas for calculating the shortest path map, which we need to 
 find the shortest path, is the notion of a conforming subdivision of the free space. This is 
 a subdivision of the free space into squares, which we will call \textit{cells}, where a 
-cell has a constant descriptives complexity. 
+cell has a constant descriptive complexity. 
 
 This construction is done i two steps: the 
-first step construct a subdivision while only considering the vertices of the obstacle 
+first step constructs a subdivision while only considering the vertices of the obstacle 
 polygons. The second step will then insert the obstacle edges into the subdivision, which 
 will have a taken a grid-like structure. This structure is build bottom up, such that every 
 vertex in the plane is contained in the interior of a cell. The algorithm then proceeds to 
@@ -29,8 +29,8 @@ When this grid of orthogonal cells has been produced we insert the obstacle edge
 grid, giving us two types of edges. The edges that we have grown, which we will call 
 \textit{transparent} edges, since our wavefronts will be able to pass through them, and the 
 obstacles edges which we will call \textit{opaque} edges, which the wavefront will be 
-blocked by these. The transparent edges will obey the claim that the will be well-covered, 
-which we will define in the next section, but this help us bind the overall complexity of 
+blocked by. The transparent edges will obey the claim that they will be well-covered, 
+which we will define in the next section, but this helps us bind the overall complexity of 
 the subdivision, and secure that there are $O(1)$ of cells within a distance of $2|e|$ for 
 every transparent edge $e$. It is this well-covering property that the shortest path 
 algorithm relies heavy on, in the unmodified Hershberger-Suri algorithm. This subdivision 
@@ -41,29 +41,29 @@ can be built in $O(n \log n)$ time \cite{HershbergerS99}.
 A crucial property of the quad-like subdivision is the subdivision being \textit{well-
 covering} on its internal edges. The following section outlines the different definitions 
 and properties that we mean by well-covering, This section is very much inspired by 
-Hershberger and Suri definition for the same concepts in \cite{HershbergerS99}. 
+Hershberger and Suri definition of the same concepts in \cite{HershbergerS99}. 
 
 We give the following definition for well-covering:
 
 \begin{mydef}
 	\label{def:wellcoveringwithpara}
 	\textbf{Well-covering with parameter $\alpha$:}\\
-	Given a straight line subdivision $\mathcal{S}$ of the plane, an edge
-	$e\in\mathcal{S}$ is said to be \textit{well-covered with parameter}
+	Given a straight line subdivision $\mathcal{S}$\footnote{a subdivision composed of straight lines} 
+	of the plane, an edge $e\in\mathcal{S}$ is said to be \textit{well-covered with parameter}
 	$\alpha$ if the following three conditions hold:
 	\begin{enumerate}
     \setlength\itemsep{1em}
 		\item[W1.] There exists a set of cells $\mathcal{C}(e)\subseteq\mathcal{S}$ such
 				   that $e$ lies in the interior of their union. The union is denoted
-				   $\mathcal{U}(e)=\{c|c\in\mathcal{C}(e)\}$.
+				   $\mathcal{U}(e)=\{c \mid c \in \mathcal{C}(e)\}$.
 		\item[W2.] The total complexity of all the cells in $\mathcal{C}(e)$ is 
         		   $O(\alpha)$.
 		\item[W3.] If $f$ is an edge on the boundary of the union $\mathcal{U}(e)$, then
-        		   the Euclidean distance between $e$ and $f$ us at least $\alpha\cdot
+        		   the Euclidean distance between $e$ and $f$ is at least $\alpha\cdot
 				   max(|e|,|f|)$. 
 	\end{enumerate}
 	The edge is said to be \textit{strongly} well-covered if the stronger
-	condition 3' holds:
+	condition W3' holds:
 	\begin{enumerate}
     \setlength\itemsep{1em}
 		\item[W3'.] If $f$ is an edge on \textit{or outside} the boundary of the
@@ -72,8 +72,8 @@ We give the following definition for well-covering:
 	\end{enumerate}
 \end{mydef}
 
-In either of the two cases, we will say the region $\mathcal{U}(e)$ is called
-the \textit{well-covering region of e}. The Hershberger-Suri shortest path algorithm 
+In either of the two cases, we will say the region $\mathcal{U}(e)$ is the 
+\textit{well-covering region of e}. The Hershberger-Suri algorithm 
 focuses solely on the distance from the boundary of $\mathcal{U}(e)$ to $e$, which means 
 we only require a the region to be well-covered, and not strongly well-covered. The 
 reason for a definition of strongly well-coveredness is due to the definition being 
@@ -90,16 +90,16 @@ used later for proving correctness of algorithm.
 		\item[C1.] Each cell of $\mathcal{S}$ contains at most one point of $V$ in its
 				   closure\footnote{its interior plus boundary}.
 		\item[C2.] Each edge of $\mathcal{S}$ is (strongly) well-covered with
-				   parameter $alpha$.
+				   parameter $\alpha$.
 		\item[C3.] The well-covering region of every edge of $\mathcal{S}$ contains at
 				   most one vertex of $V$.
 	\end{enumerate}
 \end{mydef}
 
 The reason for the naming of definition \ref{def:aconformingsubdivision} being 
-conforming, is due to condition 1 and 3, will force the cell structure to 
-\textit{conform} around the distribution of the point of $V$, and example of can be seen 
-in Figure \ref{fig:1conformingsubdivision}. Since the Hershberger-Suri
+conforming, is due to condition C1 and C3, will force the cell structure to 
+\textit{conform} around the distribution of the vertices of $V$. An example of this can 
+be seen in Figure \ref{fig:1conformingsubdivision}. Since the Hershberger-Suri
 constructs a 2-conforming subdivision $V$, we will the rest of the thesis
 denote \textit{conforming} to 
 mean 2-conforming, and explicitly state the parameter if it is 
@@ -108,9 +108,9 @@ not 2.
 \begin{figure}
 	\centering
 	\includegraphics[width=0.5\textwidth]{figures/1conformingsubdivision.pdf}
-	\caption{An example of part of an string 1-conforming subdivision. The shaded region 
-    		 in the figure is the union of cell $\mathcal{U}(e)$ forming a well-covering 
-             of edge $e$}
+	\caption{An example of part of an strong 1-conforming subdivision. The shaded region 
+    		 in the figure is the union of cell $\mathcal{U}(e)$, a well-covering 
+             of edge $e$ \cite{HershbergerS99}.}
 	\label{fig:1conformingsubdivision}
 \end{figure}
 
@@ -124,10 +124,10 @@ each cell is either a square or a square-annulus.
 \begin{mydef}
 	\textbf{(Square-annulus:)}\\
 	We will define it as a square $A$ which is missing  a square $B$ internally such that 
-    the internal square $B$ is at least $1/4$ the side length of the outer square $B$
+    the internal square $B$ is at least $1/4$ the side length of the outer square $A$
 \end{mydef}
 
-But the boundary of these cell may be subdivide into a constant number of edges.
+The boundary of these cell may be subdivide into a constant number of edges.
 We require also that they have the following minimum clearance property: 
 
 \begin{mydef}
@@ -162,7 +162,7 @@ Both the annuli and square faces are subject to the uniform edge property:
 
 \section{Conforming subdivision theorem}
 
-The conforming subdivision theorem precisely states the properties we expect of our 
+The conforming subdivision theorem precisely states the properties we expect of the 
 subdivision. It is also why this theorem will be proven by construction of the 
 conforming subdivision algorithm which we will present in section 
 \ref{section:implementationconforming}.
@@ -194,8 +194,8 @@ definition of these differences.
 
 \begin{mydef}\textbf{Transparent and opaque edges:}\\
     Let the edges in a conforming subdivision of the free space, which are introduced by 
-    the subdivision be transparent edges. Equally let the edges in a conforming 
-    subdivision of the free space, which are introduced by the original obstacles be 
+    the subdivision, be transparent edges. Equally let the edges in a conforming 
+    subdivision of the free space, which are introduced by the obstacles be 
     opaque edges. 
 \end{mydef}
 
@@ -208,14 +208,14 @@ covered. Due to these requirement, we will slightly alter definition
 
 \begin{enumerate}
 \item[W1$_{fs}$.] Let $e$ be a tranparent edge of $\mathcal{S}$. There exists a set of 
-cells $\mathcal{C}(e)\subseteq\mathcal{S}$ such that $e$ is contained in the closure 
-of the uinion of cells $\mathcal{U}(e)=\{c|c\in\mathcal{C}(e)\}$.
+    cells $\mathcal{C}(e)\subseteq\mathcal{S}$ such that $e$ is contained in the closure 
+    of the uinion of cells $\mathcal{U}(e)=\{c \mid c\in\mathcal{C}(e)\}$.
 \item[W3${fs}$.] Let $e$ and $f$ be two transparent edges of $s$ such that $f$ lies on 
-the boundary of the well-covering region $\mathcal{U}(e)$. Then the shortest path 
-distance between $e$ and $f$ is at least $\alpha\cdot\max(|e|,|f|)$. 
+    the boundary of the well-covering region $\mathcal{U}(e)$. Then the shortest path 
+    distance between $e$ and $f$ is at least $\alpha\cdot\max(|e|,|f|)$. 
 \end{enumerate}
 
-It is worth noting that condition $3_{fs}.$ ensures $e$ does not touch any transparent 
+It is worth noting that condition $W3_{fs}.$ ensures $e$ does not touch any transparent 
 boundary edge of $\mathcal{U}(e)$, although it may touch opaque boundary edges.
 
 \section{Construction of the conforming subdivision}
@@ -234,18 +234,18 @@ section.
 Before going into the algorithm for constructing the conforming subdivision, wee need
 preliminary terminology and definitions.
 
-To make things easy for our selfs, we fix a Cartesian coordinate system in the plane we are 
-working with. We say for any integer $i$ and $k$, the $i$'th-order grid in the coordinate 
-system is the arrangement of all lines $z = k \cdot 2^i$ and $y = k \cdot 2^i$. This makes a 
+To make things easy for ourselves, we fix a Cartesian coordinate system in the plane we are 
+working with. We say for any integer $j$ and $l$, the $i$'th-order grid in the coordinate 
+system is the arrangement of all lines $x = j \cdot 2^i$ and $y = l \cdot 2^i$. This makes a 
 grid where each cell (face), is a square of size $2^i \times 2 ^i$, whose lower-left corner 
-lies at the point $(k \cdot 2^i, l \cdot 2^i)$, for any pair of integers $k$ and $l$. We will 
+lies at the point $(k \cdot 2^i, l \cdot 2^i)$, for any pair of integers $j$ and $l$. We will 
 refer to such a cell as an $i$-box. Any array of size $4 \times 4$ is called an \textit{i-
 quad}, see figure \ref{fig:iquad}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{figures/iquad.pdf}
-	\caption{The figure show an example of how i-quads would be grown around the point $p_1, 
+	\caption{An example of how i-quads would be grown around the point $p_1, 
     		 p_2$ and $p_3$. Here we also see that in this particular $i$'th stage of growth, 
              that $p_1$ and $p_3$ belong to the same equivalence class, while $p_3$ does 
              not.}
@@ -260,11 +260,11 @@ the $i$-quad, see figure \ref{fig:iquad}. By this definition the core is always 
 $i$-quads that contain $b$ in their cores.
 
 The algorithm for building a $1$-conforming subdivision, is in a quad-tree-like fashion where 
-we build a partition around the set of points in the plane in a bottomup procedure. This i done 
+we build a partition around the set of points in the plane in a bottom up procedure. This i done 
 by \textit{growing} a square box around each data point, until the entire plane is covered by 
 these boxes. This is done in a number of discrete \textit{stages} numbered $-2, 0, 2, 4,...$. 
 The end goal is to produce a $1$-conforming partition of the points, where the subdivision will 
-be a grid with orthogonal cells. Key idea behind the growth process is, each data point $p$ in
+be a grid with orthogonal cells\peter{define}. Key idea behind the growth process is, each data point $p$ in
 stage $i$ is in the core of an $i$-quad. And since we grow the initial box, the data point $p$
 will remain in the $i$-quads core, and the following lemma holds inductively, by definition of
 the process we have described.
@@ -282,7 +282,7 @@ equivalence classes under the transitive closure of an \textit{overlap} relation
 Given any two quads $q$ and $q'$, we say these are in the same equivalence class, by the overlap 
 relation, if and only if there is a sequence of quads $q = q_0, q_1, ..., q_m = q' \in 
 \mathcal{Q}(i)$, s.t. $q_j$ and $q_{j+1}$ overlap (have common interior point) for all $j = 0, 1, 
-..., m - 1$. Further more, let $\{S_1(i), ..., S_k(i)\}$ denote the partition of $\mathcal{Q}(i)$ 
+..., m - 1$. Further more, let $\{S_1(i), ..., S_l(i)\}$ denote the partition of $\mathcal{Q}(i)$ 
 into these equivalence classes in the $i$th stage, and let $\equiv_i$ denote the transitive 
 equivalence relation. 
 \end{mydef}
@@ -294,8 +294,8 @@ to the same equivalence class. We differentiate between two types of classes. Th
 \textit{simple} component. A component at stage $i$ is simple if
 
 \begin{enumerate}
-\item Its outer boundary is an $i$-quad and
-\item It contains exactly on $(i-2)$-quad of $\mathcal{Q}(i-2)$ in its interior.
+\item Its outer boundary is an $i$-quad.
+\item It contains exactly one $(i-2)$-quad of $\mathcal{Q}(i-2)$ in its interior.
 \end{enumerate}
 
 The second type is a complex component. A complex component is complex if it is not simple.
@@ -304,7 +304,9 @@ The second type is a complex component. A complex component is complex if it is 
 
 In this subsection we show some distance properties that is satisfied by points of the same 
 equivalence class at stage $i$, which will be useful in the final algorithm. We say that a quad 
-$q$ is a \textit{containing $i$-quad} of a point $u \in V$ if $q \in \mathcal{Q}(i)$ and $u$ lies 
+$q$ is a \textit{containing $i$-quad} of a point\footnote{its worth noting that in this section
+and generally in this context of conforming subdivision, that points and vertices are equivalent} 
+$u \in V$ if $q \in \mathcal{Q}(i)$ and $u$ lies 
 in $q$'s core. We also say that a point $u$ \textit{belongs} to an equivalence class $S \in 
 \mathcal{Q}(i)$ if there is a containing $i$-quad of $u$ in $S$.
 
@@ -324,7 +326,7 @@ points $u$ and $v$.
 
 \begin{Lemma} (Lemma 6.7 in \cite{HershbergerS99}) \label{lemma:6.7HershbergerS99} \\
 Let $u$ and $v$ be two points of in the plane that belong to two different equivalence classes of 
-$\mathcal{Q}(i)$. Then $d(u,v) > 2 \times 2^i$.
+$\mathcal{Q}(i)$. Then $d(u,v) > 2 \cdot 2^i$.
 \end{Lemma}
 
 \begin{proof}
@@ -336,14 +338,15 @@ the outer boundaries of their $i$-quads, which immediately gives a lower bound o
 \end{proof}
 
 \begin{Lemma} (Lemma 6.8 in \cite{HershbergerS99}) \label{lemma:6.8HershbergerS99}\\
-Let $u$ and $v$ be two points in the plane and let $q_u$ and $q_v$, respectively, be the two $i$-quads of $\mathcal{Q}(i)$ containing them. If $q_u \cap q_v \neq \emptyset$, then $d(u,v) < 6 
-\times 2^i$.
+Let $u$ and $v$ be two points in the plane and let $q_u$ and $q_v$, respectively, be the two 
+$i$-quads of $\mathcal{Q}(i)$ containing them. If $q_u \cap q_v \neq \emptyset$, then $d(u,v) < 6 
+\cdot 2^i$.
 \end{Lemma}
 
 \begin{proof}
 By Lemma \ref{lemma:6.6HershbergerS99}, the maximum distance between $u$ and the outer boundary 
-of $q_u$ is at most $3 \times 2^i$. The same holds for $v$ and $q_v$, which implies the upper 
-boundary of $d(u,v) < 6 \times 2^i$. See figure \ref{fig:lessthan6i}.
+of $q_u$ is at most $3 \cdot 2^i$. The same holds for $v$ and $q_v$, which implies the upper 
+boundary of $d(u,v) < 6 \cdot 2^i$. See figure \ref{fig:lessthan6i}.
 \end{proof}
 
 \begin{figure}[H]
@@ -351,8 +354,8 @@ boundary of $d(u,v) < 6 \times 2^i$. See figure \ref{fig:lessthan6i}.
 	\includegraphics[width=\textwidth]{figures/lessthan6i.pdf}
 	\caption{The two top $i$-quads with points $u$ and $v$ are as close as they can be without 
     		 belonging to the same equivalence class, that is not overlapping, and therefore have 
-             $d(u,v) = 6 \times 2^i$. The two lower $i$-quads with points $u'$ and $v'$ overlap, and 
-             therefore have $d(u,v) < 6 \times 2^i$.}
+             $d(u,v) = 6 \cdot 2^i$. The two lower $i$-quads with points $u'$ and $v'$ overlap, and 
+             therefore have $d(u,v) < 6 \cdot 2^i$.}
 	\label{fig:lessthan6i}
 \end{figure}
 
@@ -409,20 +412,21 @@ Which establishes the lemma.
 \subsection{The invariants}
 
 The main objective of the algorithm is to draw the boundaries of certain components, which in 
-the end will give the correct subdivision. Each of these edges will be straight line segments,
+the end will give the correct subdivision with the properties of the conforming subdivision theorem. 
+Each of these edges will be straight line segments,
 all parallel to one the axes, and will be subdividing the plane into orthogonal cells. The 
 critical property of our subdivision is the following \textit{conforming property:}
 
 \paragraph{Invariant 1:} For any edge $e$ and cell $c$ of the subdivision, $c$ has an interior 
 point within distance $|e|$ of $e$ if and only if $c$ and $e$ are incident (their closures 
-intersect). Thus There are at most six cells within distance $|e|$ of any edge $e$. \\
+intersect). Thus There are at most six cells within distance $|e|$ of any edge $e$. \\ \peter{maybe pic}
 
 The algorithm will only draw edges of increasing lengths, and so we never need to subdivide 
 previously drawn edges inside a component. In order to maintain Invariant 1, the algorithm 
 will also enforce the following auxiliary invariant:
 
 \paragraph{Invariant 2:} The boundary of each complex component in stage $i$ is subdivided 
-into edges of length $2^i$ that are aligned with the $i$th-order grid\footnote{both invariants 
+into edges of length $2^i$ that are aligned with the $i$th-order grid \footnote{both invariants 
 are as defined in \cite{HershbergerS99} section 6.2}. \\
 
 Through the algorithm the outer boundary of simple components, wont be drawn until just before 
