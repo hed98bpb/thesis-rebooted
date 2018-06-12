@@ -1,9 +1,9 @@
 The following chapter is dedicated to giving the reader an overview of an $O(k^2 n \log n)$ 
-time algorithm for solving the shortest path with obstacle violation. First we present an 
+time algorithm for solving the shortest path with obstacle violation problem. First we present an 
 overview of the Hershberger-Suri algorithm, which solves the shortest path with no violation, 
 in an optimal $O(n \log n)$ time \cite{HershbergerS99}. This algorithm produces a shortest 
-path map, which divides the free space, free space being the plane minus the interior of the 
-obstacles, into subdivision where each subdivision will have the same shortest sub-path to 
+path map, which divides the free space (free space being the plane minus the interior of the 
+obstacles) into region where each subdivision will have the same shortest sub-path to 
 all points in the area. This structure can then be extended for the purpose of calculating 
 shortest paths with violation, which we will present an intuitive idea on how this is done. 
 Finally we present an algorithm which will combine the Hershberger-Suri algorithm with a 
