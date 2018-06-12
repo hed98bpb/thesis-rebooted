@@ -1,6 +1,6 @@
 \chapter{Introduction} Given a starting point $s$, an endpoint $t$ and a set of
-polygons $P$ in the plane, we want to find the shortest path from $s$ to $t$ without
-traveling in the interior of any polygon in $P$. 
+polygons $\mathcal{O}$ in the plane, we want to find the shortest path from $s$ to $t$ without
+traveling in the interior of any polygon in $\mathcal{O}$. 
 This is an old and well studied problem, and historically there have been two
 conceptionally different approaches to the problem, using visibility graphs and
 continuous Dijkstra algorithm. 
@@ -12,22 +12,24 @@ with this approach is that the complexity of the graph can be $\Theta(n^2)$,
 where $n$ is the number of vertices of the polygons. \nick{Sounds weird}
 
 The continuous Dijkstra works by simulating a \emph{wave front
-propagation}\nick{define wavefront propagation} from the
-start point $s$, where at simulation time $t$ the wavefront contains all the
-points that are reacheble with distance $d$.  Every time a vertex edge is
-reached a new wavefront starts emitting from there. In 1999 Hersberger and Suri
-held a presentation in which they presented a $O(n\log n)$ time algorithm which
-matched the lower bound of the problem, using the continuous Dijkstra method.
+propagation}\nick{define wavefront propagation} from the start point $s$, where
+at simulation time $t$ the wavefront contains all the points that are reacheble
+with distance $d$.  Every time a vertex edge is reached a new wavefront starts
+emitting from there. In 1999 Hersberger and Suri published a
+paper\cite{HershbergerS99} in which they presented an $O(n\log n)$ time
+algorithm which matched the lower bound of the problem (see
+Chapter \ref{chapter:lowerbound}), using the continuous
+Dijkstra method.
 
 In 2017 they, together with Neeraj, looked at a generalization of that problem.
 Given the same setting as before, you are now allowed to remove $k$ polygons.
-Which polygons should you remove to minimize the distance from $s$ to $t$. They
+The problem is which polygons you should remove to minimize the distance from $s$ to $t$. They
 presented an $O(k^2 n\log n)$ algorithm for this problem, which used a modified
-version of the 1999 algorithm. Notice that if $k=0$ its the same problem as the
-1999 one.
+version of the 1999 algorithm\cite{HershbergerKS17}. 
+Notice that if $k=0$ it is identical to the Shortest path with no violations.
 
-In this thesis we are going to look into implementations of the generalist
-problem. We start by describing and implementing a naive algorithm for solving
+In this thesis we are going to look into implementations of both the original
+and the generalized problem. We start by describing and implementing a naive algorithm for solving
 the problem based on computing a visibility graph and then running the Dijkstra
 single source shortest path algorithm. Afterwards we are going to explain the
 implementation details and lastly we describe the algorithm from 2017 and
@@ -37,12 +39,13 @@ vertex,(trekants uligheden), og skriv det et sted her}
 
 \section{Problem description} 
 We a given two points in the plane $s,t\in\mathbb{R}^2$ and a list of polygons
-$P=p_1,\dots,p_h$ where $p_i$ is a list of points in polygon $p_i$ starting an
-abitrary place and in clockwise order(note that sometimes we use $P$ as a set
-f. ex. polygon $p_i\in P$). We say a legal path is a list of points where two
-adjecent points are mutually visibible, i.e. you are able to draw a line from
-one to the other without crossing the interioer of any polygon in $P$. 
-We want to find a shortest legal path from $s$ to $t$.
+$\mathcal{O}=o_1,\dots,o_h$ where $o_i$ is a list of points in polygon $o_i$
+starting at an abitrary place and in clockwise order (note that sometimes we
+use $\mathcal{O}$ as a set e.g. polygon $o_i \in \mathcal{O}$). We say a
+\emph{legal path} is a list of points where two adjecent points are mutually
+visibible, i.e. you are able to draw a line from one to the other without
+crossing the interioer of any polygon in $P$.  We want to find a shortest legal
+path from $s$ to $t$.
 
 \section{Previous work}
 \begin{table}[H]
@@ -106,9 +109,21 @@ bound. The space consumption is $O(n\log n)$ and it is still an open problem if
 there exists an algorithm with run time $O(n\log n)$ and linear space
 consumption.
 
-\section{Naive algorithm}
-Overview of naive
-\section{Hersberger suri}
-overview of hersberger suri
+%\section{Naive algorithm}
+%Overview of naive
+%\section{Hersberger suri}
+%overview of hersberger suri
 
 \section{Overview of thesis}
+\begin{description}
+	\item[Chapter 2] We descripe a simple $O(n^3)$ algorithm for contructing a
+		visibility graph. THen we implement it and compare the run time to the
+		theoratical time.
+	\item [Chapter 3] overview of bla blabla
+	\item [Chapter 4] overview of bla blabla
+	\item [Chapter 5] overview of bla blabla
+	\item [Chapter 6] overview of bla blabla
+	\item [Chapter 7] overview of bla blabla
+	\item [Chapter 8] overview of bla blabla
+
+\end{description}
