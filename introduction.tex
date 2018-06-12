@@ -32,20 +32,17 @@ single source shortest path algorithm. Afterwards we are going to explain the
 implementation details and lastly we describe the algorithm from 2017 and
 implement that.
 \nick{Find ud af hvorfor visibility graphen er at gå fra vertex til
-vertex,(trekants uligheden), og skriv det et sted her} \section{Problem
-description} We a given two points in the plane $s,t\in\mathbb{R}^2$ and a list
-of polygons $P=p_1,\dots,p_h$ where $p_i$ is a list of points in polygon $p_i$
-starting an abitrary place and in clockwise order(note that sometimes we use
-$P$ as a set f. ex. polygon $p_i\in P$). We say a legal path is a list of
-points where two adjecent points are mutually visibible, i.e. you are able to
-draw a line from one to the other without crossing the interioer of any polygon
-in $P$.
+vertex,(trekants uligheden), og skriv det et sted her} 
+
+\section{Problem description} 
+We a given two points in the plane $s,t\in\mathbb{R}^2$ and a list of polygons
+$P=p_1,\dots,p_h$ where $p_i$ is a list of points in polygon $p_i$ starting an
+abitrary place and in clockwise order(note that sometimes we use $P$ as a set
+f. ex. polygon $p_i\in P$). We say a legal path is a list of points where two
+adjecent points are mutually visibible, i.e. you are able to draw a line from
+one to the other without crossing the interioer of any polygon in $P$. 
 We want to find a shortest legal path from $s$ to $t$.
 
-\section{Naive algorithm}
-Overview of naive
-\section{Hersberger suri}
-overview of hersberger suri
 \section{Previous work}
 \begin{table}[H]
 \begin{tabular}{ c l l l c c} 
@@ -55,7 +52,8 @@ overview of hersberger suri
 	 & Naive\tablefootnote{See Chapter 2} & $O(n^3)$ & $O(|E|)$ & x &\\
 
 	1978 & Lee \cite{LEE78}\tablefootnote{We were not able to obtain the
-	original ph.d. thesis, the got the running time from \cite{HershbergerS99} } & $O(n^2\log n)$ & ? & x & \\
+	original ph.d. thesis, the got the running time from \cite{HershbergerS99} }
+	& $O(n^2\log n)$ & ? & x & \\
 
 	1985 & Welzl \cite{DBLP:journals/ipl/Welzl85} & $O(n^2)$ & $O(n^2)$ & x & \\
 
@@ -76,6 +74,7 @@ overview of hersberger suri
 \end{tabular}
 \caption{Shortest Paths in the Plane with Polygon obstacles algorithms}
 \end{table}
+
 In 1978 Lee presented a $O(n^2\log n)$ algorithm for constructing a visibility
 map in his Ph.d.  thesis\cite{LEE78}, we couldn't find the original paper, the
 running time is taken from \cite{HershbergerS99}. 
@@ -105,5 +104,10 @@ $O(n\log n)$ algorithm for computing the shortest path map, matching the lower
 bound. The space consumption is $O(n\log n)$ and it is still an open problem if
 there exists an algorithm with run time $O(n\log n)$ and linear space
 consumption.
+
+\section{Naive algorithm}
+Overview of naive
+\section{Hersberger suri}
+overview of hersberger suri
 
 \section{Overview of thesis}
