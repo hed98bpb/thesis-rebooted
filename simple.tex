@@ -4,17 +4,17 @@ In this section we describe an $O(n^3+k n^2)$ implementation which solves the
 the number of vertices in the polygons and $k$ is the number of polygon
 violations allowed. In the first section we describe how we construct the
 visibility graph. Imagine a plane with a starting point $s$, an end point $t$,
-and $h$ polygon obstacles. A visibility graph is a graph where for each set of
-points  $p,q\in P \cup \{s,t\}$ (recall $P$ is the set of all points of the
-polygons) there is an edge between them if the two points can see each other
+and $\mathcal{O}$ polygon obstacles, which is build of groups of connected points,
+each representing an obstacle. A visibility graph is a graph where for each set of
+points $p,q\in \mathcal{O} \cup \{s,t\}$  there is an edge between them if the 
+two points can see each other
 without going (or looking) through any interior of an obstacle (see figure
 \ref{visibilitygraph}). In the second section we explain Dijkstra's algorithm
 for finding the shortest path from $s$ to $t$ in the visibility graph and
-finally in the third section we test our code to see if the actual running time
-is the same as the theoretical.
+finally in the third section we test our implementation to compare if the actual 
+running time is the same as the theoretical.
 
 \begin{figure}[H]
-	\caption{Example of visibility graph}
 	\begin{subfigure}{.5\textwidth}
 		\includegraphics[width=6cm]{figures/visibilitygraph1.pdf}
 		\caption{}
@@ -25,24 +25,25 @@ is the same as the theoretical.
 		\caption{}
 		\label{fig:visibilitygraph2}
 	\end{subfigure}
+	\caption{Example of visibility graph}
 	\label{visibilitygraph}
 \end{figure}
 
 \section{Constructing the visibility graph}
-The normal naive way of constructing a visibility graph is to make a graph
-where every set of points $p,q \in P\cup \{s,t\}$ is connected to each other,
+The naive way of constructing a visibility graph is to make a graph
+where every set of points $p,q \in \mathcal{O} \cup \{s,t\}$ is connected to each other,
 then removing all edges that crosses the interior of a polygon. But in this
 setting we are allowed to cross $k$ polygons, so we construct the graph a bit
-different. Given a set $P$ consisting of all the polygons, where each polygon
-is a list of the points in the polygon we use the following algorithm.  Create
-a graph $G_0=(V,E)$, where $V$ contains all the vertices in $P\cup \{s,t\}$,
+different. Given a set $\mathcal{O}$ consisting of all the polygons, where each polygon
+is a list of the points in the polygon we use the following algorithm \ref{algo:MakeVisibilityGraph}.  
+Create a graph $G_0=(V,E)$, where $V$ contains all the vertices in $P\cup \{s,t\}$,
 and let $E$ contain all possible connections between the vertices. Make $k$
-copies of the graph and name them $G_1,\dots,G_{k}$.  The algorithm goes as
-follows: for each graph $G_i$, take for each edge $e_j\in G_i$ and call
-NumberOfCrosses$(e_j)$, which returns the number of polygons from $P$ that the
+copies of the graph and name them $G_1,\dots,G_{k}$. Algorithm \ref{algo:MakeVisibilityGraph} goes as
+follows: for each graph $G_i$, take each edge $e_j\in G_i$ and call
+NumberOfCrosses$(e_j)$, which returns the number of polygons from $\mathcal{O}$ that the
 line segment crosses, and connect the endpoint to the corresponding point in
-$G_{i+n}$, i.e.\ if you take an edge in the graph, that goes through $n$
-polygons, you travel $n$ graphs up. If $i+n>k$ then delete the edge. We now
+$G_{i+l}$, i.e.\ if you take an edge in the graph, that goes through $l$
+polygons, you travel $l$ graphs up. If $i+l > k$ then delete the edge. We now
 have a graph that has $k$ levels where every time you go through $k$ polygons
 you go $k$ levels up.
 
@@ -51,15 +52,16 @@ you go $k$ levels up.
 	\begin{algorithmic}[1]
 		\ForAll{$G_i=(V_i,E_i) \in G$}
 		\ForAll{$e \in E_i$}
-			\State $count = numberOfCrossings(e)$
-			\If{$count+i<=k$}
-				\State make $e$ go from $G_i$ to $G_{i+count}$
+			\State $crosses = numberOfCrossings(e)$
+			\If{$crosses+i<=k$}
+				\State make $e$ go from $G_i$ to $G_{i+crosses}$
 			\Else
 				\State delete edge $e$
 			\EndIf
 		\EndFor
 		\EndFor
 	\end{algorithmic}
+	\label{algo:MakeVisibilityGraph}
 \end{algorithm}
 
 The only missing part is the numberOfCrossings function, which we will define
@@ -67,15 +69,14 @@ below.
 
 \subsection{Number of crossings}
 Calculating the number of polygons a line segment crosses is no trivial task,
-since there is a bunch of edge cases. We try to give a brief intuition of the
+since there is a number of edge cases. We try to give a brief intuition of the
 edge cases, and then present our algorithm.
-The first five cases (a-e) \ref{fig:crossings} are allowed intersections since
-the only the interior of a polygon we can not travel, the
+The first five cases (a-e) in figure \ref{fig:crossings} are allowed intersections since
+it is only the interior of a polygon that we can not travel. The
 next five cases (f-j) are not allowed since they travel through the interior
 of the polygon.
 
 \begin{figure}
-\caption{}
 \begin{tabular}{|c|c|c|c|c|}
       \hline
 		\multicolumn{5}{|c|}{No intersection} \\
@@ -96,9 +97,12 @@ of the polygon.
       \addheight{\includegraphics[width=20mm]{figures/crossFig10.pdf}} \\
       \small (f) &  (g) & (h) & (i) & (j) \\
       \hline
-\end{tabular}
+    \end{tabular}
+    \caption{A collection of 10 different cases showing what we have 
+             defined as an intersection between a polygon and a linesegment}
 	\label{fig:crossings}
 \end{figure}
+
 So given a polygon $p\in P$, and a line segment $l$ we want to determine
 weather $l$ crosses the polygon $p$. We start by making the list of points into
 a list of line segment $p'=(p_1,p_2),(p_2,p_3),\dots,(p_{i-1},p_i)$.  Then we
@@ -108,8 +112,9 @@ and j) all have that in common that the line segment crosses four end points
 from the polygon. So we say it is not allowed to cross four points in of
 a polygons line segments. The problem is that it makes (cases a, c
 and d) not allowed which they should be. But fortunately they all have that in
-common that they are colinear with a line segment of the polygon, so the
+common that they are collinear with a line segment of the polygon, so the
 algorithm becomes 
+
 \begin{enumerate}
 	\item if line segment crosses a line segment of a polygon it crosses the
 		polygon
