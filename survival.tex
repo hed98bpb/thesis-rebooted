@@ -2,17 +2,147 @@
 
 \begin{figure}
 \begin{center}
+    \addtolength{\leftskip} {-2.5cm} % increase (absolute) value if needed
+    \addtolength{\rightskip}{-2.5cm}
 \begin{tabular}{| c | l |}
 	\hline
 	$n$ & number of vertices \\
 	\hline
-	$s$ & Starting point \\
+	$k$ & number of violation \\
+	\hline
+	$l_i,l$ & edge segments \\
+	\hline
+	$e,e_i,f,f_i$ & edges \\
+	\hline
+	$i,j$ & counting variables \\
+	\hline
+	$p,p_i,q,q_i,a,b,r$ & points \\
+	\hline
+	$s$ & stars point, source \\
 	\hline
 	$t$ & end point \\
 	\hline
-	$k$ & number of allowed violations \\
+	$V$ & set of vertices, in the context of $G(E,V)$, else all vertices in the plane including $s$\\
 	\hline
-	$P$ & the set of polygons \\
+	$E$ & set of edges \\
+	\hline
+	$G$ & Graph \\
+	\hline
+	$p_{i.x}, q_{i.x}$ & $x$ coordinate of points \\
+	\hline
+	$p_{i.y}, q_{i.y}$ & $4$ coordinate of points\\
+	\hline
+	$v_i$ & vectors or vertices \\
+	\hline
+	$A,B,C$ & Figures, like triangles and square, or corners of triangles \\
+	\hline
+	$L_i$ & lines \\
+	\hline
+	$v_{\pi}$ & predecessor \\
+	\hline
+	$s_d, v_d$ & upper bound of weight of shortest paths \\
+	\hline
+	$w(\cdot, \cdot), w(\cdot)$ & weight function with one or two inputs \\
+	\hline
+	$Q$ & min priority queue \\
+	\hline
+	$\mathcal{S}$ & straight line subdivision \\
+	\hline
+	$\alpha$ & well covering parameter \\
+	\hline
+	$C(e)$ & set of cells with $e$ in its interior \\
+	$\mathcal{C}_i(e_i)$ & set of cells of $\mathcal{S}_i$ whose union $\mathcal{U}_{\alpha}(e_\alpha)$ the the well covering region $e_{\alpha}$ \\ 
+	\hline
+	$\mathcal{U}(e)$ & $\{c \mid c \in \mathcal{C}(e)\}$ \\
+	\hline
+	$c$ & cell \\
+	\hline
+	$\Delta$ & side length of figure \\
+	\hline
+	$x,y$ & $= j \cdot 2^i$ coordinate of $i$-quad \\
+	\hline
+	$b$ & $i$-box \\
+	\hline
+	$\mathcal{Q}(i)$ & $i$-quads at stage $i$ \\
+	\hline
+	$S, S', S_j(i)$ & equivalence class of $\mathcal{Q}(i)$ \\
+	\hline
+	$\equiv_i$ & transitive equivalence relation of overlap \\
+	\hline
+	$input(e)$ & edges who's wavefront is used for computing distance to $e$ from $\mathcal{U}(e)$'s boundary \\
+	\hline
+	$output(e)$ & $input(e) \cup \{f \mid e \in input(f)\}$ \\
+	\hline
+	$\partial$ & boundary \\
+	\hline
+	$V_S$ & points in the cores $S$ quads \\
+	\hline
+	$\overline{pq}$ & line segment between point $p$ and $q$ \\
+	\hline
+	$covertime(e)$ & time where $e$ is fully covered \\
+	\hline
+	$w,w'$ & wavelet \\
+	\hline
+	$O, O_i$ & obstacle \\
+	\hline
+	$\mathcal{O}$ & the set of obstacles in the plane \\
+	\hline
+	$g,g'$ & generators \\
+	\hline
+	$\pi(p)$ & set of shortest path from $s$ to $p$ \\
+	\hline
+	$\pi_k(p)$ & the shortest path from $s$ to $p$ \\
+	\hline
+	$SPM$ & shortest path map \\
+	\hline
+	$SPM_k$ & shortest $k$-path map\\
+	\hline
+	$T, T_i$ & minimum spanning tree or subset of edges \\
+	\hline
+	$T'$ & joined tree of $T_1$ and $T_2$ \\
+	\hline
+	$T_x$ & one of $\{T_1, T_2\}$ \\
+	\hline
+	$\mathcal{N}$ & set of minimum spanning trees \\
+	\hline
+	$G(i)$ & graph with set of vertices $V$ with edges weight of less than $6 \cdot 2^i$ \\
+	\hline
+\end{tabular}
+\end{center}
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+    \addtolength{\leftskip} {-2.5cm} % increase (absolute) value if needed
+    \addtolength{\rightskip}{-2.5cm}
+\begin{tabular}{| c | l |}
+    \hline
+	$|\cdot|$ & length of edges of size of set \\
+	\hline
+	$R_1$ & $\bigcup_{q \in S'} \{\text{the core of } growth(q)\}$ \\
+	\hline
+	$R_2$ & $\bigcup_{q \in S'} \{\text{the region covered by } q\}$ \\
+	\hline
+	$M$ & matching in graph \\
+	\hline
+	$q_u, q_v$ & $i$-quad q containing vertex $v$ or $u$ in its core \\
+	\hline
+	$MSF(\cdot)$ & minimum spanning forest at stage $i$ \\
+	\hline
+	$d(\cdot, \cdot)$ & distance function \\
+	\hline
+	$\Tilde{d}(s,e)$ & $\min(d(s,a),d(s,b))$ \\
+	\hline
+	$W(e)$ & approximate wavefront passing through edge $e$ \\
+	\hline
+	$W(f,e)$ & $\{w(f) \mid f \in input(e)\}$ \\
+	\hline
+	$W(f',e)$ & topologically different than $W(f,e)$ \\
+	\hline
+	$S(e)$ & S-face which segment intersects $e$ \\
+	\hline
+	S-face & piece of active region
 	\hline
 \end{tabular}
 \end{center}
