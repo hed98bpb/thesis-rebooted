@@ -126,9 +126,28 @@ algorithm is as follows:
 This lead us to the following algorithm
 \nick{Write this algorithm}
 \begin{algorithm} 
-	\caption{NumberOfCrossings($l,P$)}
+	\caption{NumberOfCrossings($l,O$)}
 	\begin{algorithmic}[1] 
-		\State \text{TODO}
+		\State{result=0}
+		\ForEach{$o \in O$}
+			\State{counter$=0$}
+			\ForEach {$l' \in o$}
+				\State{result$=$crosses$(l',l)$}
+				\If{result==-1}
+					\State{counter$=0$}
+					\State{\textbf{Break}}
+				\ElsIf{result==0}
+					\State{counter=counter+1}
+				\Else
+					\State{counter=4}
+					\State{\textbf{Break}}
+				\EndIf
+			\EndFor
+			\If{$counter>4$}
+				\State{result=result+1}
+			\EndIf
+		\EndFor
+		\Return{result}
 	\end{algorithmic}
 \end{algorithm}
 
