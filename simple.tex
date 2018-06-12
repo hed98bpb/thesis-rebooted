@@ -42,8 +42,8 @@ copies of the graph and name them $G_1,\dots,G_{k}$. Algorithm \ref{algo:MakeVis
 follows: for each graph $G_i$, take each edge $e_j\in G_i$ and call
 NumberOfCrosses$(e_j)$, which returns the number of polygons from $\mathcal{O}$ that the
 line segment crosses, and connect the endpoint to the corresponding point in
-$G_{i+l}$, i.e.\ if you take an edge in the graph, that goes through $l$
-polygons, you travel $l$ graphs up. If $i+l > k$ then delete the edge. We now
+$G_{i+m}$, i.e.\ if you take an edge in the graph, that goes through $m$
+polygons, you travel $m$ graphs up. If $i+m > k$ then delete the edge. We now
 have a graph that has $k$ levels where every time you go through $k$ polygons
 you go $k$ levels up.
 
@@ -99,20 +99,20 @@ of the polygon.
       \hline
     \end{tabular}
     \caption{A collection of 10 different cases showing what we have 
-             defined as an intersection between a polygon and a linesegment}
+             defined as an intersection between a polygon and a line segment}
 	\label{fig:crossings}
 \end{figure}
 
-So given a polygon $p\in P$, and a line segment $l$ we want to determine
-weather $l$ crosses the polygon $p$. We start by making the list of points into
-a list of line segment $p'=(p_1,p_2),(p_2,p_3),\dots,(p_{i-1},p_i)$.  Then we
+So given a polygon $O\in \mathcal{O}$, and a line segment $l$ we want to determine
+weather $l$ crosses the polygon $O$. We start by making the list of points into
+a list of line segment $O'=(p_1,p_2),(p_2,p_3),\dots,(p_{i-1},p_i)$.  Then we
 observe that if a line segment crosses a line segment of a polygon, it counts
 as a crossing (cases f and g). The other three cases of crossing (cases h, i
 and j) all have that in common that the line segment crosses four end points
 from the polygon. So we say it is not allowed to cross four points in of
 a polygons line segments. The problem is that it makes (cases a, c
-and d) not allowed which they should be. But fortunately they all have that in
-common that they are collinear with a line segment of the polygon, so the
+and d) illegal. But fortunately they all have that in common that they are collinear 
+(they lie on a common line) with a line segment of the polygon, so the
 algorithm becomes 
 
 \begin{enumerate}
