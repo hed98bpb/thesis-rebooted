@@ -1,19 +1,20 @@
 \chapter{Introduction} Given a starting point $s$, an endpoint $t$ and a set of
-polygons $P$, we want to find the shortest path from $s$ to $t$ without
-traveling in the interior of any polygon in $P$. It is an old and well studied
-problem, and historically there have been two approaches to the problem,
-visibility graph and continuous Dijkstra. 
+polygons $P$ in the plane, we want to find the shortest path from $s$ to $t$ without
+traveling in the interior of any polygon in $P$. 
+This is an old and well studied problem, and historically there have been two
+conceptionally different approaches to the problem, using visibility graphs and
+continuous Dijkstra algorithm. 
 
 The visibility graph approach is to construct a graph of all legal paths
 \nick{What is a legal path} and
 then running a single source shortest path algorithm on that graph. The problem
-with this approach is that the complexity of the graph can be $\Omega(n^2)$,
+with this approach is that the complexity of the graph can be $\Theta(n^2)$,
 where $n$ is the number of vertices of the polygons. \nick{Sounds weird}
 
-The continuous Dijkstra works by simulating a wave front
-propagation\nick{define wavefront propagation} from the
+The continuous Dijkstra works by simulating a \emph{wave front
+propagation}\nick{define wavefront propagation} from the
 start point $s$, where at simulation time $t$ the wavefront contains all the
-points that is reached within distance $t$.  Every time a vertex edge is
+points that are reacheble with distance $d$.  Every time a vertex edge is
 reached a new wavefront starts emitting from there. In 1999 Hersberger and Suri
 held a presentation in which they presented a $O(n\log n)$ time algorithm which
 matched the lower bound of the problem, using the continuous Dijkstra method.
