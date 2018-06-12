@@ -4,7 +4,7 @@ overview of the Hershberger-Suri algorithm, which solves the shortest path with 
 in an optimal $O(n \log n)$ time \cite{HershbergerS99}. This algorithm produces a shortest 
 path map, which divides the free space (free space being the plane minus the interior of the 
 obstacles) into region where each subdivision will have the same shortest sub-path to 
-all points in the area. This structure can then be extended for the purpose of calculating 
+all points in the region. This structure can then be extended for the purpose of calculating 
 shortest paths with violation, which we will present an intuitive idea on how this is done. 
 Finally we present an algorithm which will combine the Hershberger-Suri algorithm with a 
 modified version of the same algorithm, to produce a shortest $k$-path map, a subdivision 
@@ -13,17 +13,17 @@ n \log n)$. This result is due to Hershberger, Kumar and Suri \cite{HershbergerK
 
 \section{The Hershberger-Suri algorithm overview}
 
-The Hershberger-Suri algorithm is an algorithm for computing the shortest 
-path in a plane in the presence of obstacles without violations. The 
-Hershberger-Suri algorithm was proven to be optimal-time in \cite{HershbergerS99}, 
-with its $O(n \log n)$ running time, with $n$ being the total number of vertices 
+The Hershberger-Suri algorithm is an algorithm for computing a shortest path map, a
+data structure from which we can query the shortest path in a plane in the presence of 
+obstacles without violations. The Hershberger-Suri algorithm was proven to be optimal-time 
+in \cite{HershbergerS99}, with its $O(n \log n)$ running time, with $n$ being the total number of vertices 
 of the obstacles located in the plane. This is done by computing a shortest path map 
 which is  a map containing the shortest paths from a fixed source point $s$, to all 
 other points in the plane. This is done by subdividing the plane into a finite number
 of regions, where all the points in such a region have the same shortest sub-path
 from $s$. This map can be constructed in $O(n\log n)$ time and requires $O(n\log n)$ 
-space A query for a shortest path can be processed in $O(\log n)$
-time.
+space \cite{HershbergerS99}. A query for a shortest path can be processed in $O(\log n)$
+time suw ro\cite{DBLP:journals/siamcomp/Kirkpatrick83}. 
 
 The first step in the Hershberger-Suri algorithm is to use an implementation of
 the continuous Dijkstra method, which purpose is to give a distance from the
@@ -37,9 +37,10 @@ its wavefront until a contact (with any wavefront).
 
 Hershberger and Suri introduced two new ideas to speed the implementation of the
 continuous Dijkstra method up compared to previous attempts, the first being a 
-quad-tree-like subdivision of the plane, which we'll later introduce as a conforming 
-subdivision, and the second being an approximate wavefront, which introduces a
-bit of slack in the calculation of the collision-time of the wavefronts.
+quad-tree-like subdivision of the plane, which we'll in chapter \ref{chapter:conformingsubdivision} 
+introduce as a conforming subdivision, and the second being an approximate wavefront, which introduces a
+bit of slack in the calculation of the collision-time of the wavefronts, which 
+we will discuss in chapter \ref{chapter:wavefrontpropagation}.
 
 The first idea is grounded in the observation that a wavefront of the type in the 
 continuous Dijkstra method, will be quite complicated to implement directly. 
@@ -61,8 +62,8 @@ shortest path distance $2|e|$ of the edge.
 
 These cells will then form the basis for the \textit{unitspeed} propagation in the 
 algorithm, which will act as the wavefront propagation in the algorithm. This means 
-that at each step the wavefront will propagated through one cell at a time for each 
-time count. Since the descriptive complexity of each cell will be constant the 
+that at each step of the wavefront will propagated through one cell at a time. 
+Since the descriptive complexity of each cell will be constant the 
 algorithm will perform efficiently in the propagation through of the cells.
 
 Inside each of these cells there will be two types of event: the first being a
@@ -82,7 +83,7 @@ The idea of approximating wavefronts is the abandonment of trying to compute the
 time of collision and instead maintaining two separate wavefronts approaching the edge 
 from opposite sides. Each of these wavefronts is an \textit{approximate wavefront}, 
 representing the wavefront that hits the edge from only one side. This leads to the 
-other wavefronts which arrives at the edge after first wavefront, wont be recorded by 
+other wavefronts which arrives at the edge after the first wavefront, wont be recorded by 
 the edge, due to it being slower than the initial arriving wavefront.
 
 As mentioned above the Hershberger-Suri algorithm make use of timers to estimate the 
@@ -114,7 +115,7 @@ elevator trips when taking the path from $s$ to $t$. When thinking about the pro
 this way, it seems quite natural to think of the construction of $SPM_k$ iteratively, 
 starting by making the $SPM_0$ map, which is done by the Hershberger-Suri algorithm, and 
 then from this construct the $SPM_1$ map, and for each iteration going one floor up, 
-until we reach $SPM_{k-1}$.
+until we reach $SPM_{k}$.
 
 \section{Construction of a shortest $k$-path map}
 
@@ -127,7 +128,6 @@ the plane.
 
 \begin{figure}[H]
 \centering
-\caption{}
 \begin{subfigure}{.5\textwidth}
   \centering 
   \includegraphics[width=.95\linewidth]{figures/prespm0.pdf}
@@ -141,14 +141,14 @@ the plane.
   		   areas where there is two shortest paths of equal length}
   \label{fig:planewithspm0drawn}
 \end{subfigure}
+\caption{}
 \end{figure}
 
 Above we see in figure \ref{fig:spmplane} a plane with $s$ and $t$ and two obstacles. Figure 
-\ref{fig:planewithspm0drawn} shows a drawing of the $SPM_0$, which the unmodified 
-Hershberger-Suri algorithm will calculate. 
+\ref{fig:planewithspm0drawn} shows a drawing of the $SPM_0$, where each encapsulated area is 
+a region of the $SPM$, which will be the output of the unmodified Hershberger-Suri algorithm. 
 
 \begin{figure}[H]
-\caption{}
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
@@ -165,6 +165,7 @@ Hershberger-Suri algorithm will calculate.
            colored sub-edges as sources}
   \label{fig:spm1}
 \end{subfigure}
+\caption{}
 \end{figure}
 
 The modified algorithm needs to be able to propagate not from a source which is a point but 
@@ -174,7 +175,7 @@ obstacles interior has been propagated, the modified algorithm is ready to propa
 space towards $t$, which we see in figure \ref{fig:spm1}. It's worth noting that the free area 
 the modified algorithm needs to propagate in figure \ref{fig:spm1}, is enclosed by the the two 
 red line which are collinear with $s$ and the top and bottom point of the triangle, with an 
-angle of less than 180 degree. This is due to the area on the other of the wedge could be 
+angle of less than 180 degree. This is due to the area on the other side of the wedge could be 
 reached faster by just going directly from $s$ without violating an obstacle.
 
 This process is then repeated when constructed the next level of the $SPM_i$ map. Finally we 
