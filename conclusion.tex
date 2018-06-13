@@ -3,3 +3,32 @@ Hershberger et al. \cite{HershbergerKS17} and retold them in this thesis
 filling in details and drawing some more figures. We also came up with a simple
 algorithm for constructing the visibility graph, implementing it and see that
 the actual run time was the same as theoratical.
+
+In this thesis we have studied the problem of finding the shortest path in a plane with $k$ 
+polygonal obstacle violations. First we showed a naive way for computing this problem, by 
+building a visibility graph and using Dijkstra to find the shortest path with a maximum of 
+$k$ allowed obstacle violation. This could be done in $O(n^3 + k \cdot n^2 + \text{Dijkstra})$, 
+where Dijkstra runs in time $O((V + E) \log V)$. We implemented our naive algorithm a found 
+our implementation ran in the expected time. 
+
+Next we present an optimal solution of solving the shortest path problem without obstacle violation, 
+which is due to Hershberger and Suri\cite{HershbergerS99}, and presented an extension of this solution 
+into one which could handle paths with obstacle violation, which is due to Hershberger, Kumar and Suri
+\cite{HershbergerKS17}. 
+
+We began our discussion of the Hershberger-Suri algorithm with the construction of a conforming 
+subdivision which builds a grid on top of the plane which give us some strong properties for subdividing 
+it into a shortest path math. Here we considered both theoretical results and implementation details. 
+Next we presented the wavefront propagation which uses the conforming subdivision to construct 
+the shortest path map, from which we can query the shortest path between a source point $s$ 
+and an endpoint $t$ in time $O(\log n)$ \cite{DBLP:journals/siamcomp/Kirkpatrick83}. 
+
+Next we presented the extension of the Hershberger-Suri algorithm, with the needed modification
+to the Hershberger-Suri algorithm and the overall algorithm which solves the shortest path with
+$k$ polygonal obstacle violations in $k^2 \cdot n \log n)$ time. We also gave an overview of the
+theory behind the solution to give a better understanding of the main ideas on which the algorithm
+is build upon.
+
+At last we gave a reduction of finding a shortest path without obstacle violation to sorting numbers
+and prooved the optimality of the Hershberger-Suri algorithm.
+
