@@ -13,16 +13,32 @@ is the complexity of the graph can be $\Theta(n^2)$, with $n$ begin the number o
 which makes it difficult to get below this threshold. 
 
 The continuous Dijkstra method works by simulating a \emph{wavefront propagation}.
-A wavefront is a circular arch which originates from a point and expands in a unit-speed
-fashion such that all points of the boundary of the arch have equal distance $d$ to the 
-generator point from which the wavefront originated, at every time $t$. 
-This point is the source (start point) $s$, see figure 
+A wavefront is a circular arch which originates from a point and expands in at unit-speed
+(non-changing speed) such that all points of the boundary of the arch have equal distance 
+$d$ to the generator point from which the wavefront originated, at every time $t$. 
+This point is the source (start point) $s$, see figure \ref{fig:simplewavefront}.
 
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=0.5\textwidth]{figures/simplewavefront.pdf}
+	\label{fig:simplewavefront}
+	\caption{A right turn formed by three points}
+\end{figure}
 
-\nick{define wavefront propagation} from the start point $s$, where
-at simulation time $t$ the wavefront contains all the points that are reacheble
-with distance $d$.  Every time a vertex edge is reached a new wavefront starts
-emitting from there. In 1999 Hersberger and Suri published a
+From the figure we can see that since the wavefront expands at unit-speed, the time distance
+$d_i$ at time $t_i$ are equal, are one therefore is only concerned with the time $t$.
+Every time a vertex $v$ is reached a new wavefront starts emitting from $v$, and this way
+the plane is getting devided into different areas when 
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=0.5\textwidth]{figures/introductiontowavefront.pdf}
+	\label{fig:introductiontowavefront}
+	\caption{A simple example of the wavefront spreading in the plane around an obstacle $O$
+	         an encapsulating different areas.}
+\end{figure}
+
+In 1999 Hersberger and Suri published a
 paper\cite{HershbergerS99} in which they presented an $O(n\log n)$ time
 algorithm which matched the lower bound of the problem (see
 Chapter \ref{chapter:lowerbound}), using the continuous
