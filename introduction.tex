@@ -5,27 +5,24 @@ This is an old and well studied problem, and historically there have been two
 conceptionally different approaches to the problem, using visibility graphs and
 continuous Dijkstra algorithm. 
 
-The visibility graph approach is to construct a graph of all legal paths
-\nick{What is a legal path} and
+The visibility graph approach is to construct a graph of all legal paths and
 then running a single source shortest path algorithm on that graph. The problem
 with this approach is that the complexity of the graph can be $\Theta(n^2)$,
-where $n$ is the number of vertices of the polygons. \nick{Sounds weird}
+where $n$ is the number of vertices of the polygons.
 
-The continuous Dijkstra works by simulating a \emph{wave front
-propagation}\nick{define wavefront propagation} from the start point $s$, where
-at simulation time $t$ the wavefront contains all the points that are reacheble
-with distance $d$.  Every time a vertex edge is reached a new wavefront starts
-emitting from there. In 1999 Hersberger and Suri published a
-paper\cite{HershbergerS99} in which they presented an $O(n\log n)$ time
-algorithm which matched the lower bound of the problem (see
-Chapter \ref{chapter:lowerbound}), using the continuous
-Dijkstra method.
+The continuous Dijkstra works by simulating a \emph{wave front propagation}
+from the start point $s$, where at simulation time $t$ the wavefront contains
+all the points that are reacheble with distance $d$.  Every time a vertex edge
+is reached a new wavefront starts emitting from there. In 1999 Hersberger and
+Suri published a paper\cite{HershbergerS99} in which they presented an $O(n\log
+n)$ time algorithm which matched the lower bound of the problem (see Chapter
+\ref{chapter:lowerbound}), using the continuous Dijkstra method.
 
 In 2017 they, together with Neeraj, looked at a generalization of that problem.
 Given the same setting as before, you are now allowed to remove $k$ polygons.
-The problem is which polygons you should remove to minimize the distance from $s$ to $t$. They
-presented an $O(k^2 n\log n)$ algorithm for this problem, which used a modified
-version of the 1999 algorithm\cite{HershbergerKS17}. 
+The problem is which polygons you should remove to minimize the distance from
+$s$ to $t$. They presented an $O(k^2 n\log n)$ algorithm for this problem,
+which used a modified version of the 1999 algorithm\cite{HershbergerKS17}.
 Notice that if $k=0$ it is identical to the Shortest path with no violations.
 
 In this thesis we are going to look into implementations of both the original
@@ -34,8 +31,6 @@ the problem based on computing a visibility graph and then running the Dijkstra
 single source shortest path algorithm. Afterwards we are going to explain the
 implementation details and lastly we describe the algorithm from 2017 and
 implement that.
-\nick{Find ud af hvorfor visibility graphen er at gå fra vertex til
-vertex,(trekants uligheden), og skriv det et sted her} 
 
 \section{Problem description} 
 \label{problemdescription}
