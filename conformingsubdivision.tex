@@ -264,7 +264,7 @@ we build a partition around the set of points in the plane in a bottom up proced
 by \textit{growing} a square box around each data point, until the entire plane is covered by 
 these boxes. This is done in a number of discrete \textit{stages} numbered $-2, 0, 2, 4,...$. 
 The end goal is to produce a $1$-conforming partition of the points, where the subdivision will 
-be a grid with orthogonal cells\peter{define}. Key idea behind the growth process is, each data point $p$ in
+be a grid with orthogonal cells. Key idea behind the growth process is, each data point $p$ in
 stage $i$ is in the core of an $i$-quad. And since we grow the initial box, the data point $p$
 will remain in the $i$-quads core, and the following lemma holds inductively, by definition of
 the process we have described.

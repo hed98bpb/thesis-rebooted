@@ -1,13 +1,16 @@
 \label{chapter:wavefrontpropagation}
 
+This chapter presents the results of Hershberger and Suris wavefront propagation, 
+and is therefore heavily inspired by section 4 and 5 of \cite{HershbergerS99}.
+
 Here we will present wavefront propagation with the unmodified Hershberger-Suri 
-algorithm in mind. The only different in the regards to the modifies Hershberger-
-Suri, is the sources of the wavefronts, can been sub-edges modified algorithm, 
+algorithm in mind. One of the only differences in the regards to the modified Hershberger-
+Suri, is the sources of the wavefronts, can be sub-edges inn the modified algorithm, 
 instead of points in the unmodified.
 
 When the conforming subdivision has been constructed we are ready to actually 
-simulate the continuous Dijkstra method, by propagating through the grid with 
-a wavefront expanding at a unit-speed spreading among the obstacles. At simulation 
+simulate the continuous Dijkstra method, by propagating through the subdivision with 
+a wavefront expanding at a unit-speed spreading among the obstacles and cells. At simulation 
 time $t$, we say that a wavefront consists of all the points whose shortest-path
 distance to the source is $t$. See figure \ref{fig:wavefrontpropagation}. Such a 
 wavefront is a set of disjoint paths and closed cycles. Each path or cycle is a 
@@ -24,7 +27,7 @@ the wavefront with source $s$, and becomes generators for their own wavelets.
 	\includegraphics[width=0.45\textwidth]{figures/wavefrontpropagation.pdf}
 	\caption{An example of a wavefront propagation from $s$ with distance $t$ to all
     		 points of its circular arch. Since a path into the dashed and dotted 
-             area would require a turn at $\mathcal{O}$, these areas are propagated 
+             area would require a turn at $O$, these areas are propagated 
              by $g$ and $g'$. Since we look at the propagation at time $t$ both 
              generator would have propagated a distance $t$.}
 	\label{fig:wavefrontpropagation}
@@ -51,7 +54,7 @@ simulation changes in the case of two different event: wavefront-wavefront colli
 	\caption{The adjacent generator $g$ and $g'$ each produce a wavelets which propagates 
     the space, these are represented by the dotted circular arcs. These will overlap, 
     and the split the area between them into two equal sized regions. The fully drawn 
-    line segment between, then represent the splitting point between the two generators, 
+    line segment between them then represent the splitting point between the two generators, 
     where any point on the line segment, has equal length shortest path to both of the 
     generators.}
 	\label{fig:bisectorex}
@@ -64,15 +67,17 @@ propagation phase, and second a map computation phase. The wavefront propagation
 phase, simulates the wavefront, and thereby determines the approximate locations of 
 the different wavefront collision events. We remind that there are two different kind 
 of wavefront collisions, the first being the collisions where wavelets are neighbors 
-in the wavefronts, that is adjacent wavelets. The second being collisions between non-
-neighboring wavelets. This propagation happens through adjacent cells, and only across 
+in the wavefronts, that is adjacent wavelets and the collision between them. 
+The second being collisions between non-neighboring wavelets. This propagation happens 
+through adjacent cells, and only across 
 their transparent edges. We remind the reader that transparent edges are the edges 
 established by the subdivision, and opaque edges, are the edges of the obstacle 
 polygons. The map computation phase uses the information of wavefront collisions to 
 build a shortest path map in each cell in the conforming subdivision. 
 
 One of the main idea behind the algorithm, is the idea of calculating two 
-"\textit{single-sided}" approximations of the wavefront at each transparent edge. This 
+"\textit{single-sided approximate wavefronts}" where each approximate wavefronts 
+will approach the transparent edge from their own side. This 
 idea comes from the fact that literally translating the idea of wavefront propagation  
 into an implementation would be very hard. Instead we are contempt with calculating 
 for each transparent edge, two \textit{approximate wavefronts}, which will pass 
@@ -87,10 +92,6 @@ reason why we refer to it as approximate, since the approximate wavefront might 
 necessarily give a complete view of all wavelets time to an edge.
 
 \subsection{Definitions and terminology for propagation algorithm}
-
-The following subsection borrows heavily from \cite{HershbergerS99} section 4.1 in 
-terminology. We also present lemmas and proofs from this section to show correctness 
-and for completeness \\
 
 By visiting the cells in a correct order, and going cell by cell we can calculate the 
 correct time in which a wavefront hits a transparent edge, within a giving 
@@ -135,7 +136,7 @@ $$\tilde{d}(s,e)=\min(d(s,a),d(s,b))$$
 
 This estimates $d(s,e)$ because if the wavefront hits $a$ or $b$ then $\tilde{d}(s,e) = 
 d(s,e)$, with $d(s,e)$ being the real distance from $s$ to $e$. Should the wavefront hit 
-right in the middle, between the endpoints of $\overline{ab}$, then the distance to $a$ and 
+right in the middle, between the endpoints of $\overline{ab} = e$, then the distance to $a$ and 
 $b$ from the point the wavefronts collides with would be $\title{d}(s,e)=d(s,e)+\frac{1}
 {2}|e|$. Since if we, in the later case, move the point of collision in any direction the 
 distance becomes smaller, since it must hold that $d(e,s) \leq \tilde{d}(e,s) \leq d(e,s) + 
@@ -169,7 +170,7 @@ order of its covertime. The main loop of the simulation is as follows:
             		based on the approximate 
         		    wavefronts from all edges $f\in input(e)$ satisfying 
                     $covertime(f) < covertime(e)$}
-            \State Compute $d(v,s)$ exactly for each endpoint $v$ of $e$.
+            \State Compute $d(s,v)$ exactly for each endpoint $v$ of $e$.
             \ForEach {edge $g \in output(e)$}
            		\State \multiline{Compute time $t_g$ when approximate wavefront 
                 	   from $e$ first engulfs an endpoint of $g$}
@@ -188,12 +189,12 @@ During the wavefront propagation the following invariants hold:
 
 \begin{enumerate}[(a)]
 	\item If a wavefront of an edge $f \in input(e)$ contributes to an
-	approximate wavefront of e then $\tilde{d}(f,s)+|f|<\tilde{d}(e,s)+|e|$.
+	approximate wavefront of e then $\tilde{d}(s,f)+|f|<\tilde{d}(s,e)+|e|$.
 	\item The value of $covertime(\cdot)$ is updated a constant number of times.
-	\item The final value of $covertime(e)$ is $\tilde{d}(e,s)+|e|$. This value
+	\item The final value of $covertime(e)$ is $\tilde{d}(s,e)+|e|$. This value
 	is reached no later than the simulation clock reaches that time.
 %side 16
-	\item Edge e is processed at simulation time $\tilde{d}(e,s) + |e|$
+	\item Edge e is processed at simulation time $\tilde{d}(s,e) + |e|$
 	\end{enumerate}
 \end{Lemma}
 
@@ -202,7 +203,7 @@ The parts of the lemma are proven individually
 
 	(a) If a wavelet is able to contribute to the approximate wavefront at $e$
 	it must be the case that it reaches $e$ at some time $t_e$ where $d(e,s) \leq
-	t_e \leq \tilde{d}(e,s)+|e|$. 
+	t_e \leq \tilde{d}(s,e)+|e|$. 
 	On the way from $s$ to $e$ the wavelet either goes straight from $s$ in side 
 	$\mathcal{U}(e)$ or by going through another transparent edge  $f \in inpute(e)$ at an 
     earlier time $t_f$ 
@@ -212,12 +213,12 @@ The parts of the lemma are proven individually
 	and so $t_e \geq d(s,f)+2|f|$. Since $\tilde{d}(s,f)+\frac{1}{2}|f|$, it
 	must be the case that $\tilde{d}(s,f)+|f|<\tilde{d}(s,e)+|e|$. \\
 
-	(b) The value of $covertime_e$ is only updated when an edge $f$ is processed
+	(b) The value of $covertime(e)$ is only updated when an edge $f$ is processed
 	from either $f \in input(e)$ or $e \in input(f)$. There are $O(1)$ such edges by
 	Lemma \ref{lemma:4.1} \\
 
 	(c),(d) These are proven by induction on the simulation clock. (c) and
-	(d) holds for the edges $e$ whose initial $covertime_e$ values are not
+	(d) holds for the edges $e$ whose initial $covertime(e)$ values are not
 	infinite. The wavelets that first reaches an endpoint of $e$, at
 	$t_e=\tilde{d}(s,e)$ passes through some $f \in input(e)$. Because of the
 	base-case in the induction we know that $f$ has has already been visited before the 
@@ -229,17 +230,17 @@ The parts of the lemma are proven individually
 	simulation time $\tilde{d}(s,e)+|e|$.
 \end{proof}
 
-\begin{Lemma}[Lemma 4.3 in \cite{HershbergerS99}]
+\begin{Lemma}[Lemma 4.3 in \cite{HershbergerS99}] \label{lemma:4.3}
 	For every vertex v of our conforming subdivision, the propagation algorithm
 	correctly determines the distance $d(s,v)$ before $v$ is used as a generator in
 	any wavefront.	
 \end{Lemma}
 
 \begin{proof}
-	In the conforming subdivision, every vertex $v$ is an endpoint of a transparent edge 
+	In a conforming subdivision, every vertex $v$ is an endpoint of a transparent edge 
     $e$. The wavefront that creates the distance $d(s,v)$, either reaches $v$ by only 
     traveling within the boundary of $\mathcal{U}(e)$ or exists through an edge $f \in 
-    input(e)$ s.t. $covertime(f) < covertime(e)$. The case of not leaving $\mathcal{U}(e)$, 
+    input(e)$ s.t. $covertime(f) < covertime(e)$. In the case of not leaving $\mathcal{U}(e)$, 
     the initialization trivially computes $d(s,v)$ correctly. The case of leaving 
     $\mathcal{U}(e)$, step 4 and 5 in algorithm \ref{algorithm:propagationalgorithm} 
     implies $d(s,v)$ would be correctly computed. Should $v$ be an obstacle vertex, it may 
@@ -247,15 +248,15 @@ The parts of the lemma are proven individually
     computed at time $\tilde{d}(s,e)+|e|$ (Lemma \ref{lemma:4.2} (d))
 \end{proof}
 
-Even though a well-covering region $\mathcal{U}(e)$ has constant complexity, it might not be 
-a simply connected component. One could consider the case of a square annulus. Consequently 
+Even though a well-covering union of cells $\mathcal{U}(e)$ has constant complexity, it might not be 
+a simple connected component. One could consider the case of a square annulus. Consequently 
 there might be multiple topologically distinct paths from a boundary edge $f \in input(e)$ 
 to $e$. But we're not interested in comparing paths of different topologies, so to avoid 
 comparisons of different topological paths we split the wavefront $W(e)$ into topologically 
 equivalent pieces. 
 
 For this purpose, let $W(e)$ denote one of the approximate wavefront passing through $e$. Now 
-when we will compute $W(e)$ from the set $\{W(f)|f \in input(e)\}$, we will use topologically 
+when we will compute $W(e)$ from the set $\{W(f) \mid f \in input(e)\}$, we will use topologically 
 constrained versions of the two incoming wavefronts, which we will denote $W(f,e)$. In this 
 context a wavefront $W(f,e)$ will be a portion of $W(f)$ that follows a single topological 
 path inside $\mathcal{U}(e)$ from $f$ to $e$.
@@ -269,14 +270,15 @@ etc.
 Lets assume that two point $p, q \in e$ are hit by a single topologically constrained 
 wavefront $W(f,e)$. The segment of $e$ which has $p$ and $q$ as endpoints then all of the 
 segments points has among their predecessor the generator vertices in $W(f)$, which 
-intersects $f$ and $f$. Also the quadrilateral bounded by the segments of $f$ and $e$, which 
+intersects $f$ and $e$. Also the quadrilateral\footnote{A figure consisting of 4 vertices in a euclidean space} 
+bounded by the segments of $f$ and $e$, which 
 is a subset of $\mathcal{U}(e)$. Such paths are not always segments. We can imaging an 
 obstacle vertex $v$ which lies in a well-covering region of $e$, and the path from $f$ to $p$ 
 turns at $v$. This would then imply that the predecessor of $p$ in $W(f,e)$ may be $v$. 
 Should this be the case, then the paths from $p$ and $q$ to $f$ can be continuously deformed 
 (there is no obstacles between the two paths) to each inside $\mathcal{U}(e)$. 
 
-Unless $s \in \mathcal{U}(e)$, then for any points $p \in e$ the shortest path $\pi(s,p)$ 
+Unless source $s \in \mathcal{U}(e)$, then for any points $p \in e$ the shortest path $\pi(s,p)$ 
 would pass through some $f \in input(e)$, an so constrain the source wavefronts to pass 
 through $input(e)$, and by doing so not lose any essential information for the path.
 
@@ -285,21 +287,21 @@ through $input(e)$, and by doing so not lose any essential information for the p
 As mentioned earlier, conceptually when calculating the distance to a transparent edge $e$, we 
 can get to situation where one wavefront will consume the edge way before the other edge even 
 reaches $e$. In such a situation we would want to discard the wavefront arriving later, 
-because we don't need it. The concept for this the artificial wavefronts. This mechanism will 
-also be our only mechanism for pruning the wavefront that arrives second at a transparent 
-edge. The easiest way to understand artificial wavefronts is by an example, see figure 
+because we don't need it since its being dominated. The concept for this is the artificial wavefronts. 
+This mechanism will also be our only mechanism for pruning the wavefront that arrives second at a 
+transparent edge. The easiest way to understand artificial wavefronts is by an example, see figure 
 \ref{fig:artificialwavefront} below.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.45\textwidth]{figures/artificialwavefront.pdf}
-	\caption{An example of an artificial wavefront from $v$ reaching point $p$ on edge $e$}
+	\caption{An example of an artificial wavefront from $v$ reaching point $p$ on edge $e$\cite{HershbergerS99}}
 	\label{fig:artificialwavefront}
 \end{figure}
 
 Here $u$'s wavefront engulfs the left side of the transparent edge below it, lets call it $e$. 
-The left endpoint of $e$ is $v$. When we is engulfed $v$ will generate a artificial wavefront, 
-which will run along $e$. In the figure we see that $v$ artificial wavefront engulfs $p$ 
+The left endpoint of $e$ is $v$. When $v$ is engulfed, $v$ will generate a artificial wavefront, 
+which will run along $e$. In the figure we see that $v$'s artificial wavefront engulfs $p$ 
 before the wavefront from the other side even reaches $e$. By the triangular inequality we 
 have $d(s,p) \leq d(s,v) + |\overline{vp}|$ for any point $p \in e$. This surely means that 
 the upper wavefront reaches $p$ first, and there is therefore no need to continue the 
@@ -317,13 +319,11 @@ $W(f',e)$ that comes from the part of $f$ below $e$.
 from figure \ref{fig:artificialwavefront} has weight $d(v,s)$.
 \end{enumerate}
 
-So in essence, the artificial wavefront is a convenient mechanism for discarding parts the 
-actual wavefront which will be completed dominated by other parts of the wavefront. Since we 
-only use the artificial wavefront to discard parts of incoming wavefronts, their generators 
+So in essence, the artificial wavefront is a convenient mechanism for discarding parts of the 
+actual wavefront which will be completely dominated by other parts of the wavefront. Since we 
+only use of the artificial wavefronts to discard parts of incoming wavefronts, their generators 
 will not be passed on to $output(e)$ as part of the approximate wavefront, unless it's also a 
-vertex of $\mathcal{O}$.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%% what to do with this %%%%%%%%%%%%%%%%%%%%%%%%%%
+vertex of the set of obstacles $\mathcal{O}$.
 
 \subsubsection{Proof for artificial wavefronts}
 
@@ -333,28 +333,31 @@ Consider a set of wavefronts that reach $e$ from the same side. We say that a
 contributing wavefront $W(f)$  claims a point $p \in e$ if $W(f)$ reaches $p$
 before any other contributor from the same side of $e$.
 
-\begin{Lemma}[Lemma 4.4] 
-	Let $e$ be horizontal  and let W(f,e) and W(g,e) be two contributors to the
-	approximate wavefront that passes through e from below. Let x and x' be
-	points on e claimed by W(f,e) and let y be a point e claimed by W(g,e). The
-	y cannot lie between x and x'.
+\begin{Lemma}[Lemma 4.4 in \cite{HershbergerS99}] 
+	Let $e$ be horizontal  and let $W(f,e)$ and $W(g,e)$ be two contributors to the
+	approximate wavefront that passes through $e$ from below. Let $p$ and $p'$ be
+	points on $e$ claimed by $W(f,e)$ and let $q$ be a point $e$ claimed by $W(g,e)$. The
+	$q$ cannot lie between $p$ and $p'$.
 \end{Lemma}
+
 \begin{proof}
-	Consider the the shortest paths $\pi(x,s)$, $\pi(x',s),$ and $\pi(y,s)$ in
-	the modified enviroment in which $e$ has been replaced by an open, opaque
-	segment. These paths connect $x$ and $x'$ to $f$ and $y$ too $g$, inside
-	$\mathcal{U}(e)$. Shortest paths $\pi(x,s)$, $\pi(x',s),$ and $\pi(y,s)$ do
-	not cross. The subpaths of $\pi(x,s)$ and $\pi(x',s)$ inside
+	Consider the the shortest paths $\pi(s,p)$, $\pi(s,p'),$ and $\pi(s,q)$ in
+	the modified environment in which $e$ has been replaced by an open, opaque
+	segment. These paths connect $p$ and $p'$ to $f$ and $q$ to $g$, inside
+	$\mathcal{U}(e)$. Shortest paths $\pi(s,p)$, $\pi(s,p'),$ and $\pi(s,q)$ do
+	not cross. The subpaths of $\pi(s,p)$ and $\pi(s,p')$ inside
 	$\mathcal{U}(e)$ can be continuously deformed to each other inside
-	$\mathcal{U}(e)$, so $g$ is not between them. It follows that $y$ is not
+	$\mathcal{U}(e)$, so $g$ is not between them. It follows that $q$ is not
 	between them, either.
 \end{proof}
-\begin{Lemma}[Lemma 4.5]
+
+\begin{Lemma}[Lemma 4.5 in \cite{HershbergerS99}]
 	Let u and v be two obstacle vertices, both generating wavelets that are
 	considered when the approximate wavefront passing through an edge e from
 	below is computed. Then the bisector generated by u and v intersects e at
 	most once in SPM(s).
 \end{Lemma}
+
 \begin{proof}
 	Suppose the bisector intersects $e$ twice. Without lose of generality assume
 	$u$ lies inside the loop formed by the bisector and $e$. If the bisector
@@ -368,9 +371,9 @@ before any other contributor from the same side of $e$.
 	contribute to the approximate wavefront at $e$.
 \end{proof}
 
-\begin{Lemma}[Lemma 4.6] \label{lemma:4.6HersherbergerS99}
-	Given $w(f,e)$	for each f below e that contributes to $W(e)$ we can compute
-	the interval of e claimed by each $W(f,e)$ in $O(1+k)$ total time, where $k$
+\begin{Lemma}[Lemma 4.6 in \cite{HershbergerS99}] \label{lemma:4.6HersherbergerS99}
+	Given $W(f,e)$	for each f below e that contributes to $W(e)$ we can compute
+	the interval of e claimed by each $W(f,e)$ in $O(1+m)$ total time, where $m$
 	is the total number of generators in all wavefronts $W(f,e)$ that are absent
 	from $W(e)$.
 \end{Lemma}
@@ -408,7 +411,7 @@ before any other contributor from the same side of $e$.
 	\centering
 	\includegraphics[width=0.65\textwidth]{figures/contribution.pdf}
 	\caption{The contribution of $b$ to $W(e)$ is constrained to be left of $p_b$ 
-    		 and right of $x$ and therefore does not exist.}
+    		 and right of $x$ and therefore does not exist\cite{HershbergerS99}.}
 	\label{fig:artificialwavefront}
 	\end{figure}
 
@@ -425,15 +428,13 @@ before any other contributor from the same side of $e$.
 	one of the approximate wavefronts at $e$.
 \end{Lemma}
 \begin{proof}
-	The first part is clear-every deleted generator is dominated by some other
+	The first part is clear since every deleted generator is dominated by some other
 	generator at $e$. The second part follows by induction from two facts: any
 	wavelet that contributes to the true wavefront at $e$ must come either from
 	$s$ inside $\mathcal{U}(e)$ or through one of the edges in $input(e)$ (by
 	the definition of well-covering). The approximate wavefronts at $input(e)$
 	are ready before they are needed to construct $W(e)$ (by Lemma 4.2)
 \end{proof}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{The bisector events} \label{section:bisectorevents}
 
@@ -448,9 +449,8 @@ may be detected in two ways:
 \item During the computation of $W(e,g)$ from $W(e)$ for some $g \in output(e)$. This kind of 
 	  bisector event is detected when simulating the propagation of wavefront from $e$ to $g$ 
       to compute $W(e,g)$. In particular, when two generators $u$ and $v$ are non-adjacent in 
-      $W(e)$, but at any time in the propagation form $e$ to $g$ become adjacent, then there 
+      $W(e)$, but at any time in the propagation from $e$ to $g$ become adjacent, then there 
       is a bisector event involving $u$ and $v$.
-      \peter{evt forklarer merging udenfor lemmaet, hvis det flyttes skal der gøre noget}
 \item During the merging process described in Lemma \ref{lemma:4.6HersherbergerS99}. Let a 
 	  generator $v$ be contributing to one of the input wavefronts $W(e,g)$, but not the the 
       merged wavefront $W(g)$ at $g$, then $v$ will be involved in the bisector event on the 
@@ -460,19 +460,19 @@ may be detected in two ways:
 The algorithm for detecting bisector events, detects these in a small proximity to their 
 actual location in $SPM(s)$. The process of doing this is by \textit{marking} the generators 
 that participate in a bisector event in $O(1)$ cell near where the event is detected. So if a 
-generator $v$ is involved in a bisector event in a cell $v$, then $v$ is guaranteed to belong 
+generator $v$ is involved in a bisector event in a cell $c$, then $v$ is guaranteed to belong 
 to a set of marked generators for $c$. It may however be the case that the set of marked 
-generators for a cell $c$ is a superset of generators that actually participate in bisector 
+generators for a cell $c$ is a super set of generators that actually participate in bisector 
 events in $c$. The proof of showing that this total number of generator marked in all the cell 
-in $O(n)$ will be shown in Lemma \ref{lemma:4.9HershbergerS99}
+in $O(n)$ time will be shown in Lemma \ref{lemma:4.9HershbergerS99}
 
 We here state the rules for Marking generators as given in \cite{HershbergerS99}.
 
 \begin{enumerate}
-\item If a generator $v$ lies in a cell $v$, them mark $v$ in $c$.
+\item If a generator $v$ lies in a cell $c$, them mark $v$ in $c$.
 \item Let $e$ be a transparent edge, and let $W(e)$ be the approximate wavefront coming from 
 	  some generator $v$'s side of $e$.
-      \begin{enumerate}[a]
+      \begin{enumerate}[a.]
       \item If $v$ claims an endpoint of $e$ in $W(e)$, or if it would do so except for an 
             artificial wavefront, then mark $v$ in all cells incident to the claimed endpoint.
       \item If $v$'s claim in $W(e)$ is shortened or eliminated by an artificial wavefront, 
@@ -480,7 +480,7 @@ We here state the rules for Marking generators as given in \cite{HershbergerS99}
       \end{enumerate}
 \item Let $e$ and $f$ be two transparent edges with $f \in output(e)$. Mark $v$ in both the 
 	  cells that have $e$ as an edge if one of the following event occurs:
-      \begin{enumerate}[a]
+      \begin{enumerate}[a.]
       \item $v$ claims an endpoint of $f$ in $W(e,f)$;
       \item $v$ participates in a bisector event detected either during the computation of 
       		$W(e,f)$ from $W(e)$, or during the merging step at $f$. We also mark $v$ as 
@@ -492,8 +492,8 @@ We here state the rules for Marking generators as given in \cite{HershbergerS99}
 \end{enumerate}
 
 From the above we see that both rule 2a and 3a apply when a wavefronts claims an endpoints of 
-an edge $e$. The difference lies in 2a marking cells near the claimed end point while 3a puts 
-marks in cells near the source edge of the wavefront.
+an edge $e$. The difference lies in 2a marking cells near the claimed end point while 3a  
+marks generators in cells near the source edge of the wavefront.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Copied from article %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -508,7 +508,7 @@ the marking rules.
 
 \begin{Lemma}[Lemma 4.8 in \cite{HershbergerS99}] \label{lemma:4.8HershbergerS99}
 	Let $v$ be a generator that contributes to an approximate wavefront $W(e)$
-	suppose there i a point $p \in e$ that is claimed by $v$ in $W(e)$ but not
+	suppose there is a point $p \in e$ that is claimed by $v$ in $W(e)$ but not
 	in $SPM(S)$ (because a wave from the other side of $e$ reaches $p$ first)
 	Then $v$ is marked in the cell $c$ on $v$'s side of $e$.
 \end{Lemma}
@@ -518,11 +518,11 @@ the marking rules.
 	apply. The bisectors $(u,v)$ and $(v,w)$ must exit from $\mathcal{U}(e)$
 	though the same transparent edge $h$ --- otherwise Rule 3 or 4 would
 	apply. For the same reason, the region bounded by $(u,v)$, $(v,w)$, $h$,
-	and $e$ is a subset of $\mathcal{U}(e)$ --- if th region contained a
+	and $e$ is a subset of $\mathcal{U}(e)$ --- if the region contained a
 	non-$\mathcal{U}(e)$ island, $v$ would claim an endpoint of a boundary
 	edge of that island. Edge $h$ is by definition part of $input(e)$.
 	Consider the point $p \in e$ that is claimed by $v$ in the approximate
-	wavefront $W(e)$ but not in th true wavefront at $e$, and suppose that
+	wavefront $W(e)$ but not in the true wavefront at $e$, and suppose that
 	the true predecessor of $p$ is $z\neq v$. The vertex $z$ is either an
 	obstacle vertex or the source $s$. In the former case, $z$ lies outside
 	$\mathcal{U}(e)$ or on its boundary $\partial\mathcal{U}(e)$ --- by
@@ -544,14 +544,14 @@ the marking rules.
 	and $(v,w)$ on the edge $h$. Now, since $|\overline{qp}|\geq|h|$ (by the
 	well-covering property), the endpoints of $h$ are engulfed by a wavefront
 	from $z$ or from some other generator before the wavefront from $z$
-	reaches $p$ at time $d(z,s) + |\overline{zp}|$. The artificial wavefront
+	reaches $p$ at time $d(s,z) + |\overline{zp}|$. The artificial wavefront
 	from $h$'s endpoints will cover $h$ before time
-	$d(z,s)+|\overline{zp}|+|h|$. By assumption we have
-	$d(v,s)+|\overline{vp}| > d(z,s)+|\overline{zp}|$. The wavefront from $v$
-	cannot reach $e$ earlier than $d(v,s)+|\overline{vp}| - |e|$. By
+	$d(s,z)+|\overline{zp}|+|h|$. By assumption we have
+	$d(s,v)+|\overline{vp}| > d(s,z)+|\overline{zp}|$. The wavefront from $v$
+	cannot reach $e$ earlier than $d(s,v)+|\overline{vp}| - |e|$. By
 	well-covering with parameter 2, $d(e,h)$ is at least $|e|+|h|$ and so the
 	wavefront from $v$ reaches $h$ no earlier than
-	$d(v,s)+|\overline{vp}|+|h|>d(z,s)+|\overline{zp}|+|h|$, at which time
+	$d(s,v)+|\overline{vp}|+|h|>d(s,z)+|\overline{zp}|+|h|$, at which time
 	$h$ is already covered by the artificial wavefront. The claim of $v$ on
 	$h$ is shortened by the artificial wavefront (in fact $a$'s claim is
 	eliminated completely), and so it must be marked by Rule 3b.
@@ -564,7 +564,7 @@ the marking rules.
 	in $SPM(s)$. We show that our propagation and merging algorithms will
 	detect a bisector event for $(u,v)$. Let $r$ be the intersection point
 	between the bisector $(u,v)$ and the edge $h$. As noted in the discussion
-	after Lemma 4.3, the triangle defined by the segments $\overline{ur}$,
+	after Lemma \ref{lemma:4.3}, the triangle defined by the segments $\overline{ur}$,
 	$\overline{vr}$ and $e$ is a subset of $\mathcal{U}(e)$. Bisector $(u,v)$
 	crosses the triangle boundary on $e$ and at $r$, but nowhere else. The
 	larger region $R$ bounded by $e$, $h$, $\overline{ur}$ and bisector
@@ -573,11 +573,11 @@ the marking rules.
 	not intersect the $(v,w)$ or $h$ sides of $R$, $\overline{qp}$ must
 	intersect $\overline{ur}$ let $x$ be the point of intersection. The
 	wavelet from $z$ reaches $x$ before the one from $u$, so the path $z
-	\to x \to r$ starting at time $d(z,s)$ reaches $r$ before the path $u \to
+	\to x \to r$ starting at time $d(s,z)$ reaches $r$ before the path $u \to
 	r$ starting at time $d(u,s)$. Observe also that the path $z \to x \to r$
 	is a legal path --- it lies in free space. Now, consider the shortest
 	path from $z$ to $r$ inside the triangle $\bigtriangleup zxr$ that does
-	not cross $h$ or any obstacle edge (see Figure 4.3). Because $z\to x \to
+	not cross $h$ or any obstacle edge (see Figure \peter{make figure}). Because $z\to x \to
 	r$ lies in free space, such a path exists and is shorter than $z \to x
 	\to r$. This path claims $r$ from the same side as $u$ before the wavelet
 	from $u$ reaches $r$. (If the path passes through an endpoint of $h$,
@@ -596,7 +596,7 @@ the marking rules.
 	$v$ is marked by Rule 3a or 4 if $z$ is not between the bisectors, the
 	segment $zp$ intersects one of the bisectors, say $(u,v)$ and we detect a
 	bisector event for $(u,v)$ in advancing the wavefront from $e$ to
-	$ouput(e)$.
+	$output(e)$.
 
 	Finally consider the case in which $z=s$ lies inside $\mathcal{U}(e)$. If
 	$z$ is not between the bisectors $(u,v)$ and $(v,w)$ segment
@@ -745,12 +745,10 @@ We defer the finer details of the propagation algorithm to section
 \ref{section:implwavefront} and instead describe the second phase of the 
 algorithm next, namely the shortest path map computation.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \subsection{Computing the shortest path map}
 
 So far in this section we have gone through the propagation phase. In this phase we have 
-propagate the plane with wavefronts and wavelets from generator, and we have used approximate 
+propagated the plane with wavefronts and wavelets from generator, and we have used approximate 
 wavefronts for each transparent edge to sort out dominated wavefronts. We also marked generators
 in every cell $c$, where each marked generator is in the approximate wavefront of one of the 
 boundary edges of $c$, an all but $O(1)$ of them contribute to a bisector event either in $c$ or 
@@ -766,7 +764,7 @@ no vertex is present in the area we denote it as inactive. We saw in section
 \ref{section:bisectorevents}, lemma \ref{lemma:4.9HershbergerS99} that only marked generator 
 would contribute to a bisector event in $c$. 
 
-A bisector made by a marked generator and an unmarked neighbor generator will be drawn in the 
+The bisectors made by a marked generators and tehri unmarked neighbors generators will be drawn in the 
 $SPM(s)$. All such bisectors are disjoint, and we will see the partition of $c$ into active 
 and inactive regions, will be done such that active regions are claimed only by unmarked 
 generators and inactive regions by marked generators. This can be seen in figure 
@@ -775,9 +773,9 @@ generators and inactive regions by marked generators. This can be seen in figure
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\textwidth]{figures/activeinactiveregions.pdf}
-	\caption{Here the white regions are active and the shaded regions are inactive. The 
+	\caption{Here the white regions are the active regions and the shaded regions are the inactive. The 
     		 boundaries between the regions encapsulating active and inactive region, are 
-             defined by being the bisector of one marked and one unmarked generator.}
+             defined by being the bisector of one marked and one unmarked generator\cite{HershbergerS99}.}
 	\label{fig:activeinactiveregions}
 \end{figure}
 
@@ -810,16 +808,16 @@ boundary edges of an active region.
 
 \begin{Lemma}[Lemma 4.12 in \cite{HershbergerS99}] \label{lemma:4.12} 
 	Given the approximate wavefronts on the boundary of a cell $c$ and a set of
-	$k$ marked generators in those wavefronts, we can compute the vertices of
-	$SPM(s)$ inside $c$ in time $O(k\log k)$.
+	$g$ marked generators in those wavefronts, we can compute the vertices of
+	$SPM(s)$ inside $c$ in time $O(g\log g)$.
 \end{Lemma}
 \begin{proof}
 	Consider an active region inside $c$ and two transparent edge fragments $e$
 	and $f$ on the boundary of this active region. We can use the merge step
-	from a standard divide-and-conquer Voronoi diagram algorithm to compute the
+	from a standard divide-and-conquer Voronoi diagram algorithm\cite{CompGeo} to compute the
 	portion of the region nearer to $W(e)$ than to $W(f)$ using weighted
 	distance in time $O(|W(e)|+|W(f)|)$. More specifically assume that $S(e)$
-	and $S(f)$ have both been computed. Let $m=|W(e)|+|W(f)$. Each of $S(e)$
+	and $S(f)$ have both been computed. Let $m=|W(e)|+|W(f)|$. Each of $S(e)$
 	defines a distance function on the points of the active region. The
 	pointwise minimum of these two functions determines which points are nearer
 	to $W(e)$ than to $W(f)$ under weighted distance. Consider a point $p$ in
@@ -827,7 +825,7 @@ boundary edges of an active region.
 	$S$-face in $SPM(s)$ only if all of the segment $\overline{pv}$ is closer to
 	$v$ than to any generator in $|W(f)|$. The set of  points $p$ such that the
 	entire segment from $p$ to its predecessor is closer to $W(e)$ than to
-	$W(f)$ is bounded by a single chain $\Gamma$ of $O(m)$ hyperbolic arcs. (The
+	$W(f)$ is bounded by a single chain $\Gamma$ of $O(m)$ hyperbolic arcs (see appendix \ref{appendix:def}. (The
 	number of arcs follows from Lemma \ref{lemma:3.2}.) To find $\Gamma$, first trace along
 	a ray emanating from some generator $v \in W(e)$ marching through $S(e)$ and
 	$S(f)$ simultaneously until the ray reaches the boundary of $c$ or reaches a
@@ -859,9 +857,9 @@ boundary edges of an active region.
 	vertices of $SPM(s)$ inside $c$.
 
 	The partition $S(e)$ determined by each edge fragment $e$ participates $O(1)$
-	times in a Voronoi-style merge, so the total cost of merging is $O(k)$.
+	times in a Voronoi-style merge, so the total cost of merging is $O(g)$.
 	Hence the running time is dominated by the propagation algorithm which takes
-	$O(k\log k)$ times altogether.
+	$O(g\log g)$ times altogether.
 \end{proof}
 \begin{Lemma}[Lemma 4.13 in \cite{HershbergerS99}] \label{lemma:4.13} 
 	The shortest path map vertices computed cell-by-cell can be combined to
@@ -870,7 +868,7 @@ boundary edges of an active region.
 \begin{proof}
 	To compute $SPM(s)$ we compute all its edges separately then use a standard
 	plane sweep to assemble them as follows. Create a list of the bisector
-	endpoints discovered in the computation of Lemma \ref{lemma:4.12} each identified by a
+	endpoints discovered in the computation of Lemma \ref{lemma:4.12}, each identified by a
 	key consisting of two generators. Put each three-bisector endpoint into the
 	list three times, once for each bisector. Put each bisector/edge collision
 	in once labeled with the generators of the bisector. Now sort the list to
@@ -886,20 +884,20 @@ boundary edges of an active region.
 \section{The list based data structure for wavefront propagation} \label{section:datastructurewavefront}
 
 To keep track of our approximate wavefront, we use a list to keep track of the generators coming from 
-obstacle vertices. For this list we need a data structure which we can use two types of operations on:
+obstacle vertices. For this list we need a data structure which supports two types of operations:
 
 \begin{enumerate}
 \item \textit{Standard list operations:} these are insert, delete, concatenate, split, find previous 
 			  and next element, and search. Here the search operation locates the position of a query 
               point. This position is found in the list of bisectors defined by the generators 
               wavefront at a particular time. 
-\item \textit{Priority queue operations:} this operations are used on the generators, to which we 
+\item \textit{Priority queue operations:} these operations are used on the generators, to which we 
 			  assign a priority. The data structure should be able to  update priorities and find the 
               minimum priority in the list.
 \end{enumerate}
 
 These two types of operations should be implemented in a flavor of self balancing binary trees. One 
-could implement the operations e.g. in a red-black tree. Here the generators will be located at the 
+could implement the operations e.g.\ in a red and black search tree\cite{IntroToAlg}. Here the generators will be located at the 
 leaves, and each node should have a priority field which records the minimum priority of the leaves in 
 it subtree.
 
@@ -910,11 +908,11 @@ take $O(\log n)$ time each.
 Beside these operations we also need the tree to be fully persistent, s.t. we can operate on past 
 version of any list. Each kind of operation uses $O(1)$ storage per node of the binary tree, which 
 mean we can make the data structure fully persistent by path copying. The effect of using an operation 
-affects $O(\log n)$ nodes of the tree, which also includes the ancestors of every affected node. We we 
-simple, before an operation modifies the tree, we copy all the nodes that will be affected, and then '
-modify the copies. This way we create a new version of three while leaving the old version unchanged.
+affects $O(\log n)$ nodes of the tree, which also includes the ancestors of every affected node. We 
+simple, before an operation modifies the tree, copy all the nodes that will be affected, and then
+modify the copies. This way we create a new version of the tree while leaving the old version unchanged.
 Since the data structure uses $O(\log n)$ for each operation, and we save a copy of size $O(\log n)$, 
-the total storage usage of the data structure is $O(m \log m)$ where $m$ is total number of operations 
+the total storage usage of the data structure is $O(m \log n)$ where $m$ is total number of operations 
 used. The above gives us the following lemma:
 
 \begin{Lemma} [Lemma 5.1 in \cite{HershbergerS99}]
@@ -925,21 +923,21 @@ made fully persistent at the expense of an additional $O(\log n)$ space per oper
 
 \section{An implementation of the wavefront propagation} \label{section:implwavefront}
 
-Concretely the idea of wavefront propagation is to propagate an approximate wavefront from an edge edge on 
+Concretely the idea of wavefront propagation is to propagate an approximate wavefront from an edge on 
 the boundary of the cell containing the edge we want to propagate to. In particular, we want to propagate 
-the wavefront $W(e)$, an compute $W(e,g)$ for ever edge $g \in output(e)$, and in this process, assign the 
-time (weight) of first contact between $W(e,g)$ and the endpoints of $g$.In this section we will show how 
+the wavefront $W(e)$, and compute $W(e,g)$ for every edge $g \in output(e)$, and in this process, assign the 
+time (weight) of first contact between $W(e,g)$ and the endpoints of $g$. In this section we will show how 
 to do this computation of $W(e,g)$ for all transparent edges $g$ on the boundary of $e$'s cell. 
 
 We know from lemma \ref{lemma:4.1} that there is a constant number of edges in $output(e)$, which means 
-they can only belongs to a constant number of different cell. We will use this fact to compute $W(e,g)$ 
-for all $g \in output(e)$. When propagating the wavefront cell-by-cell, we can think of this as splitting 
-the wavefront $W(e,g)$ into multiple piece, each piece is labeled by the sequence of crossings of 
+they can only belong to a constant number of different cells. We will use this fact to compute $W(e,g)$ 
+for all $g \in output(e)$. When propagating the wavefront cell-by-cell, one can think of this as splitting 
+the wavefront $W(e,g)$ into multiple piece. Each piece is labeled by the sequence of crossings of the
 transparent edges it follows from $e$ to $g$. The $W(e,g)$ is then made of these components wavefronts by 
 concatenating the piece that are topological equivalent paths inside $\mathcal{U}(e)$. 
 
 Since each of these component wavefronts is a list of generators, we may find that adjacent wavefront 
-piece can contain duplicate generator that claims the common endpoint. On of these duplicates are to be 
+piece can contain duplicate generator that claims the common endpoint. One of these duplicates are to be 
 deleted before the lists are concatenated.
 
 As an example of the above see figure \ref{fig:weg}. Here $W(e,g)$ is assembled from $W(e',g)$ and 
@@ -949,12 +947,12 @@ $W(e'',g)$, where $e'$ and $e''$ are two edges on the boundary of $g$'s cell.
 	\centering
 	\includegraphics[width=0.4\textwidth]{figures/weg.pdf}
 	\caption{$W(e,g)$ is assembled from $W(e',g)$ and $W(e'',g)$, where $e'$ and $e''$ are two edges on 
-    		 the boundary of $g$'s cell}
+    		 the boundary of $g$'s cell\cite{HershbergerS99}.}
 	\label{fig:weg}
 \end{figure}
 
-The propagation algorithm which follows assumes that each cell $c$ is convex. Since we assumed the 
-conforming subdivision could be build with square annulus, this isn't satisfied immediately. For this we 
+The propagation algorithm assumes that each cell $c$ is convex. Since we assumed the 
+conforming subdivision could be build with square annulus's, this isn't satisfied immediately. For this we 
 temporarily break a cell which isn't convex into subcells by adding transparent edges, which are 
 \textit{parallel to $e$} through the points of nonconvexity. An example of this i shown in figure 
 \ref{fig:preparingcells}.
@@ -963,11 +961,11 @@ temporarily break a cell which isn't convex into subcells by adding transparent 
 	\centering
 	\includegraphics[width=0.7\textwidth]{figures/preparingcells.pdf}
 	\caption{Insertion of transparent edges parallel to $e$ to fix the cells non convexity. The right 
-    		 figure is the cases of an obstacle overlaying the cell.}
+    		 figure is the cases of an obstacle overlaying the cell\cite{HershbergerS99}.}
 	\label{fig:preparingcells}
 \end{figure}
 
-Let $f$ a transparent edge of the boundary of $c$ such that $f \neq e$. Then the propagation algorithm has 
+Let $f$ be a transparent edge of the boundary of $c$ such that $f \neq e$. Then the propagation algorithm has 
 the following invariant.
 
 \paragraph{Propagation Invariant:} When a wavefront $W(e,f)$ is propagated for distance $2 \cdot | f |$
@@ -980,30 +978,32 @@ just added some temporary transparent edges to non convex cells, we need to fix 
 this invariant. This is done by dividing these added edges into $O(1)$ pieces, each no longer than the edges 
 of $\mathcal{S}$ on the boundary of the annulus's outer boundary, one-eight the side length of the outer 
 square, which we know is bounded by the minimum clearance property and uniform edge property of the conforming 
-subdivision, see section \ref{section:def-well-covering-if-regions}. 
+subdivision. These are explained in section \ref{section:def-well-covering-if-regions}. 
 
-We know let $H$ denote the convex hull of $e$ and the inner square of the annulus as shown in figure 
-\ref{fig:subdividedconvexhull}. Should $H$ intersect an added transparent edge $f$, we further subdivide the 
-sub edge $f \cap H$ into pieces of length equal to the inner square of the annulus, as also shown on figure 
+We now let $H$ denote the convex of $e$ and the inner square of the annulus as shown in figure 
+\ref{fig:subdividedconvexhull}. A convex hull is the smallest set of points which makes the set convex \cite{CompGeo}.  
+Should $H$ intersect an added transparent edge $f$, we further subdivide the 
+edge segment $f \cap H$ into pieces of length equal to the inner square of the annulus, as also shown on figure 
 \ref{fig:subdividedconvexhull}. 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.6\textwidth]{figures/subdividedconvexhull.pdf}
-	\caption{A subdivision of of a cell, with a convex hull around a boundary edge $e$ and the inner square of 
+	\caption{A subdivision of a cell, with a convex hull around a boundary edge $e$ and the inner square of 
     		 the annulus.}
 	\label{fig:subdividedconvexhull}
 \end{figure}
 
-Due to $f$ being parallel with edge $e$ and the inner boundary of the annulus being well separated from the '
-outer boundary, see again the minimum clearance property, the total length of $f$'s sub edge inside $H$ is 
+Due to $f$ being parallel with edge $e$ and the inner boundary of the annulus being well separated from the
+outer boundary (see again the minimum clearance property) the total length of $f$'s edge segment inside $H$ is 
 proportional to the side length of the inner square. By this it follows that the partition of $f$ only creates 
 $O(1)$ edges. We can see that these subdivided edges satisfy the propagation invariant, by the following example. 
 Given any such $f$, let $g'$ be an edge of $c$ such $W(e,f)$ leaves $c$ by passing through $g'$. Since $g'$ is an 
 edge from the conforming subdivision of the free space, $\mathcal{S}'$, we know it is a fragment of an edge $g$ in 
 the conforming subdivision of the obstacles vertices and $s$, $\mathcal{S}$. We know we from lemma 
-\ref{lemma:admitsa2conformingsubdivision} that there are $O(1)$ cells of $S'$ within shortest path distance $2|g|$ 
-of $g'$ by construction. Since the new transparent edge which makes the cell $c$ convex are subdivided into piece 
+\ref{lemma:admitsa2conformingsubdivision} (see appendix \ref{appendix:proofs}) that there are $O(1)$ cells of $S'$ 
+within shortest path distance $2|g|$ 
+of $g'$ by construction. Since the new transparent edge which makes the cell $c$ convex is subdivided into piece 
 such that $|f| \leq |g|$, then this implies that the propagation invariant holds for the edge $f$.
 
 \subsection{Dynamic wavefront propagation} \label{section:dynamicwavefront}
@@ -1017,7 +1017,7 @@ when we add the element of time to the process.
 
 So what happens to the combinatorical structure of the wavefront as it sweeps across the (convex) cells, and how 
 does the wavefront $W(e)$ behave as it sweeps across a cell $c$ after entering it through the edge $e$? The 
-simulation should detect and process each bisector event involving the the generators from each wavefront, e.g. 
+simulation should detect and process each bisector event involving the generators from each wavefront, e.g. 
 $W(e)$ that may occur inside $c$. The events are processed in an order of increasing distance to $s$. This is to 
 simulate the element of time since the weight and therefore the distance to each generator is assigned by the 
 arrival of the wavefront in unit speed, so distance and time are equivalent in this sense. So generator marked as 
@@ -1028,15 +1028,15 @@ beginning of the simulation we have $W = W(e)$ as the approximate wavefront whic
 $c$. It might be the case that the edge $e$ is claimed by multiple waves, and therefore $W$ is a list of generators,
 each claiming a portion of $e$. Every generator $v \in W$ defines a pair of bisectors with its neighbors in the 
 list. If we let $v$ be the first generator in the list, then $v$ claims one of the endpoints of $e$, and its first 
-bisector represented as the ray from $v$ through the end point of $e$. Similarly we define the last generator $v'$ 
-of the generators. Should $v = v'$ and claim the whole edge $e$, then there are no bisectors in the list, and the 
-wave is the ray propagated from the generator through $e$. See figure \ref{fig:vandvprimesharingedge}, \ref{fig:vandvprimeallofe} and \ref{fig:visallofe}.
+bisector represented as the ray from $v$ through the end point of $e$. We define the last generator $v'$ 
+of the generators similarly. Should $v = v'$ and claim the whole edge $e$, then there are no bisectors in the list, and the 
+wave is the ray propagated from the generator through $e$. See figures \ref{fig:vandvprimesharingedge}, \ref{fig:vandvprimeallofe} and \ref{fig:visallofe}.
 
 \begin{figure}[H]
 	\caption{Crossing of two line segments}
 	\minipage{0.48\textwidth}
 		\includegraphics[height=3cm]{figures/vandvprimesharingedge.pdf}
-		\caption{$v$ and $v'$ each claim the end points of $e$, with their bisectors being shared with other generators claiming the middle part of $e$.}
+		\caption{$v$ and $v'$ each claim the end points of $e$, with their bisectors being shared with other generators claiming the middle part of $e$, represented by the dots.}
 		\label{fig:vandvprimesharingedge}
 	\endminipage\hfill
 	\minipage{0.48\textwidth}
@@ -1055,8 +1055,8 @@ wave is the ray propagated from the generator through $e$. See figure \ref{fig:v
 In order to process the bisectors event in the correct order, we will maintain the generators of $W$ in the priority queue which was 
 describe in section \ref{section:datastructurewavefront}. The priority field which each node of the priority queue tree has, is 
 assigned with its weighted distance to the point at which the two bisectors that defines $v$ and its neighbors intersect, beyond $e$. 
-An example of this is given in figure \ref{fig:priorityvalue}. Here thee bisectors defining $v$ and its neighbours intersects after 
-passing through $e$, and meeting at the point $p$. This means that $v$ priority value $priority(v) = d(s,v) + |\overline{vp}|$.
+An example of this is given in figure \ref{fig:priorityvalue}. Here the bisectors defining $v$ and its neighbours intersects after 
+passing through $e$, and meeting at the point $p$. This means that $v$'s priority value $priority(v) = d(s,v) + |\overline{vp}|$.
 
 \begin{figure}[H]
 	\centering
@@ -1067,42 +1067,42 @@ passing through $e$, and meeting at the point $p$. This means that $v$ priority 
 \end{figure}
 
 The processing of the approximate wavefront propagation will be done in event of increasing priority up to some maximum priority 
-$t_{stop}$. The $t_{stop}$ is calculated from the shape of the cell $c$, which we will show how to later in this section. The limit of 
-$t_{stop}$ is calculated from the individual values of $t_{stop}(f)$ for each transparent edge $f$ of $c$. Initially the values for all
-f is $t_{stop}(f) = \infty$ and therefore $t_{stop} = \infty$. Also to keep track of the priorities through out the simulation, by 
-initializing an empty set $T$ which will be cleared after each simulation.
+$t_{stop}$. The $t_{stop}$ is calculated from the shape of the cell $c$, rules for this will be presented later in this section. 
+The limit of $t_{stop}$ is calculated from the individual values of $t_{stop}(f)$ for each transparent edge $f$ of $c$. Initially
+the values for all $f$ is $t_{stop}(f) = \infty$ and therefore $t_{stop} = \infty$. Also to keep track of the priorities through 
+out the simulation, we initialize an empty set $T$ which will be cleared after each simulation.
 
 At each step of the simulation, the generator $v$ with the lowest priority from the queue is processed, where one of following 
 scenarios can happen.
 
 \begin{enumerate}
-    \item  If the event (the intersection of the $v$'s bisectors) happens inside the cell $c$, then $v$ is deleted, since it no longer 
-           propagates the free space, and we recompute the priorities for $v$'s neighbours. We mark $v$ in $W(e)$ for the cell $c$ by 
-           the marking rules explained in section \ref{section:bisectorevents}, which also implies marking it in $O(1)$ number of 
-           neighbouring cells to $c$ accord to the marking rules.
-    \item If $v$'s event happens outside, then we set $priority(v) = \infty$ and add $v$ to the set $T$. In this case the generator 
+    \item  If the event (the intersection of the $v$'s bisectors) happens inside the cell $c$, then $v$ is deleted, since it can no 
+           longer propagates the free space, and we recompute the priorities for $v$'s neighbours. We mark $v$ in $W(e)$ for the cell 
+           $c$ by the marking rules explained in section \ref{section:bisectorevents}, which also implies marking it in $O(1)$ number 
+           of neighbouring cells to $c$ accord to the marking rules.
+    \item If $v$'s event happens outside $c$, then we set $priority(v) = \infty$ and add $v$ to the set $T$. In this case the generator
           list is not changed since $v$ still has more free space outside of $c$ to propagate.
 \end{enumerate}
 
 If we where to process each bisector event of $W$ in their initialize time order, and not update them in the first of the above cases, 
-then the neighboring generators of $v$ could participate in bisector event outside of cell $c$ before, all bisector events inside $c$ 
+then the neighboring generators of $v$ could participate in bisector event outside of cell $c$ before all bisector events inside $c$ 
 were fully processed. 
 
 So far we have seen the intersection of $v$'s bisectors if its neighbours engulfs $v$, as seen in figure \ref{fig:priorityvalue}, in 
-which case we would mark $v$ by rule 3 of the generator marking rules. But it's also important to be aware that the bisector event of 
+which case we would mark $v$ by rule 3 of the generator marking rules. But it's also important to be aware that the bisector event or 
 $v$ could also happen if either the intersection lies on a opaque edge of if they lie on different transparent edges with an opaque 
 edge between them. In that case rule 1 above, should still do as stated, but would use rule 4 to mark $v$ for cell $c$ and its 
-neighbours. Should the intersection point $p$ lie on a transparent edge, e.g. $f$, then we update our $t_stop$'s as follows:
+neighbours. Should the intersection point $p$ lie on a transparent edge, e.g. $f$, then we update our $t_{stop}$'s as follows:
 
 \begin{align*}
-    t_{stop}(f) &= \min(t_{stop}(f), d(s,v) + |\overline{vx}| + |f|) \\
+    t_{stop}(f) &= \min(t_{stop}(f), d(s,v) + |\overline{vp}| + |f|) \\
     t_{stop}    &= \min(t_{stop}, t_{stop}(f))
 \end{align*}
 
 The update of $t_{stop}(f)$ is either the current $t_{stop}(f)$ or the weight as calculated the same way as in figure 
-\ref{fig:priorityvalue} plus the length of the transparent edge $f$. This way we assure, that overestimate the priority since we would 
-have swept all of $f$. By doing it this way, we also don't overshoot the estimate since it still not $2\cdot|f|$ times greater than the
-time at which $W$ first comes to contact with $f$.
+\ref{fig:priorityvalue} plus the length of the transparent edge $f$. This way we assure, that overestimate the priority 
+since we would have swept all of $f$. By doing it this way, we also don't overshoot the estimate since it is still not 
+$2\cdot|f|$ times greater than the time at which $W$ first comes to contact with $f$.
 
 The $t_{stop}$ priority, which is in the priority queue, is either $t_{stop} = \infty$ in which case all events inside $c$ have been 
 processed, or $t_{stop} < \infty$, which happens in the above update if there is a transparent edge $f$ on the boundary of $c$ with 
@@ -1110,16 +1110,17 @@ $t_{stop} = t_{stop}(f)$. We see that by updating $t_{stop}(f)$ this way, we ens
 have indeed been processed. So now we move one to explain how to process $W(e,f)$. The wavefront $W(e,f)$ is calculated from $W$ in the
 following way. First we locate the endpoints of $f$ in $W$, which can be done by can picking a bisector in $W$, and following its 
 neighbors outwards, there is at least on such bisector (in the case of one, this bisector claims all of f). Mark the endpoint claiming 
-generator by rule 2. From here we split the generator list into 3 parts. Those generators whose bisectors are between the two endpoint 
+generators by rule 2. From here we split the generator list into 3 parts. Those generators whose bisectors are between the two endpoint
 claiming generators. Those are the one who will go through $f$, which after the reset of priorities will be the $W(e,f)$ wavefront, and
-the other two sets are those who pass left and those who pass right of $f$, see figurue \ref{fig:wef}. The simulation process continues with the left and right 
-passing sets independently after the $t_{stop}$ has been reset in each set to be the minim of $t_{stop}(g)$ over the transparent edges 
-$g$ for that group. 
+the other two sets are those who pass left and those who pass right of $f$, see figurue \ref{fig:wef}. The simulation process continues
+with the left and right passing sets independently after the $t_{stop}$ has been reset in each set to be the minimum of $t_{stop}(g)$ 
+over the transparent edges $g$ for that group. 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{figures/wef.pdf}
-	\caption{A visualisation of the three groups of bisectors that can occur in the calculation of $W(e,f)$. One going left of $f$, one going right of $f$, these two groups are marked with gray, and the middle group which is the group $W(e,f)$ consists of.}
+	\caption{A visualisation of the three groups of bisectors that can occur in the calculation of $W(e,f)$. One going left of $f$, one
+	         going right of $f$ (these two groups are marked with gray) and the middle group which is the group $W(e,f)$ consists of.}
 	\label{fig:wef}
 \end{figure}
 
@@ -1132,36 +1133,40 @@ generators in that piece for cell $c$ and a $O(1)$ of neighboring cell by markin
 and rule 3.
 
 When finished the priority of each vertex in $T$ is reset, based on the bisectors it defines with its neighbours in the new list. This 
-is done to ensure each wavefront fragment $W(e,f)$ has proper priorities. Now we have computer $W(e,f)$ and we can determine the time 
-the wavefront first makes contact, which is $d(s,v)+|\overline{vp}$.
+is done to ensure each wavefront fragment $W(e,f)$ has the proper priorities. Now we have computer $W(e,f)$ and we can determine the 
+time the wavefront first makes contact, which is $d(s,v)+|\overline{vp}|$.
 
 \subsection{Analysis of the wavefront propagation}
 
-The propagation algorithm calls the self balancing binary priority queue $O(1)$ times with priority and list operations per bisector event processed and $O(1)$ for each edge in the conforming subdivision (transparent edge). Each operation takes by construction of data structure $O(\log n)$ time and space. Since the data structure by construction is fully persistent, the all the modifications we do when computing a single wavefront list $W(e)$ are independent.
+The propagation algorithm calls the self balancing binary priority queue $O(1)$ times with priority and list operations per bisector 
+event processed and $O(1)$ for each edge in the conforming subdivision (transparent edge). Each operation takes by construction of the 
+data structure $O(\log n)$ time and space. Since the data structure by construction is fully persistent, all the modifications we 
+do when computing a single wavefront list $W(e)$ are independent.
 
 The main result for section \ref{section:dynamicwavefront} can be summarized in the following lemma:
 
 \begin{Lemma} [Lemma 5.2 in \cite{HershbergerS99}]
-Every bisector event processed in the procedure in section \ref{section:dynamicwavefront} either:
+Every bisector event processed in the procedure described in section \ref{section:dynamicwavefront} either:
 \begin{enumerate}
     \item Lies inside cell $c$.
     \item Involves a generator whose region is truncated by an opaque edge of $c$.
-    \item Is associated with $t_{stop}(f)$ being set to a finite values for the first time for some transparent edge $f$ of $c$, or
+    \item Is associated with $t_{stop}(f)$ being set to a finite value for the first time for some transparent edge $f$ of $c$, or
     \item Lies within shortest path distance $2\cdot|f|$ of a transparent edge $f$ of $c$. 
 \end{enumerate}
 If the number of event is $m$, then the procedure takes $O(m \log n)$ time.
 \end{Lemma}
 
-This Lemma, together with the results of chapter \ref{chapter:shortestpathmap} and \ref{chapter:conformingsubdivision} gives us the following theorem due to Hershberger and Suri \cite{HershbergerS99}.
+This Lemma, together with the results of chapter \ref{chapter:shortestpathmap} and \ref{chapter:conformingsubdivision} gives us the 
+following theorem due to Hershberger and Suri \cite{HershbergerS99}.
 
 \begin{theorem}[Theorem 5.3 in \cite{HershbergerS99}]
 Let $\mathcal{O}$ be a family of polygonal obstacles in the plane with pairwise disjoint interiors and a total of $n$ vertices. Given a
 point $s$, we can construct the shortest path map from $s$ with respect to $\mathcal{O}$ in time $O(n \log n)$ and space $O(n \log n)$.
 \end{theorem}
 
-By this theorem we see that, one can compute the $SPM(s)$ by processing the point locations in the plane, where after one can make a 
-shortest path query from $s$ to any point $t$ in the plane, which can be answered in time $O(\log n)$ due to \peter{inset artikle 16 
-from hershberger99}. A shortest path $\pi(s,t)$ can be computed in additional $O(k)$ time, where $k$ is the number of edges in 
-$\pi(s,t)$.
+By this theorem we see that, one can compute the $SPM(s)$ by processing the point locations in the plane, where after 
+one can make a shortest path query from $s$ to any point $t$ in the plane, which can be answered in time $O(\log n)$ 
+due to \cite{DBLP:journals/siamcomp/Kirkpatrick83}. A shortest path $\pi(s,t)$ can be computed in additional $O(h)$ 
+time, where $h$ is the number of edges in $\pi(s,t)$.
 
 
