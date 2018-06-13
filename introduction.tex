@@ -1,22 +1,33 @@
 \chapter{Introduction} Given a starting point $s$, an endpoint $t$ and a set of
-polygons $\mathcal{O}$ in the plane, we want to find the shortest path from $s$ to $t$ without
-traveling in the interior of any polygon in $\mathcal{O}$. 
+polygons $\mathcal{O}$ in the plane, we want to find the shortest path from $s$ to $t$ 
+without traveling through the interior of any polygon in $\mathcal{O}$. 
 This is an old and well studied problem, and historically there have been two
-conceptionally different approaches to the problem, using visibility graphs and
-continuous Dijkstra algorithm. 
+conceptually different approaches to the problem, one using visibility graphs and
+another using the continuous Dijkstra method. 
 
-The visibility graph approach is to construct a graph of all legal paths and
-then running a single source shortest path algorithm on that graph. The problem
-with this approach is that the complexity of the graph can be $\Theta(n^2)$,
-where $n$ is the number of vertices of the polygons.
+The visibility graph approach is to construct a graph of all paths between every pair 
+of vertices in the plane which doesn't go through an interior of an obstacle. 
+These paths are called legal paths. Then the shortest path is found by then running a 
+single source shortest path algorithm on that graph. A problem of this approach
+is the complexity of the graph can be $\Theta(n^2)$, with $n$ begin the number of vertices of the polygons,
+which makes it difficult to get below this threshold. 
 
-The continuous Dijkstra works by simulating a \emph{wave front propagation}
-from the start point $s$, where at simulation time $t$ the wavefront contains
-all the points that are reacheble with distance $d$.  Every time a vertex edge
-is reached a new wavefront starts emitting from there. In 1999 Hersberger and
-Suri published a paper\cite{HershbergerS99} in which they presented an $O(n\log
-n)$ time algorithm which matched the lower bound of the problem (see Chapter
-\ref{chapter:lowerbound}), using the continuous Dijkstra method.
+The continuous Dijkstra method works by simulating a \emph{wavefront propagation}.
+A wavefront is a circular arch which originates from a point and expands in a unit-speed
+fashion such that all points of the boundary of the arch have equal distance $d$ to the 
+generator point from which the wavefront originated, at every time $t$. 
+This point is the source (start point) $s$, see figure 
+
+
+\nick{define wavefront propagation} from the start point $s$, where
+at simulation time $t$ the wavefront contains all the points that are reacheble
+with distance $d$.  Every time a vertex edge is reached a new wavefront starts
+emitting from there. In 1999 Hersberger and Suri published a
+paper\cite{HershbergerS99} in which they presented an $O(n\log n)$ time
+algorithm which matched the lower bound of the problem (see
+Chapter \ref{chapter:lowerbound}), using the continuous
+Dijkstra method.
+
 
 In 2017 they, together with Neeraj, looked at a generalization of that problem.
 Given the same setting as before, you are now allowed to remove $k$ polygons.
