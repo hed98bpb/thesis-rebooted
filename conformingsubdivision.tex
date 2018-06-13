@@ -509,7 +509,6 @@ to proceed with the \textbf{build-subdivision} algorithm:
 		\EndWhile
 	\end{algorithmic} 
 \end{algorithm}
-(*)\peter{HOW TO FIX!?}
 As we explained earlier, the algorithm runs in discrete stages of $-2, 0, 2, 4, ... $, which we 
 see in the increment step of step 2. Step 3 to step 8 computes the $\mathcal{Q}(i)$ from 
 $\mathcal{Q}(i-2)$. This is done by growing the previous squares from $\mathcal{Q}(i-2)$, one 
@@ -794,7 +793,7 @@ To give a better overview, we include step 10 through 20 from algorithm \ref{alg
 see algorithm \ref{algorithm:build-subdivision} below.
 
 \begin{algorithm}[H]
-	\caption{step 10 to 20 from Algorithm \ref{algorithm:build-subdivision1}}  
+	\caption{step 10 to 20 from Algorithm 8}  
 	\begin{algorithmic}[1]
         \ForEach {$q\in \mathcal{Q}(i-2)$}
             \State Let $\bar{q} = \mathbf{growth}(q)$
