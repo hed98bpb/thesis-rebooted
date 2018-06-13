@@ -1,13 +1,14 @@
 The following chapter is dedicated to giving the reader an overview of an $O(k^2 n \log n)$ 
-time algorithm for solving the shortest path with obstacle violation problem. First we present an 
+time algorithm for solving the shortest problem path with polygonal obstacle violation. First we present an 
 overview of the Hershberger-Suri algorithm, which solves the shortest path with no violation, 
 in an optimal $O(n \log n)$ time \cite{HershbergerS99}. This algorithm produces a shortest 
 path map, which divides the free space (free space being the plane minus the interior of the 
-obstacles) into region where each subdivision will have the same shortest sub-path to 
-all points in the region. This structure can then be extended for the purpose of calculating 
-shortest paths with violation, which we will present an intuitive idea on how this is done. 
-Finally we present an algorithm which will combine the Hershberger-Suri algorithm with a 
-modified version of the same algorithm, to produce a shortest $k$-path map, a subdivision 
+obstacles) into regions where each region will have the same shortest sub-path from $s$ to 
+all points in that region. This structure can then be extended for the purpose of calculating 
+shortest paths with violations, which we will present an intuitive idea on how this is done. 
+Finally we present an algorithm in chapter \ref{chapter:shortestpathobstaclesviolation} which
+combines the Hershberger-Suri algorithm with a modified version of the same algorithm, 
+to produce a shortest $k$-path map, a subdivision 
 which has the shortest sub-path to all points in an area with $k$ violations, in time $O(k^2 
 n \log n)$. This result is due to Hershberger, Kumar and Suri \cite{HershbergerKS17}.
 
@@ -16,8 +17,8 @@ n \log n)$. This result is due to Hershberger, Kumar and Suri \cite{HershbergerK
 The Hershberger-Suri algorithm is an algorithm for computing a shortest path map, a
 data structure from which we can query the shortest path in a plane in the presence of 
 obstacles without violations. The Hershberger-Suri algorithm was proven to be optimal-time 
-in \cite{HershbergerS99}, with its $O(n \log n)$ running time, with $n$ being the total number of vertices 
-of the obstacles located in the plane. This is done by computing a shortest path map 
+in \cite{HershbergerS99}, with its $O(n \log n)$ running time, where $n$ is the total number of vertices 
+of the obstacles located in the plane. This is done by computing a \emph{shortest path map} 
 which is  a map containing the shortest paths from a fixed source point $s$, to all 
 other points in the plane. This is done by subdividing the plane into a finite number
 of regions, where all the points in such a region have the same shortest sub-path
@@ -33,7 +34,15 @@ free space, where $s$ sends out the first emission, which propagates through
 the plane and collides with obstacles. Upon collision between a wavefront and
 a vertex in an obstacle, then this vertex will also start emitting a wavefront
 of its own, with its weight equal to the time it took from $s$ started to emit
-its wavefront until a contact (with any wavefront). 
+its wavefront until a contact (with any wavefront), see figure \ref{fig:introductiontowavefront}. 
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=0.7\textwidth]{figures/introductiontowavefront.pdf}
+	\caption{A simple example of the wavefront propagation from $s$ and hitting vertices
+	         on obstacle $O$ which starts new wavefronts, from these vertices.}
+     \label{fig:introductiontowavefront}
+\end{figure}
 
 Hershberger and Suri introduced two new ideas to speed the implementation of the
 continuous Dijkstra method up compared to previous attempts, the first being a 

@@ -419,7 +419,7 @@ critical property of our subdivision is the following \textit{conforming propert
 
 \paragraph{Invariant 1:} For any edge $e$ and cell $c$ of the subdivision, $c$ has an interior 
 point within distance $|e|$ of $e$ if and only if $c$ and $e$ are incident (their closures 
-intersect). Thus There are at most six cells within distance $|e|$ of any edge $e$. \\ \peter{maybe pic}
+intersect). Thus There are at most six cells within distance $|e|$ of any edge $e$. \\ 
 
 The algorithm will only draw edges of increasing lengths, and so we never need to subdivide 
 previously drawn edges inside a component. In order to maintain Invariant 1, the algorithm 
@@ -709,8 +709,6 @@ Delaunay Triangulation can then be understood as the dual graph of the Voronoi d
 is build as follow: each vertex in the dual graph corresponds to a cell of the Voronoi diagram. Each pair 
 of vertices in the dual graph is connected with a edge if the vertices corresponds to neighboring cell in the Voronoi 
 diagram. This gives us a triangulation of the all the points in the plane, where no edge overlaps.
-
-\peter{pic of dual graph process}
 
 The Delaunay triangulation of a plane with points can be done in $O(n \log n)$ time\cite{CompGeo}. 
 Then for finding the minimum spanning tree of this triangulation we can run Kruskal's MST 

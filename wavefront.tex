@@ -577,7 +577,17 @@ the marking rules.
 	r$ starting at time $d(u,s)$. Observe also that the path $z \to x \to r$
 	is a legal path --- it lies in free space. Now, consider the shortest
 	path from $z$ to $r$ inside the triangle $\bigtriangleup zxr$ that does
-	not cross $h$ or any obstacle edge (see Figure \peter{make figure}). Because $z\to x \to
+	not cross $h$ or any obstacle edge (see Figure \ref{fig:complexfigure}). 
+	
+	\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{figures/complexfigure.pdf}
+	\caption{The shaded path from $z$ to $r$ claims $r$ before the wavelet
+	         from $u$, and from the same side of $h$ as $u$\cite{HershbergerS99}.}
+	\label{fig:complexfigure}
+    \end{figure}
+	
+	Because $z\to x \to
 	r$ lies in free space, such a path exists and is shorter than $z \to x
 	\to r$. This path claims $r$ from the same side as $u$ before the wavelet
 	from $u$ reaches $r$. (If the path passes through an endpoint of $h$,
