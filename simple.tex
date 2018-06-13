@@ -41,20 +41,21 @@ Create a graph $G_0=(V,E)$, where $V$ contains all the vertices in $P\cup \{s,t\
 and let $E$ contain all possible connections between the vertices. Make $k$
 copies of the graph $G_0$ and name them $G_1,\dots,G_{k}$. Algorithm \ref{algo:MakeVisibilityGraph} goes as
 follows: for each graph $G_i$, take each edge $e_j\in G_i$ and call
-NumberOfCrosses$(e_j)$, which returns the number of polygons from $\mathcal{O}$ that the
+NumberOfCrosses$(e_j)$, which returns the number $m$ of polygons from $\mathcal{O}$ that the
 line segment crosses, and connect the endpoint to the corresponding point in
 $G_{i+m}$, i.e.\ if you take an edge in the graph, that goes through $m$
-polygons, you travel $m$ graphs up. If $i+m > k$ then delete the edge. We now
+polygons, you travel $m$ graphs up. If $i+m > k$ then delete the edge from
+$G_i$. We now
 have a graph that has $k$ levels where every time you go through $k$ polygons
 you go $k$ levels up.
 
 \begin{algorithm} 
-	\caption{MakeVisibilityGraph($P,s,t$)}
+	\caption{MakeVisibilityGraph($\mathcal{O},s,t$)}
 	\begin{algorithmic}[1]
 		\ForAll{$G_i=(V_i,E_i) \in G$}
 		\ForAll{$e \in E_i$}
 			\State $crosses = numberOfCrossings(e)$
-			\If{$crosses+i<=k$}
+			\If{$crosses+i\leq k$}
 				\State make $e$ go from $G_i$ to $G_{i+crosses}$
 			\Else
 				\State delete edge $e$
@@ -106,7 +107,7 @@ of the polygon.
 
 So given a polygon $o\in \mathcal{O}$, and a line segment $l$ we want to determine
 weather $l$ crosses the polygon $O$. We start by making the list of points into
-a list of line segment $o'=(p_1,p_2),(p_2,p_3),\dots,(p_{i-1},p_i)$.  Then we
+a list of line segment $o'=(p_1,p_2),(p_2,p_3),\dots,(p_{i-1},p_i),(p_i,p_1)$.  Then we
 observe that if a line segment crosses a line segment of a polygon, it counts
 as a crossing (cases f and g). The other three cases of crossing (cases h, i
 and j) all have that in common that the line segment crosses four end points
