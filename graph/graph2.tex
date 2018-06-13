@@ -6,6 +6,7 @@ width=9cm,
 grid=major,
 xlabel = $n$,
 ylabel = time (microseconds),
+legend pos=north west
 ]
 \addplot coordinates {
 %crossing
@@ -142,5 +143,8 @@ ylabel = time (microseconds),
 (6402,1496)
 (6726,1610)
 };
+\addlegendentry{Crosses function}
+\addlegendentry{Visibility graph construction}
+\addlegendentry{Dijkstra's algorithm}
 \end{axis}
 \end{tikzpicture}

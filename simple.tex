@@ -103,13 +103,13 @@ of the polygon.
 	\label{fig:crossings}
 \end{figure}
 
-So given a polygon $O\in \mathcal{O}$, and a line segment $l$ we want to determine
+So given a polygon $o\in \mathcal{O}$, and a line segment $l$ we want to determine
 weather $l$ crosses the polygon $O$. We start by making the list of points into
-a list of line segment $O'=(p_1,p_2),(p_2,p_3),\dots,(p_{i-1},p_i)$.  Then we
+a list of line segment $o'=(p_1,p_2),(p_2,p_3),\dots,(p_{i-1},p_i)$.  Then we
 observe that if a line segment crosses a line segment of a polygon, it counts
 as a crossing (cases f and g). The other three cases of crossing (cases h, i
 and j) all have that in common that the line segment crosses four end points
-from the polygon. So we say it is not allowed to cross four points in of
+from the polygon. So we could say it is not allowed to cross four points in of
 a polygons line segments. The problem is that it makes (cases a, c
 and d) illegal. But fortunately they all have that in common that they are collinear 
 (they lie on a common line) with a line segment of the polygon, so the
@@ -125,28 +125,25 @@ algorithm is as follows:
 
 This lead us to the following algorithm
 \begin{algorithm} 
-	\caption{NumberOfCrossings($l,O$)}
+	\caption{NumberOfCrossings($l,\mathcal{O}$)}
 	\begin{algorithmic}[1] 
-		\State{result=0}
+		\State{howManyCrosses=0}
 		\ForEach{$o \in O$}
-			\State{counter$=0$}
+			\State{count$=0$}
 			\ForEach {$l' \in o$}
 				\State{result$=$crosses$(l',l)$}
 				\If{result==-1}
-					\State{counter$=0$}
+					\State{counter$=4$}
 					\State{\textbf{Break}}
 				\ElsIf{result==0}
-					\State{counter=counter+1}
-				\Else
-					\State{counter=4}
-					\State{\textbf{Break}}
+					\State{count=count+1}
 				\EndIf
 			\EndFor
-			\If{$counter>4$}
-				\State{result=result+1}
+			\If{$counter>3$}
+				\State{howManyCrosses=howManyCrosses+1}
 			\EndIf
 		\EndFor
-		\Return{result}
+		\Return{howManyCrosses}
 	\end{algorithmic}
 \end{algorithm}
 
@@ -186,9 +183,9 @@ Lets denote $v_1 = \langle a,b\rangle$ and $v_2 = \langle c,d\rangle$
 \end{figure}
 
 We claim that we can calculate the turn by calculating the signed area of the
-parallelogram spanned by the two vectors. The area of their parallelogram can
+parallelogram spanned by the two vectors (see Figure \ref{fig:rightturn_b}). The area of their parallelogram can
 be calculated as follows: calculate the area of the big rectangle, and take the
-two small triangles and the little square and subtract that area.
+two small triangles and the two small squares and subtract that area.
 
 \begin{align}
 	\text{area} &= (a+c)(d+b)-2A-2B-2C\nonumber\\
@@ -286,8 +283,10 @@ We can check whether the endpoints of a line segment lie on opposite sites of an
 line segment by multiplying the right turn results, since, if they lie on opposite sites,
 they will have different sign, if they lie on the same side they have the same
 sign so the result will be negative if they are on opposite sites and positive
-if they are on the same side.
-
+if they are on the same side. If both foo and bar is negativ, the segments
+cross and we return $-1$. If either foo and bar is $0$ it means that a point from
+one segment touches the other line segment and we return $0$. Else they do not
+touch at all, and we return $1$.
 \begin{algorithm}[H]
 	\caption{Crosses($l_1,l_2$)}
 	\begin{algorithmic}[1] 
@@ -296,9 +295,11 @@ if they are on the same side.
 		\State bar = $rightTurn(l_2.p,l_2.q,l_1.p)\cdot
 		rightTurn(l_2.p,l_2.q,l_1.q)$
 		\If{foo$<0$ and bar$<0$}
-		\State \Return True
+		\State \Return $-1$
+		\ElsIf{foo$=0$ or bar$=0$}
+		\State \Return $0$
 		\Else
-		\State \Return False
+		\State \Return $1$
 		\EndIf
 	\end{algorithmic}
 \end{algorithm}
@@ -307,19 +308,19 @@ if they are on the same side.
 Calculating the number of crossing each set edge make takes $O(n^3)$ since
 there are $O(n^2)$ possible edges and they each can cross $O(n)$ possible
 polygon edges. Then constructing the $k$ layers takes $O(k n^2)$. Since $k<n$
+(if $k\geq n$ the shortest distance will just be the line from $s$ to $t$)
 $O(n^3)$ will dominate and the running time will be $O(n^3)$.
 
 \section{Dijkstra}
 
-the following description
-is based on an "Introduction to Algorithms"\cite{IntroToAlg}, 24.3.
+Dijkstra originally conceived the algorithm in his 1959 paper "A note on two
+problems in connexion with graphs" \cite{dijkstra59}.  The following
+description is based on an "Introduction to Algorithms"\cite{IntroToAlg}, 24.3.
 
 Dijkstra's algorithm solves the single-source shortest path problem for a
 weighted directed graph $G$. i.e. Given a graph $G=(V,E)$, where $V$ is the
 vertices and $E$ is the directed weighted edges and a start vertex $s\in V$,
 find the path where the sum of the weights is the smallest possible.
-Dijkstra original conceived the algorithm in his 1959 paper "A note on two
-problems in connexion with graphs" \cite{dijkstra59}.
 
 Let $v_\pi$ either be a predecessor of null. $v_d$ being the upper bound of
 the weight of a shortest path from source $s$ to $v$. Running time $\Theta (V)$
@@ -332,8 +333,7 @@ the weight of a shortest path from source $s$ to $v$. Running time $\Theta (V)$
 			\State $v.\pi =$ Null
 		\EndFor 
 		\State $s.d = 0$ 
-	\end{algorithmic}
-\end{algorithm}
+	\end{algorithmic} \end{algorithm}
 
 Relaxing an edge $(u,v)$ consist of testing whether we can improve the shortest
 path to $v$ found so far, by going through $u$ and, if so, update $v.d$ and
@@ -354,9 +354,10 @@ $$ w(p) = \sum_{i=1}^k w(v_{i-1},v_i) $$
 \end{algorithm}
 
 $Q$ acts as a min-priority queue to contain all the vertices in $V$. Naive
-implementation of Dijkstra yields $O((V+E)lgV)$ which is $O(E \cdot lgV)$ if
+implementation of Dijkstra yields $O((V+E)\log V)$ which is $O(E \cdot \log V)$ if
+
 all vertices are reachable from the source. And can be $O(V^2)$ if
-$E=o(V^2/lgV)$. Extract min runs in $O(lgV)$ 
+$E=O(V^2/\log V)$. Extract min runs in $O(\log V)$ 
 
 \begin{algorithm}[H]
 	\caption{Dijkstra(G,w,s)} 
@@ -398,7 +399,7 @@ The test were run on a computer with the following specification
 To verify the correctness of our implementation we run the code against a list of tests.
 We implemented the function to output a svg image of the polygons and route so we
 were able to confirm the algorithm made the correct visibility graph. (See
-figure \ref{fig:correctness_1} and \ref{fig:correctness_2}
+Figure \ref{fig:correctness_1} and \ref{fig:correctness_2})
 \begin{figure}[H]
 	\begin{subfigure}{.5\textwidth}
 		\includegraphics[width=6cm]{figures/correctness1.pdf}
@@ -415,7 +416,7 @@ figure \ref{fig:correctness_1} and \ref{fig:correctness_2}
 
 \subsection{Running time of algorithm}
 To test the running time of our implementation we auto generated a map consisting of
-x times x squares and put $s$ and $t$ in opposite corners of the map (see figure
+x times x squares and put $s$ and $t$ in opposite corners of the map (see Figure
 \ref{fig:test})
 
 \begin{figure}[H]
