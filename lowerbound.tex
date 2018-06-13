@@ -65,7 +65,7 @@ With that settled, we will move on to sorting
 
 \subsection{Sorting of numbers}
 
-\begin{mydef}\textbf{(Sorting:)} \nick{cite cormen} \label{def:sorting} \\
+\begin{mydef}[Section 2.1 \cite{IntroToAlg}]\textbf{(Sorting:)} \label{def:sorting} \\
     Given a sequence of $n$ numbers $x_1,\dots,x_n$ find er permutation
 	$x'_1,\dots,x'_n$ such that  $x'_1\leq x'_2 \leq\dots\leq x'_n$
 \end{mydef}
@@ -73,7 +73,7 @@ With that settled, we will move on to sorting
 Now we make a reduction from distinction definition (\ref{def:distinction}) to
 sorting definition (\ref{def:sorting}). We are given $x_1,\dots, x_n$, and wants to
 see if there exists a pair $x_i=x_j$ where $i\neq j$. We do this by sorting the
-values and afterwards make a linear scan to see if $x'_i \leq x'_{i+1}$ since the \peter{it is leq right?}
+values and afterwards make a linear scan to see if $x'_i = x'_{i+1}$ since the 
 elements is in sorted order, two element that are the same will appear next to
 each other in the sorted sequence, so we will find it using this approach.
 Since the reduction takes $O(n)$ and the element distinction can be solved
@@ -82,17 +82,18 @@ $\Omega(n\log n)$, as element distinction.
 
 \subsection{Shortest path in the plane}
 Now we make a reduction from sorting numbers to calculating the shortest path
-in the plane with obstacles (\todo{Insert ref to problem definition}).
+in the plane with obstacles (See section \ref{problemdescription} for the
+formal definition).
 Given numbers $x_1,\dots,x_n\in \mathbb{N}$, and lets for simplicity say they are all positive
 (i.e.\ $x_i>0$ for $i=1,\dots,n$) we construct the obstacle as follows: Take each
 point $x_i$ and construct a rectangle with the following points
-$(x_i,x_i^2),(x_i-1,x_i^2),(x_i-1,w), (x_i,w)$, where $w=max$ (see figure \nick{define max?}
-\ref{fig:reduction})
+$(x_i,x_i^2),(x_i-1,x_i^2),(x_i-1,\max), (x_i,\max)$, where max is the maximum
+value (see Figure \ref{fig:reduction})
 
 \begin{figure}[H]
 	\includegraphics{figures/reduction.pdf}
-	\label{fig:reduction}
 	\caption{An example of the reduction from sorting numbers to shortest path}
+	\label{fig:reduction}
 \end{figure}
 
 Set $s=(0,0)$ and let
