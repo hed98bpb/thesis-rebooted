@@ -28,8 +28,9 @@ This point is the source (start point) $s$, see figure \ref{fig:simplewavefront}
 
 From the figure we can see that since the wavefront expands at unit-speed, the time distance
 $d_i$ at time $t_i$ are equal, are one therefore is only concerned with the time $t$.
-Every time a vertex $v$ is reached a new wavefront starts emitting from $v$, and this way
-the plane is getting devided into different areas when 
+Every time a vertex $v$ is reached a new wavefront starts emitting from $v$. This way
+the plane will be divided into different areas depending on which wavefront encapsulates it,
+see figure \ref{fig:introductiontowavefront}.
 
 \begin{figure}[H]
     \centering
@@ -39,15 +40,13 @@ the plane is getting devided into different areas when
 	         an encapsulating different areas.}
 \end{figure}
 
-In 1999 Hersberger and Suri published a
-paper\cite{HershbergerS99} in which they presented an $O(n\log n)$ time
-algorithm which matched the lower bound of the problem (see
-Chapter \ref{chapter:lowerbound}), using the continuous
-Dijkstra method.
+In 1999 Hershberger and Suri published the paper "an optimal algorithm for euclidean shortest 
+paths in the plane"\cite{HershbergerS99} in which they presented an optimal $O(n\log n)$ time 
+algorithm which matched the lower bound of the problem (see Chapter \ref{chapter:lowerbound}), 
+using an implementation of the continuous Dijkstra method.
 
-
-In 2017 they, together with Neeraj, looked at a generalization of that problem.
-Given the same setting as before, you are now allowed to remove $k$ polygons.
+In 2017 they, together with Kumar, looked at a generalization of the problem:
+given the same setting as before, one is now allowed to go through up to $k$ obstalces.
 The problem is which polygons you should remove to minimize the distance from
 $s$ to $t$. They presented an $O(k^2 n\log n)$ algorithm for this problem,
 which used a modified version of the 1999 algorithm\cite{HershbergerKS17}.
