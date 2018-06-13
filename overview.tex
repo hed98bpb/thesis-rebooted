@@ -23,7 +23,7 @@ other points in the plane. This is done by subdividing the plane into a finite n
 of regions, where all the points in such a region have the same shortest sub-path
 from $s$. This map can be constructed in $O(n\log n)$ time and requires $O(n\log n)$ 
 space \cite{HershbergerS99}. A query for a shortest path can be processed in $O(\log n)$
-time suw ro\cite{DBLP:journals/siamcomp/Kirkpatrick83}. 
+time due to\cite{DBLP:journals/siamcomp/Kirkpatrick83}. 
 
 The first step in the Hershberger-Suri algorithm is to use an implementation of
 the continuous Dijkstra method, which purpose is to give a distance from the
@@ -98,7 +98,7 @@ then a Voronoi diagram like technique is used in each cell to compute the collis
 events in that cell precisely. These collisions determines the edges of the final 
 shortest path map, which will give us the shortest path to every point in the plane.
 
-\section{From no violations to k-violations}
+\section{From no violations to $k$-violations}
 
 Previously, we've given an overview of the Hershberger-Suri algorithm which calculates a 
 shortest path map ($SPM$) in $O(n\log n)$ time from a source point $s$ 
