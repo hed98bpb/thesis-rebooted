@@ -1,17 +1,18 @@
 \chapter{Simple $O(n^3)$ implementation}
 In this section we describe an $O(n^3)$ implementation which solves the
-"Shortest Paths in Plane with Obstacles Violations"-problem. Recall that $n$ is
+"Shortest Paths in Plane with Obstacles Violations"-problem using visibility
+graphs. Recall that $n$ is
 the number of vertices in the polygons and $k$ is the number of polygon
-violations allowed. In the first section we describe how we construct the
+violations allowed. In Section 2.1 we describe how we construct the
 visibility graph. Imagine a plane with a starting point $s$, an end point $t$,
 and $\mathcal{O}$ polygon obstacles, which is build of groups of connected points,
 each representing an obstacle. A visibility graph is a graph where for each set of
 points $p,q\in \mathcal{O} \cup \{s,t\}$  there is an edge between them if the 
 two points can see each other
-without going (or looking) through any interior of an obstacle (see figure
-\ref{visibilitygraph}). In the second section we explain Dijkstra's algorithm
+without going (or looking) through any interior of an obstacle (see Figure
+\ref{visibilitygraph}). In Section 2.2 we explain Dijkstra's algorithm
 for finding the shortest path from $s$ to $t$ in the visibility graph and
-finally in the third section we test our implementation to compare if the actual 
+finally in Section 2.3 we test our implementation to verify that the actual 
 running time is the same as the theoretical.
 
 \begin{figure}[H]
@@ -31,14 +32,14 @@ running time is the same as the theoretical.
 
 \section{Constructing the visibility graph}
 The naive way of constructing a visibility graph is to make a graph
-where every set of points $p,q \in \mathcal{O} \cup \{s,t\}$ is connected to each other,
+where every pair of points $p,q \in \mathcal{O} \cup \{s,t\}$ is connected to each other,
 then removing all edges that crosses the interior of a polygon. But in this
 setting we are allowed to cross $k$ polygons, so we construct the graph a bit
 different. Given a set $\mathcal{O}$ consisting of all the polygons, where each polygon
 is a list of the points in the polygon we use the following algorithm \ref{algo:MakeVisibilityGraph}.  
 Create a graph $G_0=(V,E)$, where $V$ contains all the vertices in $P\cup \{s,t\}$,
 and let $E$ contain all possible connections between the vertices. Make $k$
-copies of the graph and name them $G_1,\dots,G_{k}$. Algorithm \ref{algo:MakeVisibilityGraph} goes as
+copies of the graph $G_0$ and name them $G_1,\dots,G_{k}$. Algorithm \ref{algo:MakeVisibilityGraph} goes as
 follows: for each graph $G_i$, take each edge $e_j\in G_i$ and call
 NumberOfCrosses$(e_j)$, which returns the number of polygons from $\mathcal{O}$ that the
 line segment crosses, and connect the endpoint to the corresponding point in
@@ -160,6 +161,7 @@ a left turn or are collinear we make the following two vectors.
 	v_1 &=p_2-p_1 = \langle p_2.x-p_1.x,p_2.y-p_1.y\rangle\\
 	v_2 &=p_3-p_1 = \langle p_3.x-p_1.x,p_3.y-p_1.y\rangle
 \end{align*}
+
 Lets denote $v_1 = \langle a,b\rangle$ and $v_2 = \langle c,d\rangle$
 (see Figure \ref{fig:rightturn_a})
 
