@@ -288,8 +288,6 @@ they will have different sign, if they lie on the same side they have the same
 sign so the result will be negative if they are on opposite sites and positive
 if they are on the same side.
 
-\nick{If its zero the hits an endpoint, write about that}
-
 \begin{algorithm}[H]
 	\caption{Crosses($l_1,l_2$)}
 	\begin{algorithmic}[1] 
@@ -304,6 +302,12 @@ if they are on the same side.
 		\EndIf
 	\end{algorithmic}
 \end{algorithm}
+
+\subsection{Run time}
+Calculating the number of crossing each set edge make takes $O(n^3)$ since
+there are $O(n^2)$ possible edges and they each can cross $O(n)$ possible
+polygon edges. Then constructing the $k$ layers takes $O(k n^2)$. Since $k<n$
+$O(n^3)$ will dominate and the running time will be $O(n^3)$.
 
 \section{Dijkstra}
 
@@ -371,7 +375,7 @@ $E=o(V^2/lgV)$. Extract min runs in $O(lgV)$
 \end{algorithm}
 
 \section{Experiment}
-In this section we present the experiments we did on our $O(n^3+kn^2)$ implementation,
+In this section we present the experiments we did on our $O(n^3)$ implementation,
 both for running time and test of correctness.
 
 \subsection{Computer specification}
@@ -451,5 +455,5 @@ the almost linear graph
 \input{graph/graph4.tex}
 \end{center}
 
-In conclusion we have implemented a naive $O(n^3 + kn^2)$ algorithm and made tests both
+In conclusion we have implemented a naive $O(n^3)$ algorithm and made tests both
 for confirming its correctness and its running time of the algorithm.
