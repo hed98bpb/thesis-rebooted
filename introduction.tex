@@ -22,8 +22,8 @@ This point is the source (start point) $s$, see figure \ref{fig:simplewavefront}
 \begin{figure}[H]
     \centering
 	\includegraphics[width=0.5\textwidth]{figures/simplewavefront.pdf}
-	\label{fig:simplewavefront}
 	\caption{A right turn formed by three points}
+    \label{fig:simplewavefront}
 \end{figure}
 
 From the figure we can see that since the wavefront expands at unit-speed, the time distance
@@ -35,9 +35,9 @@ see figure \ref{fig:introductiontowavefront}.
 \begin{figure}[H]
     \centering
 	\includegraphics[width=0.5\textwidth]{figures/introductiontowavefront.pdf}
-	\label{fig:introductiontowavefront}
 	\caption{A simple example of the wavefront spreading in the plane around an obstacle $O$
 	         an encapsulating different areas.}
+     \label{fig:introductiontowavefront}
 \end{figure}
 
 In 1999 Hershberger and Suri published the paper "an optimal algorithm for euclidean shortest 
@@ -46,8 +46,8 @@ algorithm which matched the lower bound of the problem (see Chapter \ref{chapter
 using an implementation of the continuous Dijkstra method.
 
 In 2017 they, together with Kumar, looked at a generalization of the problem:
-given the same setting as before, one is now allowed to go through up to $k$ obstalces.
-The problem is which polygons you should remove to minimize the distance from
+given the same setting as before, one is now allowed to go through up to $k$ obstacles.
+The problem lies in which polygons you should pass through to minimize the distance from
 $s$ to $t$. They presented an $O(k^2 n\log n)$ algorithm for this problem,
 which used a modified version of the 1999 algorithm\cite{HershbergerKS17}.
 Notice that if $k=0$ it is identical to the Shortest path with no violations.
