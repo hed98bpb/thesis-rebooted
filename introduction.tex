@@ -47,27 +47,36 @@ using an implementation of the continuous Dijkstra method.
 
 In 2017 they, together with Kumar, looked at a generalization of the problem:
 given the same setting as before, one is now allowed to go through up to $k$ obstacles.
+See figure \ref{fig:shortestkpath}.
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=0.7\textwidth]{figures/shortestkpath.pdf}
+	\caption{A shortest $k$-path from $s$ to $t$ with $k = 2$}
+     \label{fig:shortestkpath}
+\end{figure}
+
 The problem lies in which polygons you should pass through to minimize the distance from
 $s$ to $t$. They presented an $O(k^2 n\log n)$ algorithm for this problem,
 which used a modified version of the 1999 algorithm\cite{HershbergerKS17}.
-Notice that if $k=0$ it is identical to the Shortest path with no violations.
+Notice that if $k = 0$ it is identical to the Shortest path with no violations.
 
-In this thesis we are going to look into implementations of both the original
-and the generalized problem. We start by describing and implementing a naive algorithm for solving
-the problem based on computing a visibility graph and then running the Dijkstra
-single source shortest path algorithm. Afterwards we are going to explain the
-implementation details and lastly we describe the algorithm from 2017 and
-implement that.
+In this thesis we are going to present implementation details of both the original
+and the generalized problem. We start by describing and implementing a naive algorithm 
+for solving the problem based on computing a visibility graph and then running the Dijkstra
+single source shortest path algorithm. Afterwards we are going to explain the theoretical
+results leading to the algorithm and the implementation details. Lastly we describe the 
+algorithm from 2017 and its implementation details.
 
-\section{Problem description} 
+\section{Formal Problem description} 
 \label{problemdescription}
-We a given two points in the plane $s,t\in\mathbb{R}^2$ and a list of polygons
+Given two points in the plane $s,t\in\mathbb{R}^2$ and a list of polygons
 $\mathcal{O}=o_1,\dots,o_h$ where $o_i$ is a list of points in polygon $o_i$
-starting at an abitrary place and in clockwise order (note that sometimes we
+starting at an arbitrary place and in clockwise order (note that sometimes we
 use $\mathcal{O}$ as a set e.g. polygon $o_i \in \mathcal{O}$). We say a
-\emph{legal path} is a list of points where two adjecent points are mutually
-visibible, i.e. you are able to draw a line from one to the other without
-crossing the interioer of any polygon in $P$.  We want to find a shortest legal
+\emph{legal path} is a list of points where two adjacent points are mutually
+visible, i.e. you are able to draw a line from one to the other without
+crossing the interior of any polygon in $P$.  We want to find a shortest legal
 path from $s$ to $t$.
 
 \section{Previous work}
