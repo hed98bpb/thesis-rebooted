@@ -37,7 +37,7 @@ then removing all edges that crosses the interior of a polygon. But in this
 setting we are allowed to cross $k$ polygons, so we construct the graph a bit
 different. Given a set $\mathcal{O}$ consisting of all the polygons, where each polygon
 is a list of the points in the polygon we use the following algorithm \ref{algo:MakeVisibilityGraph}.  
-Create a graph $G_0=(V,E)$, where $V$ contains all the vertices in $P\cup \{s,t\}$,
+Create a graph $G_0=(V,E)$, where $V$ contains all the vertices in $\mathcal{O}\cup \{s,t\}$,
 and let $E$ contain all possible connections between the vertices. Make $k$
 copies of the graph $G_0$ and name them $G_1,\dots,G_{k}$. Algorithm \ref{algo:MakeVisibilityGraph} goes as
 follows: for each graph $G_i$, take each edge $e_j\in G_i$ and call
