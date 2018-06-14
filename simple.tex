@@ -284,7 +284,7 @@ We can check whether the endpoints of a line segment lie on opposite sites of an
 line segment by multiplying the right turn results, since, if they lie on opposite sites,
 they will have different sign, if they lie on the same side they have the same
 sign so the result will be negative if they are on opposite sites and positive
-if they are on the same side. If both foo and bar is negativ, the segments
+if they are on the same side. If both foo and bar is negative, the segments
 cross and we return $-1$. If either foo and bar is $0$ it means that a point from
 one segment touches the other line segment and we return $0$. Else they do not
 touch at all, and we return $1$.
@@ -356,10 +356,9 @@ $$ w(p) = \sum_{i=1}^k w(v_{i-1},v_i) $$
 
 In the below algorithm $Q$ acts as a min-priority queue to contain all the
 	vertices in $V$. Naive implementation of Dijkstra's algorithm yields
-	$O((V+E)\log V)$ which is $O(E \cdot \log V)$ if
-
-all vertices are reachable from the source. And can be $O(V^2)$ if
-$E=O(V^2/\log V)$. Extract-min runs in $O(\log V)$ 
+	$O((V+E)\log V)$ which is $O(E \cdot \log V)$ if all vertices are reachable
+	from the source. And can be $O(V^2)$ if $E=O(V^2/\log V)$. Extract-min runs
+	in $O(\log V)$ 
 
 \begin{algorithm}[H]
 	\caption{Dijkstra$(G,w,s)$} 
