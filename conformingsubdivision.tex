@@ -2,7 +2,7 @@
 
 The following chapters result are due to Hershberger and Suri\cite{HershbergerS99}. 
 We will present the main theory behind a conforming subdivision, 
-and an algorithm for computing it, and The implementation details for a $O(n \log n)$
+and an algorithm for computing it, and The implementation details for an $O(n \log n)$
 implementation.
 
 Given a plane with obstacles, we could view this as a plane with holes in it, which we 
@@ -34,7 +34,8 @@ which we will define in the next section, but this helps us bind the overall com
 the subdivision, and secure that there are $O(1)$ of cells within a distance of $2|e|$ for 
 every transparent edge $e$. It is this well-covering property that the shortest path 
 algorithm relies heavy on, in the unmodified Hershberger-Suri algorithm. This subdivision 
-can be built in $O(n \log n)$ time \cite{HershbergerS99}.
+can be built in $O(n \log n)$ time shown by Lemma \ref{lemma:6.11HershbergerS99}
+\cite{HershbergerS99}.
 
 \section{Defining well covering of regions}\label{section:def-well-covering-if-regions}
 

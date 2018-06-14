@@ -86,7 +86,7 @@ parts of the wave arch emitted from one source. The case of colliding neighborin
 wavelets occurs when a wavelet would be engulfed by the expansion of wavelets of its 
 two neighbors and should be quite easy to detect and process. The collision between 
 non-neighboring wavelets, however are more troublesome, and to process these we make 
-use of the second idea: approximate wavefront.
+use of the second idea: \emph{approximate wavefront}.
 
 The idea of approximating wavefronts is the abandonment of trying to compute the exact 
 time of collision and instead maintaining two separate wavefronts approaching the edge 
@@ -104,7 +104,7 @@ therefore location.
 
 At the end of the propagation phase, all the collision information is collected, and 
 then a Voronoi diagram like technique is used in each cell to compute the collision 
-events in that cell precisely. These collisions determines the edges of the final 
+events in that cell exactly. These collisions determines the edges of the final 
 shortest path map, which will give us the shortest path to every point in the plane.
 
 \section{From no violations to $k$-violations}
@@ -114,7 +114,7 @@ shortest path map ($SPM$) in $O(n\log n)$ time from a source point $s$
 \cite{HershbergerS99}. By modifying the algorithm, and using it in as a subroutine 
 Hershberger, Kumar and Suri showed an algorithm for calculating the shortest path map, 
 where every route would violated at most $k$ obstacles from $s$ to an endpoint 
-$t$\cite{HershbergerKS17}. This  is done by calculating a shortest $k$-path map, which in 
+$t$\cite{HershbergerKS17}. This is done by calculating a shortest $k$-path map, which in 
 essence would produce a subdivision of the plane into regions, as done by the 
 Hershberger-Suri algorithm, but with the guarantee of every path violating at most $k$ 
 obstacles. A way to better understand how such a map would be calculated is by using the 
