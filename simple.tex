@@ -73,7 +73,7 @@ below.
 Calculating the number of polygons a line segment crosses is no trivial task,
 since there is a number of edge cases. We try to give a brief intuition of the
 edge cases, and then present our algorithm.
-The first five cases (a-e) in figure \ref{fig:crossings} are allowed intersections since
+The first five cases (a-e) in Figure \ref{fig:crossings} are allowed intersections since
 it is only the interior of a polygon that we can not travel. The
 next five cases (f-j) are not allowed since they travel through the interior
 of the polygon.
@@ -105,17 +105,18 @@ of the polygon.
 	\label{fig:crossings}
 \end{figure}
 
-So given a polygon $o\in \mathcal{O}$, and a line segment $l$ we want to determine
-weather $l$ crosses the polygon $O$. We start by making the list of points into
-a list of line segment $o'=(p_1,p_2),(p_2,p_3),\dots,(p_{i-1},p_i),(p_i,p_1)$.  Then we
-observe that if a line segment crosses a line segment of a polygon, it counts
-as a crossing (cases f and g). The other three cases of crossing (cases h, i
-and j) all have that in common that the line segment crosses four end points
-from the polygon. So we could say it is not allowed to cross four points in of
-a polygons line segments. The problem is that it makes (cases a, c
-and d) illegal. But fortunately they all have that in common that they are collinear 
-(they lie on a common line) with a line segment of the polygon, so the
-algorithm is as follows:
+So given a polygon $o\in \mathcal{O}$, and a line segment $l$ we want to
+determine weather $l$ crosses the polygon $O$. We start by making each obstacle
+list of points $o=p_1,p_2,\dots,p_i$ into a list of line segment
+$o'=(p_1,p_2),(p_2,p_3),\dots,(p_{i-1},p_i),(p_i,p_1)$.  Then we observe that
+if a line segment crosses a line segment of a polygon, it counts as a crossing
+(cases f and g). The other three cases of crossing (cases h, i and j) all have
+that in common that the line segment crosses four end points from the polygon.
+So we could say it is not allowed to cross four points in of a polygons line
+segments. The problem is that it makes (cases a, c and d) illegal. But
+fortunately they all have that in common that they are collinear (they lie on a
+common line) with a line segment of the polygon, so the algorithm is as
+follows:
 
 \begin{enumerate}
 	\item if a line segment $l_1$ crosses another line segment $l_2$ of a polygon it 
@@ -163,7 +164,7 @@ a left turn or are collinear we make the following two vectors.
 	v_2 &=p_3-p_1 = \langle p_3.x-p_1.x,p_3.y-p_1.y\rangle
 \end{align*}
 
-Lets denote $v_1 = \langle a,b\rangle$ and $v_2 = \langle c,d\rangle$
+Let us denote $v_1 = \langle a,b\rangle$ and $v_2 = \langle c,d\rangle$
 (see Figure \ref{fig:rightturn_a})
 
 \subsection{Right turn}
@@ -198,15 +199,15 @@ two small triangles and the two small squares and subtract that area.
 \end{align}
 
 Now we claim that the area between these two vectors is positive if the
-three points form a right turn, and negative if they form a left turn. We show
-that by an example (see figure \ref{rightturn3})
+three points form a right turn, and negative if they form a left turn. We
+illustrate that by an example (see Figure \ref{rightturn3})
 
 Given our formula (formula \ref{form:rightturn}) we get that the $q_1,q_3,q_2$ area is
 
 \begin{align*}
-	&(q_3.y-q_1.y)(q_2.x-q_1.x)-(q_3.x-q_1.x)(q_2.y-q_1.y)\\ 
-	= &(2-0)(-1-0)-(0-0)(1-0)\\
-	= & 2\cdot (-1)-0\cdot1\\
+	&\quad\,(q_3.y-q_1.y)(q_2.x-q_1.x)-(q_3.x-q_1.x)(q_2.y-q_1.y)\\ 
+	= & \quad(2-0)(-1-0)-(0-0)(1-0)\\
+	= & \quad\, 2\cdot (-1)-0\cdot1\\
 	= & -2-0\\
 	= & -2
 \end{align*}
@@ -215,8 +216,8 @@ And the area of $q_1,q_3,q_4$ is
 	&(q_3.y-q_1.y)(q_4.x-q_1.x)-(q_3.x-q_1.x)(q_4.y-q_1.y)\\ 
 	= &(2-0)(1-0)-(0-0)(1-0)\\
 	= &(2\cdot 1 - 0\cdot 1\\
-	= &2-0\\
-	= &2
+	= &\ 2-0\\
+	= &\ 2
 \end{align*}
 
 \begin{figure}[H]
@@ -226,18 +227,15 @@ And the area of $q_1,q_3,q_4$ is
     \label{rightturn3}
 \end{figure}
 
-So the function for calculating a right turn is
-
-\begin{algorithm} 
+The righturn function below will return a negative number if the three points make a left
+turn, a positive number if it is a right turn and 0 if the three points are on
+a line.
+\begin{algorithm}[H]
 	\begin{algorithmic}[1] 
 		\State \Return $(p_2.x-p_1.x)(p_3.y-p_1.y)-(p_2.y-p_1.y)(p_3.x-p_1.x)$
 	\end{algorithmic}
 	\caption{rightTurn($p_1,p_2,p_3$)}
 \end{algorithm}
-
-This function will return a negative number if the three points make a left
-turn, a positive number if it is a right turn and 0 if the three points are on
-a line.
 
 \subsection{Crossing of two line segments}
 
@@ -264,20 +262,20 @@ a line.
     by first checking if the two end points of $l_2$, namely $l_2.p$ and $l_2.q$, 
     lie on separate sides of the line which is collinear to $l_1$. Should this be
     the case, we do a similar check for $l_2$ on $l_1$. Should both cases be true
-    we know $l_1$ crosses $l_2$, see figure \ref{fig:crosses_a}.
+    we know $l_1$ crosses $l_2$, see Figure \ref{fig:crosses_a}.
 \end{Lemma}
 
 \begin{proof}
 Let $L_1$ and $L_2$ denote the lines collinear to $l_1$ and $l_2$ respectively.
-	If both the end points of $l_2$ is on the same side of $L_1$, then the line
-	segments can't cross $L_1$, and therefore $l_1$ obviously(see figure
+	If both the end points of $l_2$ are on the same side of $L_1$, then the line
+	segments can't cross $L_1$, and therefore $l_1$ obviously(see Figure
 	\ref{fig:crosses_b}). If they lie on opposite sites, $l_2$ crosses $L_1$ and
 	we have to determine if $l_2$ crosses $L_1$ between $l_1.p$ and $l_1.q$. 
 
 We know the line $l_2$ crosses $L_1$, the question is, is it between the two
-	end points, we can quit easily determine this by looking at if the endpoints
-	lie on opposite sites of $l_2$, like before(see figure \ref{fig:crosses_b}.
-	If they do it must be the case that $l_1$ and $l_2$ crosses, if not it
+	end points. We determine this verifying that if the endpoints of $l_1$
+	lie on opposite sites of $l_2$, like before(see Figure \ref{fig:crosses_b}.
+	If they do it must be the case that $l_1$ and $l_2$ cross, if not it
 	crosses $L_1$ another place.
 \end{proof}
 
@@ -293,10 +291,10 @@ touch at all, and we return $1$.
 \begin{algorithm}[H]
 	\caption{Crosses($l_1,l_2$)}
 	\begin{algorithmic}[1] 
-		\State foo = $rightTurn(l_1.p,l_1.q,l_2.p)\cdot
-		rightTurn(l_1.p,l_1.q,l_2.q)$
-		\State bar = $rightTurn(l_2.p,l_2.q,l_1.p)\cdot
-		rightTurn(l_2.p,l_2.q,l_1.q)$
+		\State foo = $\text{rightTurn}(l_1.p,l_1.q,l_2.p)\cdot
+		\text{rightTurn}(l_1.p,l_1.q,l_2.q)$
+		\State bar = $\text{rightTurn}(l_2.p,l_2.q,l_1.p)\cdot
+		\text{rightTurn}(l_2.p,l_2.q,l_1.q)$
 		\If{foo$<0$ and bar$<0$}
 		\State \Return $-1$
 		\ElsIf{foo$=0$ or bar$=0$}
@@ -338,7 +336,7 @@ the weight of a shortest path from source $s$ to $v$. Running time $\Theta (V)$
 		\State $s.d = 0$ 
 	\end{algorithmic} \end{algorithm}
 
-Relaxing an edge $(u,v)$ consist of testing whether we can improve the shortest
+	\emph{Relaxing} an edge $(u,v)$ consist of testing whether we can improve the shortest
 path to $v$ found so far, by going through $u$ and, if so, update $v.d$ and
 $v.\pi$. We define $w$ as following for a path $p=\langle v_0,v_1,...,v_k
 \rangle$
@@ -346,7 +344,7 @@ $v.\pi$. We define $w$ as following for a path $p=\langle v_0,v_1,...,v_k
 $$ w(p) = \sum_{i=1}^k w(v_{i-1},v_i) $$
 
 \begin{algorithm} 
-	\caption{Relax(u,v,w)} 
+	\caption{Relax$(u,v,w)$} 
 	\begin{algorithmic}[1] 
 		\If {$v.d > u.d + w(u,v)$} 
 			\State $v.d=u.d+w(u,v)$ 
@@ -356,23 +354,24 @@ $$ w(p) = \sum_{i=1}^k w(v_{i-1},v_i) $$
 	\end{algorithmic} 
 \end{algorithm}
 
-$Q$ acts as a min-priority queue to contain all the vertices in $V$. Naive
-implementation of Dijkstra yields $O((V+E)\log V)$ which is $O(E \cdot \log V)$ if
+In the below algorithm $Q$ acts as a min-priority queue to contain all the
+	vertices in $V$. Naive implementation of Dijkstra's algorithm yields
+	$O((V+E)\log V)$ which is $O(E \cdot \log V)$ if
 
 all vertices are reachable from the source. And can be $O(V^2)$ if
-$E=O(V^2/\log V)$. Extract min runs in $O(\log V)$ 
+$E=O(V^2/\log V)$. Extract-min runs in $O(\log V)$ 
 
 \begin{algorithm}[H]
-	\caption{Dijkstra(G,w,s)} 
+	\caption{Dijkstra$(G,w,s)$} 
 	\begin{algorithmic}[1] 
-		\State Initialize-Single-Source(G,s) 
+		\State Initialize-Single-Source$(G,s)$
 		\State $S = \emptyset$ 
 		\State $Q = G.V$ 
 		\While {$Q \not= \emptyset$} 
 			\State $u = $Extract-Min(Q) 
 			\State $S = S \cup \{u\}$
 			\ForEach {vertex $v \in G.Adj[u]$} 
-				\State Relax(u,v,w) 
+				\State Relax$(u,v,w)$
 			\EndFor 
 		\EndWhile
 	\end{algorithmic} 
@@ -437,8 +436,8 @@ number of vertices was $n= 4 \cdot t^2$ for $t=1,\dots,41$ and got the following
 \end{center}
 
 Then we tried figuring out where the time was spent so we tried measuring the
-crossing function, the construction of visibility graph and the Dijkstra
-separately and got the following
+crossing function, the construction of visibility graph and Dijkstra's
+algorithm separately and got the following
 
 \begin{center}
 \input{graph/graph2.tex}
@@ -446,7 +445,7 @@ separately and got the following
 
 The implementation is totally dominated by the crossing calculating which makes
 sense since the $O(n^3)$ is the most dominant sub time, we tried dividing the first graph
-with $O(n^3)$ and got the following
+with $n^3$ and got the following
 
 \begin{center}
 \input{graph/graph3.tex}
