@@ -1,19 +1,28 @@
 \label{chapter:shortestpathobstaclesviolation}
 
-This chapter is dedicated to showing the extension of the Hershberger Suri algorithm which was presented in chapter 
-\ref{chapter:conformingsubdivision} and \ref{chapter:shortestpathmap} for calculating a shortest $k$-path map, $SPM_k$ in time $O(k^2 \cdot 
-n \log n)$. This is done by extending this continuous Dijkstra method into a $k$-garage structure. This way we can enter each level $i$ by 
-going through an obstacle polygon in level $i-1$, and leave it into the next layer $i$. This can then be done up to $k$ times, which is 
-equivalent to violating $k$ obstacles. So more precisely, when a wavefront hit an obstacle $O \in \mathcal{O}$, it claims the sub edges of 
-the outer boundary of $O$, and then is re emitted into the interior of $O$, therefore also claiming the interior space of $O$. When reaching
-the opposite side of $O$ from which it entered, it is re emitted into the free space free space a level higher than when entering. Therefore
-this "vertical" movement in the interior of $O$ adds no time delay. So in this extension a wavefront at time $T$ contains all points at all 
-levels which has $T$ distance to $s$. 
+This chapter is dedicated to showing the extension of the Hershberger Suri
+algorithm which was presented in Chapter \ref{chapter:conformingsubdivision}
+and \ref{chapter:shortestpathmap} for calculating a shortest $k$-path map,
+$SPM_k$ in time $O(k^2 \cdot n \log n)$. This is done by extending the
+continuous Dijkstra method into a $k$-garage structure. This way we can enter
+each level $i$ by going through an obstacle polygon in level $i-1$, and leave
+it into the next layer $i$. This can then be done up to $k$ times, which is
+equivalent to violating $k$ obstacles. So more precisely, when a wavefront hit
+an obstacle $O \in \mathcal{O}$, it claims the sub edges of the outer boundary
+of $O$, and then is reemitted into the interior of $O$, therefore also
+claiming the interior space of $O$. When reaching the opposite side of $O$ from
+which it entered, it is reemitted into the free space free space a level
+higher than when entering. Therefore this "vertical" movement in the interior
+of $O$ adds no time delay. So in this extension a wavefront at time $t$
+contains all points at all levels which has $t$ distance to $s$. 
 
-Another change has to be made to the Hershberger Suri algorithm which involves how we identifies generators i each level. Before we had a 
-generator $g$ known by which vertex $v$ it start emitting from, and the time $t$ in which it starts to emit. When using the elevator we pass
-through some subedges of $O$, which leads us to define the generators in term of a triplet, which now also involves the sub edge on the 
-border of $O$ through which we enter this new level, see figure \ref{fig:tripletgenerator}.
+Another change has to be made to the Hershberger Suri algorithm which involves
+how we identifies generators i each level. Before we had a generator $g$ known
+by which vertex $v$ it start emitting from, and the time $t$ in which it starts
+to emit. When using the elevator we pass through some subedges of $O$, which
+leads us to define the generators in term of a triplet, which now also involves
+the sub edge on the border of $O$ through which we enter this new level, see
+figure \ref{fig:tripletgenerator}.
 
 \begin{figure}[H]
 	\centering
@@ -24,7 +33,7 @@ border of $O$ through which we enter this new level, see figure \ref{fig:triplet
 \end{figure}
 
 We can now imaging that entering the next level through $e$ is the same as emitting a wave from $v$ through the interior "triangular 
-flap", shown in figure \ref{fig:tripletgenerator} with dotted lines, which is connected to $e$ and from there enter the free space at the 
+flap", shown in Figure \ref{fig:tripletgenerator} with dotted lines, which is connected to $e$ and from there enter the free space at the 
 next floor. Algorithmically we ignore the triangular flap, and start emitting directly from $e$, which is another difference compared to 
 the unmodified Hershberger Suri algorithm where we only emitted from points, and not edges. So we do the following for each edge $e$ of 
 the conforming sub division, as described in \cite{HershbergerKS17}:
@@ -37,7 +46,7 @@ the conforming sub division, as described in \cite{HershbergerKS17}:
     \item For each source $(v,t,e)$ with $e \in \mathcal{U}(f)$, propagate its wavelet to $e$ inside $\mathcal{U}(f)$.
 \end{enumerate}
 
-By using the modified Hershberger Suri algorithm described above we get the following lemma, which we will use with out proof.
+By using the modified Hershberger Suri algorithm described above we get the following lemma, which we will use without proof.
 
 \begin{Lemma}[Lemma 22 in \cite{HershbergerKS17}]
 Given $m$ boundary sources in a polygonal domain with $n$ vertices, we can compute the exit claims of the sources in $O((m + n) \cdot \log

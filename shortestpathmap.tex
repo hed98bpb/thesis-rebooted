@@ -4,7 +4,7 @@ This chapter is dedicated to presenting some formal definition that will help us
 precisely discuss the theory in the rest of the thesis. We will also define the
 shortest path map and its near relatives the shortest $k$-path map, and some properties
 their properties. Finally we will present a Lemma which bounds some complexity of 
-the shortest path map which will be usefull later in \ref{chapter:wavefrontpropagation}.
+the shortest path map which will be usefull later in Chapter \ref{chapter:wavefrontpropagation}.
 
 \section{Definitions for shortest paths and shortest $k$-paths}
 
@@ -88,7 +88,7 @@ Through out this thesis we will use use the notation of $\pi(s,t)$ to denote the
 shortest paths connecting two points $s$ and $t$ in the case where no obstacle 
 violation is allowed. The length of any path in	$\pi(s,t)$ is the shortest path 
 distance between $s$ and $t$, denoted $d(p,q)$. If the shortest path between $s$ 
-and $t$ is the line segment $\overline{p,q}$, then $p$ and $q$ are said to be 
+and $t$ is the line segment $\overline{pq}$, then $p$ and $q$ are said to be 
 visible. 
 
 \begin{mydef}
@@ -144,7 +144,7 @@ what a shortest path map is
 	then $s$ is a predecessor of $p$. \cite{HershbergerS99} 
 \end{mydef}
 
-next we give the definition of a shortest path map
+Next we give the definition of a shortest path map
 
 \begin{mydef}
 	\textbf{Shortest Path Map:} \\ 
@@ -154,7 +154,7 @@ next we give the definition of a shortest path map
 	same, unique predecessor\cite{HershbergerS99}. 
 \end{mydef}
 
-An example of an $SPM$ can be seen in figure \ref{fig:exampleofspms} blow
+An example of a construction of $SPM$ can be seen in figure \ref{fig:exampleofspms} blow
 
 \begin{figure}[H] 
 	\centering
@@ -225,7 +225,7 @@ have the same predecessor see figure \ref{fig:1predecessor}.
 
 Here we see that the shortest path from $s$ to $p$ goes through point $q$ which lies outside the region
 in which $p$ is. So we need to maintain additional information with polygon vertices to disambiguate the 
-predecessor relation. So suppose we have a live segment $\overline{vp}$ between to vertices which crosses
+predecessor relation. So suppose we have a line segment $\overline{vp}$ between to vertices which crosses
 $(k-1)$ obstacles for some $0 \leq i \leq k$, then the length $d_k(p)$ of $\pi_k(p)$, is defined as
 the sum of the length of the $i$-path to $v$ and the length of segment $\overline{vp}$. So in the context
 of figure \ref{fig:1predecessor}  we have $\overline{qp}$ crosses $(k-1)$ obstacle in the relation of $0 \leq
@@ -237,7 +237,7 @@ is a vertex of $\mathcal{P}$ and $i \in \{0,1,..,k\}$ such that $d_k(o) = d_i(v)
 segment $\overline{vp}$ crosses $(k-i)$ obstacles \cite{HershbergerKS17}.
 
 Neat property of the $SPM_k$ is we devide it into two parts, a $V_{k-1}$ path which is the region consisting of
-$k-1$-visible points, which is starshaped, and the $SPM_{=k}$ part. The concept of $V$ areas can be seen in
+$k-1$-visible points, which is star-shaped (Definition \ref{star-shaped}), and the $SPM_{=k}$ part. The concept of $V$ areas can be seen in
 figure \ref{fig:regions}.
 
 \begin{figure}[H] 
@@ -251,7 +251,7 @@ figure \ref{fig:regions}.
 \section{Complexity of $SPM$ map}
 
 Here follows a Lemma which will be usefull for bounding the number of hyperbolic arcs in the proof 
-of Lemma \ref{lemma:4.12} in chapter \ref{chapter:wavefrontpropagation} but first we define what
+of Lemma \ref{lemma:4.12} in Chapter \ref{chapter:wavefrontpropagation} but first we define what
 a star-shaped polygon is.
 
 \begin{mydef}[Star-shaped polygon]\cite{PreparataS85}
@@ -268,7 +268,7 @@ a star-shaped polygon is.
 	edge is a segment of a line or a hyperbola
 \end{Lemma}
 \begin{proof}
-	Note that each face $SPM(s)$ is star-shaped (see definition
+	Note that each face $SPM(s)$ is star-shaped (see Definition
 	\ref{star-shaped})
 	with the unique predecessor vertex for the face, and the predecessor is in
 	the kernel of the face.
