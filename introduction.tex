@@ -7,10 +7,10 @@ conceptually different approaches to the problem, one using visibility graphs an
 another using the continuous Dijkstra method. 
 
 The visibility graph approach is to construct a graph of all paths between every pair 
-of vertices in the plane which doesn't go through an interior of an obstacle. 
+of vertices in the plane which does not go through an interior of an obstacle. 
 These paths are called legal paths. Then the shortest path is found by then running a 
 single source shortest path algorithm on that graph. A problem of this approach
-is the complexity of the graph can be $\Theta(n^2)$, with $n$ begin the number of vertices of the polygons,
+is that the complexity of the graph can be $\Theta(n^2)$, with $n$ begin the number of vertices of the polygons,
 which makes it difficult to get below this threshold. 
 
 The continuous Dijkstra method works by simulating a \emph{wavefront propagation}.
@@ -36,7 +36,7 @@ see Figure \ref{fig:introductiontowavefront}.
     \centering
 	\includegraphics[width=0.5\textwidth]{figures/introductiontowavefront.pdf}
 	\caption{A simple example of the wavefront spreading in the plane around an obstacle $O$
-	         an encapsulating different areas.}
+	         and encapsulating different areas.}
      \label{fig:introductiontowavefront}
 \end{figure}
 
@@ -112,18 +112,18 @@ path from $s$ to $t$.
 \end{table}
 
 In 1978 Lee presented a $O(n^2\log n)$ algorithm for constructing a visibility
-map in his Ph.d.  thesis\cite{LEE78}, we couldn't find the original paper, the
+map in his Ph.d.  thesis\cite{LEE78}, we were unable to find the original paper, the
 running time is taken from \cite{HershbergerS99}. 
 
-Seven years later, in 1985, Welzl \cite{DBLP:journals/ipl/Welzl85} published a
+Seven years later, in 1985, Welzl \cite{DBLP:journals/ipl/Welzl85} published an
 $O(n^2)$ time algorithm consuming $O(n^2)$ for construction of a visibility
 map.  
 
-Six years later in 1991 Ghosh et al.\ \cite{GhoshM91} presented a $O(E+n\log n)$
+Six years later in 1991 Ghosh et al.\ \cite{GhoshM91} presented an $O(E+n\log n)$
 algorithm consuming $O(E+n)$ space, for constructing a visibility graph where
 $E$ is the number of edges in the visibility graph.
 Since the visibility graph can contain $O(n^2)$ the algorithm is output bound
-and people started making shortest path map algorithm insteed, hoping to reach
+and people started making shortest path map algorithm instead, hoping to reach
 the $\Omega{(n\log n)}$ lower bound (see chapter \ref{chapter:lowerbound}).
 
 That same year in 1991 Michell \cite{DBLP:journals/amai/Mitchell91} published
@@ -149,9 +149,9 @@ consumption.
 \section{Overview of thesis}
 \begin{description}
 
-	\item[Chapter 2] We descripe a simple $O(n^3)$ algorithm for contructing a
+	\item[Chapter 2] We describe a simple $O(n^3)$ algorithm for constructing a
 		visibility graph. Then we implement it and compare the run time to the
-		theoratical time.
+		theoretical time.
 
 	\item [Chapter 3] Gives an overview of the Hershberger et al.
 		\cite{HershbergerS99} algorithm.
@@ -159,8 +159,8 @@ consumption.
 	\item [Chapter 4] Goes through the formal definition of the shortest path
 		maps and its geometric properties including the complexity of the map.
 
-	\item [Chapter 5] Explaines what the conforming subdivision is and how it is
-		contructed.
+	\item [Chapter 5] Explains what the conforming subdivision is and how it is
+		constructed.
 
 	\item [Chapter 6] Is dedicated to the wavefront propagation algorithm
 		explaining how it works and its implementation details.
@@ -171,7 +171,7 @@ consumption.
 
 	\item [Chapter 8] In here we prove the lower bound of the "shortest path in
 		the plane with obstacles problem in The Algebraic Computation Tree Model.
-		By making a reduction from number destinction to number sorting to
+		By making a reduction from number distinction to number sorting to
 		shortest map in the plane with obstacles.
 
 	\item [Chapter 9] We conclude the work we have done.
