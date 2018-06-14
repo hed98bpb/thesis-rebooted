@@ -154,7 +154,7 @@ Next we give the definition of a shortest path map
 	same, unique predecessor\cite{HershbergerS99}. 
 \end{mydef}
 
-An example of a construction of $SPM$ can be seen in figure \ref{fig:exampleofspms} blow
+An example of a construction of $SPM$ can be seen in Figure \ref{fig:exampleofspms} blow
 
 \begin{figure}[H] 
 	\centering
@@ -214,7 +214,7 @@ chapter \ref{chapter:shortestpathobstaclesviolation}.
 
 We saw with the $SPM_0$ map that each predecessor to an region always where on the boundary on said
 region, this isn't necessarily the case for a $SPM_k$. Further more multiple regions in $SPM_k$ may 
-have the same predecessor see figure \ref{fig:1predecessor}.
+have the same predecessor see Figure \ref{fig:1predecessor}.
 
 \begin{figure}[H] 
 	\centering
@@ -228,7 +228,7 @@ in which $p$ is. So we need to maintain additional information with polygon vert
 predecessor relation. So suppose we have a line segment $\overline{vp}$ between to vertices which crosses
 $(k-1)$ obstacles for some $0 \leq i \leq k$, then the length $d_k(p)$ of $\pi_k(p)$, is defined as
 the sum of the length of the $i$-path to $v$ and the length of segment $\overline{vp}$. So in the context
-of figure \ref{fig:1predecessor}  we have $\overline{qp}$ crosses $(k-1)$ obstacle in the relation of $0 \leq
+of Figure \ref{fig:1predecessor}  we have $\overline{qp}$ crosses $(k-1)$ obstacle in the relation of $0 \leq
 1 \leq k = 1$, which leaves the $k - 1 = 0$ obstacles left which we can cross. The $0$-path to $q$ is the
 direct path $\overline{sq}$, where we have the total shortest path.
 
@@ -238,7 +238,7 @@ segment $\overline{vp}$ crosses $(k-i)$ obstacles \cite{HershbergerKS17}.
 
 Neat property of the $SPM_k$ is we devide it into two parts, a $V_{k-1}$ path which is the region consisting of
 $k-1$-visible points, which is star-shaped (Definition \ref{star-shaped}), and the $SPM_{=k}$ part. The concept of $V$ areas can be seen in
-figure \ref{fig:regions}.
+Figure \ref{fig:regions}.
 
 \begin{figure}[H] 
 	\centering
