@@ -1,12 +1,13 @@
 The following chapter is dedicated to giving the reader an overview of an $O(k^2 n \log n)$ 
-time algorithm for solving the shortest problem path with polygonal obstacle violation. First we present an 
-overview of the Hershberger-Suri algorithm, which solves the shortest path with no violation, 
+time algorithm for solving the shortest problem path with polygonal obstacle
+violation. First, we present an 
+overview of the Hershberger-Suri algorithm, which solves the shortest path with no violation 
 in an optimal $O(n \log n)$ time \cite{HershbergerS99}. This algorithm produces a shortest 
 path map, which divides the free space (free space being the plane minus the interior of the 
 obstacles) into regions where each region will have the same shortest sub-path from $s$ to 
 all points in that region. This structure can then be extended for the purpose of calculating 
 shortest paths with violations, which we will present an intuitive idea on how this is done. 
-Finally we present an algorithm in chapter \ref{chapter:shortestpathobstaclesviolation} which
+Finally, we present an algorithm in chapter \ref{chapter:shortestpathobstaclesviolation} which
 combines the Hershberger-Suri algorithm with a modified version of the same algorithm, 
 to produce a shortest $k$-path map, a subdivision 
 which has the shortest sub-path to all points in an area with $k$ violations, in time $O(k^2 
@@ -24,7 +25,7 @@ other points in the plane. This is done by subdividing the plane into a finite n
 of regions, where all the points in such a region have the same shortest sub-path
 from $s$. This map can be constructed in $O(n\log n)$ time and requires $O(n\log n)$ 
 space \cite{HershbergerS99}. A query for a shortest path can be processed in $O(\log n)$
-time due to\cite{DBLP:journals/siamcomp/Kirkpatrick83}. 
+time due to \cite{DBLP:journals/siamcomp/Kirkpatrick83}. 
 
 The first step in the Hershberger-Suri algorithm is to use an implementation of
 the continuous Dijkstra method, which purpose is to give a distance from the
@@ -45,10 +46,10 @@ its wavefront until a contact (with any wavefront), see Figure
      \label{fig:introductiontowavefront2}
 \end{figure}
 
-Hershberger and Suri introduced two new ideas to speed the implementation of the
-continuous Dijkstra method up compared to previous attempts, the first being a 
-quad-tree-like subdivision of the plane, which we'll in chapter \ref{chapter:conformingsubdivision} 
-introduce as a conforming subdivision, and the second being an approximate wavefront, which introduces a
+Hershberger and Suri introduced two new ideas to speed up the implementation of the
+continuous Dijkstra method compared to previous attempts, the first being a 
+quad-tree-like subdivision of the plane, which we will introduce in chapter \ref{chapter:conformingsubdivision} 
+as a conforming subdivision, and the second being an approximate wavefront, which introduces a
 bit of slack in the calculation of the collision-time of the wavefronts, which 
 we will discuss in chapter \ref{chapter:wavefrontpropagation}.
 
@@ -73,8 +74,8 @@ shortest path distance $2|e|$ of the edge.
 These cells will then form the basis for the \textit{unitspeed} propagation in the 
 algorithm, which will act as the wavefront propagation in the algorithm. This means 
 that at each step of the wavefront will propagated through one cell at a time. 
-Since the descriptive complexity of each cell will be constant the 
-algorithm will perform efficiently in the propagation through of the cells.
+Since the descriptive complexity of each cell will be constant, the 
+algorithm will perform efficiently in the propagation through each of the cells.
 
 Inside each of these cells there will be two types of event: the first being a
 collision between a wavefront and an obstacle, which is quite easy to handle. The 
@@ -96,7 +97,7 @@ representing the wavefront that hits the edge from only one side. This leads to 
 other wavefronts which arrives at the edge after the first wavefront, wont be recorded by 
 the edge, due to it being slower than the initial arriving wavefront.
 
-As mentioned above the Hershberger-Suri algorithm make use of timers to estimate the 
+As mentioned above, the Hershberger-Suri algorithm make use of timers to estimate the 
 distance between two points in the plane but also to estimate when each edge in the 
 subdivision would be engulfed by the wavefronts. A critical task of these timers is to 
 ensure that the collision between two wavefronts which are used in the construction of 
@@ -110,12 +111,13 @@ shortest path map, which will give us the shortest path to every point in the pl
 
 \section{From no violations to $k$-violations}
 
-Previously, we've given an overview of the Hershberger-Suri algorithm which calculates a 
+Previously, we have given an overview of the Hershberger-Suri algorithm which calculates a 
 shortest path map ($SPM$) in $O(n\log n)$ time from a source point $s$ 
-\cite{HershbergerS99}. By modifying the algorithm, and using it in as a subroutine 
+\cite{HershbergerS99}. By modifying the algorithm, and using it as a
+subroutine,
 Hershberger, Kumar and Suri showed an algorithm for calculating the shortest path map, 
 where every route would violated at most $k$ obstacles from $s$ to an endpoint 
-$t$\cite{HershbergerKS17}. This is done by calculating a shortest $k$-path map, which in 
+$t$ \cite{HershbergerKS17}. This is done by calculating a shortest $k$-path map, which in 
 essence would produce a subdivision of the plane into regions, as done by the 
 Hershberger-Suri algorithm, but with the guarantee of every path violating at most $k$ 
 obstacles. A way to better understand how such a map would be calculated is by using the 
@@ -130,10 +132,10 @@ until we reach $SPM_{k}$.
 \section{Construction of a shortest $k$-path map}
 
 The $O(k^2 n \log n)$ implementation of shortest path with obstacle violation, makes use 
-both of a unchanged and a modification version of the Hershberger-Suri algorithm. The 
+both of an unchanged and a modified version of the Hershberger-Suri algorithm. The 
 unchanged version is used to prepare the $SPM_0$ map, which the modified version then 
-uses to iteratively calculate the $SPM_k$ map. The change is due to the unchanged 
-algorithm starts the wave propagation from a source point $s$ which propagates through 
+uses to iteratively calculate the $SPM_k$ map. The difference is due to the unchanged 
+algorithm starting the wave propagation from a source point $s$ which then propagates through 
 the plane. 
 
 \begin{figure}[H]
@@ -183,7 +185,7 @@ The modified algorithm needs to be able to propagate not from a source which is 
 from a sub-edge which can be seen in Figure \ref{fig:spm0projection}. Each of the colors 
 represent a "sub-edge-source" from which wavefronts will propagate the obstacle. When the 
 obstacles interior has been propagated, the modified algorithm is ready to propagate the free 
-space towards $t$, which we see in Figure \ref{fig:spm1}. It's worth noting that the free area 
+space towards $t$, which we see in Figure \ref{fig:spm1}. It is worth noting that the free area 
 the modified algorithm needs to propagate in Figure \ref{fig:spm1}, is enclosed by the the two 
 red line which are collinear with $s$ and the top and bottom point of the triangle, with an 
 angle of less than 180 degree. This is due to the area on the other side of the wedge could be 
