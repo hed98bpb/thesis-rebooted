@@ -3,7 +3,9 @@
 This chapter is dedicated to showing the extension of the Hershberger Suri
 algorithm which was presented in Chapter \ref{chapter:conformingsubdivision}
 and \ref{chapter:shortestpathmap} for calculating a shortest $k$-path map,
-$SPM_k$ in time $O(k^2 \cdot n \log n)$. This is done by extending the
+$SPM_k$ in time $O(k^2 \cdot n \log n)$. This extension is due to Hershberger,
+Kumar and Suri and presented in \cite{HershbergerKS17} section 3.2 and 4.
+This is done by extending the
 continuous Dijkstra method into a $k$-garage structure. This way we can enter
 each level $i$ by going through an obstacle polygon in level $i-1$, and leave
 it into the next layer $i$. This can then be done up to $k$ times, which is
