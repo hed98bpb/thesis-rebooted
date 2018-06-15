@@ -13,7 +13,7 @@ without going (or looking) through any interior of an obstacle (see Figure
 \ref{visibilitygraph}). In Section 2.2 we explain Dijkstra's algorithm
 for finding the shortest path from $s$ to $t$ in the visibility graph and
 finally in Section 2.3 we test our implementation to verify that the actual 
-running time is the same as the theoretical.
+running time is the same as the theoretically predicted one.
 
 \begin{figure}[H]
 	\begin{subfigure}{.5\textwidth}
@@ -33,9 +33,9 @@ running time is the same as the theoretical.
 \section{Constructing the visibility graph}
 The naive way of constructing a visibility graph is to make a graph
 where every pair of points $p,q \in \mathcal{O} \cup \{s,t\}$ is connected to each other,
-then removing all edges that crosses the interior of a polygon. But in this
+then removing all edges that cross the interior of a polygon. But in this
 setting we are allowed to cross $k$ polygons, so we construct the graph a bit
-different. Given a set $\mathcal{O}$ consisting of all the polygons, where each polygon
+differently. Given a set $\mathcal{O}$ consisting of all the polygons, where each polygon
 is a list of the points in the polygon we use the following algorithm \ref{algo:MakeVisibilityGraph}.  
 Create a graph $G_0=(V,E)$, where $V$ contains all the vertices in $\mathcal{O}\cup \{s,t\}$,
 and let $E$ contain all possible connections between the vertices. Make $k$
@@ -66,13 +66,13 @@ you go $k$ levels up.
 	\label{algo:MakeVisibilityGraph}
 \end{algorithm}
 
-The only missing part is the numberOfCrossings function, which we will define
+The only missing part is the numberOfCrossings function, which we define
 below.
 
 \subsection{Number of crossings}
 Calculating the number of polygons a line segment crosses is no trivial task,
 since there is a number of edge cases. We try to give a brief intuition of the
-edge cases, and then present our algorithm.
+edge cases, and then we present our algorithm.
 The first five cases (a-e) in Figure \ref{fig:crossings} are allowed intersections since
 it is only the interior of a polygon that we can not travel. The
 next five cases (f-j) are not allowed since they travel through the interior
@@ -105,28 +105,28 @@ of the polygon.
 	\label{fig:crossings}
 \end{figure}
 
-So given a polygon $o\in \mathcal{O}$, and a line segment $l$ we want to
-determine weather $l$ crosses the polygon $O$. We start by making each obstacle
-list of points $o=p_1,p_2,\dots,p_i$ into a list of line segment
+So, given a polygon $o\in \mathcal{O}$, and a line segment $l$ we want to
+determine if $l$ crosses the polygon $O$. We start by making each obstacle
+(i.e. list of points $o=p_1,p_2,\dots,p_i$) into a list of line segment
 $o'=(p_1,p_2),(p_2,p_3),\dots,(p_{i-1},p_i),(p_i,p_1)$.  Then we observe that
 if a line segment crosses a line segment of a polygon, it counts as a crossing
-(cases f and g). The other three cases of crossing (cases h, i and j) all have
-that in common that the line segment crosses four end points from the polygon.
-So we could say it is not allowed to cross four points in of a polygons line
+(cases f and g). The other three cases of crossing (cases h, i and j) all have 
+in commonm that the line segment crosses four end points of the polygon.
+So we could say it is not allowed to cross four points of a polygons line
 segments. The problem is that it makes (cases a, c and d) illegal. But
-fortunately they all have that in common that they are collinear (they lie on a
+fortunately they all have in common that they are collinear (they lie on a
 common line) with a line segment of the polygon, so the algorithm is as
 follows:
 
 \begin{enumerate}
 	\item if a line segment $l_1$ crosses another line segment $l_2$ of a polygon it 
 	      crosses the polygon
-	\item if a line segment has four points in common with the polygon it crosses the
+	\item if a line segment has four points in common with the polygon, it crosses the
 		  polygon, unless the line segment is collinear with a line segment of the
 		  polygon 
 \end{enumerate}
 
-This lead us to the following algorithm
+This leads us to the following algorithm:
 \begin{algorithm} 
 	\caption{NumberOfCrossings($l,\mathcal{O}$)}
 	\begin{algorithmic}[1] 
@@ -152,8 +152,8 @@ This lead us to the following algorithm
 
 \subsection{Crosses}
 To make a crosses function, we need a right turn function. Consider three
-points $p_1,p_2,p_3$ in the plane, make a line that goes through $p_1$ and $p_2$. 
-Now if we stand at point $p_1$ and look in the direction of $p_2$ will $p_3$, if $p_3$
+points $p_1,p_2,p_3$ in the plane and make a line that goes through $p_1$ and $p_2$. 
+Now if we stand at point $p_1$ and look in the direction of $p_2$ , if $p_3$
 does not lie on the same line as $p_1$ and $p_2$ will it be on the
 right or the left of the line. Let $p_i.x$ and $p_i.y$ denote the x-coordinates
 and y-coordinates respectively. To find out whether the three points form a right turn, 
@@ -272,21 +272,21 @@ Let $L_1$ and $L_2$ denote the lines collinear to $l_1$ and $l_2$ respectively.
 	\ref{fig:crosses_b}). If they lie on opposite sites, $l_2$ crosses $L_1$ and
 	we have to determine if $l_2$ crosses $L_1$ between $l_1.p$ and $l_1.q$. 
 
-We know the line $l_2$ crosses $L_1$, the question is, is it between the two
+We know the line $l_2$ crosses $L_1$, the question is, if it is between the two
 	end points. We determine this verifying that if the endpoints of $l_1$
-	lie on opposite sites of $l_2$, like before(see Figure \ref{fig:crosses_b}.
-	If they do it must be the case that $l_1$ and $l_2$ cross, if not it
-	crosses $L_1$ another place.
+	lie on opposite sites of $l_2$, like before(see Figure \ref{fig:crosses_b}).
+	If they do, it must be the case that $l_1$ and $l_2$ cross, if not, it
+	crosses $L_1$ in another place.
 \end{proof}
 
 \subsection{Crosses algorithm}
-We can check whether the endpoints of a line segment lie on opposite sites of another
+We can check if the endpoints of a line segment lie on opposite sites of another
 line segment by multiplying the right turn results, since, if they lie on opposite sites,
-they will have different sign, if they lie on the same side they have the same
-sign so the result will be negative if they are on opposite sites and positive
+they will have different signs, if they lie on the same side they will have the same
+sign, so the result will be negative if they are on opposite sites and positive
 if they are on the same side. If both foo and bar is negative, the segments
 cross and we return $-1$. If either foo and bar is $0$ it means that a point from
-one segment touches the other line segment and we return $0$. Else they do not
+one segment touches the other line segment and we return $0$. Otherwise they do not
 touch at all, and we return $1$.
 \begin{algorithm}[H]
 	\caption{Crosses($l_1,l_2$)}
@@ -324,7 +324,7 @@ vertices and $E$ is the directed weighted edges and a start vertex $s\in V$,
 find the path where the sum of the weights is the smallest possible.
 
 Let $v_\pi$ either be a predecessor of null. $v_d$ being the upper bound of
-the weight of a shortest path from source $s$ to $v$. Running time $\Theta (V)$
+the weight of a shortest path from source $s$ to $v$. 
 
 \begin{algorithm} 
 	\caption{Initialize-Single-Source(G,s)}
@@ -417,13 +417,14 @@ Figure \ref{fig:correctness_1} and \ref{fig:correctness_2})
 
 \subsection{Running time of algorithm}
 To test the running time of our implementation we auto generated a map consisting of
-x times x squares and put $s$ and $t$ in opposite corners of the map (see Figure
+$x$ times $x$ squares and put $s$ and $t$ in opposite corners of the map (see Figure
 \ref{fig:test})
 
 \begin{figure}[H]
     \centering
 	\includegraphics[width=6cm]{figures/testexample.pdf}
-	\caption{Examples of figures for correctness}
+	\caption{Example of how the run time test are constructed. Here is a $3$
+	times $3$ example}
 	\label{fig:test}
 \end{figure}
 \label{testfilegeneration}
@@ -434,16 +435,16 @@ number of vertices was $n= 4 \cdot t^2$ for $t=1,\dots,41$ and got the following
 \input{graph/graph1.tex}
 \end{center}
 
-Then we tried figuring out where the time was spent so we tried measuring the
+Then we tried to figure out where the time was mostly spent so we tried measuring the
 crossing function, the construction of visibility graph and Dijkstra's
-algorithm separately and got the following
+algorithm separately and we obtained the following result:
 
 \begin{center}
 \input{graph/graph2.tex}
 \end{center}
 
-The implementation is totally dominated by the crossing calculating which makes
-sense since the $O(n^3)$ is the most dominant sub time, we tried dividing the first graph
+The implementation is totally dominated by the crossing calculation, which makes
+sense since the $O(n^3)$ is the most dominant time of the three, we tried dividing the first graph
 with $n^3$ and got the following
 
 \begin{center}
@@ -460,4 +461,4 @@ overall run time that much, which is what we would expect.
 \end{center}
 
 In conclusion we have implemented a naive $O(n^3)$ algorithm and made tests both
-for confirming its correctness and its running time of the algorithm.
+for confirming its correctness and its running time.
